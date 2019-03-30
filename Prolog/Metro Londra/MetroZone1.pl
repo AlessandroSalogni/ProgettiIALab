@@ -1,8 +1,5 @@
 % percorso(Linea, Dir, ListaFermate)
 
-
-
-
 percorso(bakerloo,0,["Paddington","Edgware Road (Bakerloo)","Marylebone","Baker Street","Regent's Park","Oxford Circus","Piccadilly Circus","Charing Cross",
     "Embankment","Waterloo","Lambeth North"]).
 percorso(central,0,["Notting Hill Gate","Queensway","Lancaster Gate","Marble Arch","Bond Street","Oxford Circus","Tottenham Court Road","Holborn",
