@@ -95,6 +95,6 @@ stazione("London Bridge", -0.088037808, 51.50455372).
 fermata(Stazione,Linea) :- percorso(Linea,0,P), member(Stazione,P).
 
 
-iniziale([at('Bayswater'),ground]).
+iniziale([at("Bayswater"),ground]).
 
-finale([at('Piccadilly Circus'),ground]).
+finale([at("Piccadilly Circus"),ground]).
