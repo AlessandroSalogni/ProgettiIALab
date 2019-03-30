@@ -1,18 +1,24 @@
 % percorso(Linea, Dir, ListaFermate)
 
-percorso(bakerloo,0,['Paddington','Edgware Road (Bakerloo)','Marylebone','Baker Street',"Regent's Park",'Oxford Circus','Piccadilly Circus','Charing Cross','Embankment','Waterloo','Lambeth North']).
-percorso(central,0,['Notting Hill Gate','Queensway','Lancaster Gate','Marble Arch','Bond Street','Oxford Circus','Tottenham Court Road','Holborn','Chancery Lane',"St. Paul's",'Bank','Liverpool Street']).
-percorso(circle,0,['Embankment','Westminster','Victoria','South Kensington','Gloucester Road','Notting Hill Gate','Bayswater','Paddington','Baker Street','Kings Cross']).
-
-percorso(piccadilly,0,['Kings Cross','Holborn','Covent Garden','Leicester Square','Piccadilly Circus','Green Park','South Kensington','Gloucester Road','Earls Court']).
-percorso(jubilee,0,['Baker Street','Bond Street','Green Park','Westminster','Waterloo','London Bridge']).
-percorso(victoria,0,['Kings Cross','Euston','Warren Street','Oxford Circus','Green Park','Victoria']).
+percorso(bakerloo,0,['Paddington','Edgware Road (Bakerloo)','Marylebone','Baker Street',"Regent's Park",'Oxford Circus','Piccadilly Circus','Charing Cross',
+    'Embankment','Waterloo','Lambeth North']).
+percorso(central,0,['Notting Hill Gate','Queensway','Lancaster Gate','Marble Arch','Bond Street','Oxford Circus','Tottenham Court Road','Holborn',
+    'Chancery Lane',"St. Paul's",'Bank','Liverpool Street']).
+percorso(circle,0,['Embankment','Westminster',"St. James's Park",'Victoria','Sloane Square','South Kensington','Gloucester Road','High Street Kensington',
+    'Notting Hill Gate','Bayswater','Paddington','Edgware Road (Circle Line)','Baker Street','Great Portland Street','Euston Square',"King's Cross St. Pancras",
+    'Farringdon','Barbican','Moorgate', 'Liverpool Street','Aldgate','Tower Hill','Monument','Cannon Street','Mansion House','Blackfriars','Temple','Embankment']). %Pensare bene alla lista circolare
+%District, per ora saltiamo perche' raddoppia quasi tutta circle.
+%Hammer Smith and City, saltiamo perche' raddoppia
+percorso(jubilee,0,['Baker Street','Bond Street','Green Park','Westminster','Waterloo','Southwark','London Bridge']).
+%Metropolitan raddoppia circle
+percorso(northern,0,['Euston',"King's Cross St. Pancras",'Angel', 'Old Street', 'Moorgate', 'Bank','London Bridge', 'Borough']).
+percorso(piccadilly,0,["King's Cross St. Pancras",'Russell Square','Holborn','Covent Garden','Leicester Square','Piccadilly Circus','Green Park','Hyde Park Corner',
+    'Knightsbridge','South Kensington','Gloucester Road','Earls Court']).
+percorso(victoria,0,["King's Cross St. Pancras",'Euston','Warren Street','Oxford Circus','Green Park','Victoria','Pimlico']).
 
 percorso(Linea,1,LR) :- percorso(Linea,0,L), reverse(L,LR).
 
-
 % tratta(NomeLinea, Dir, StazionePartenza, StazioneArrivo)
-
 tratta(Linea,Dir,SP,SA) :- percorso(Linea,Dir,LF), member_pair(SP,SA,LF).
 
 member_pair(X,Y,[X,Y|_]).
@@ -67,7 +73,7 @@ stazione("Westminster", -0.124052209, 51.50045311).
 stazione("Euston", -0.132992071, 51.52757668).
 stazione("Waterloo", -0.112818812, 51.50291418).
 stazione("Green Park", -0.140937126, 51.50635747).
-stazione("Paddington (H&C Line)", -0.17719615, 51.51800497).
+%stazione("Paddington (H&C Line)", -0.17719615, 51.51800497).
 stazione("Piccadilly Circus", -0.132081484, 51.50955061).
 stazione("Charing Cross", -0.125777173, 51.50686754).
 stazione("Lambeth North", -0.110624882, 51.49833058).
@@ -76,12 +82,12 @@ stazione("Marylebone", -0.162637346, 51.52165079).
 stazione("Regent's Park", -0.144708117, 51.52277011).
 stazione("Sloane Square", -0.15473274, 51.49182524).
 stazione("St. James's Park", -0.132021543, 51.49905006).
-stazione("Goodge Street", -0.132736642, 51.52009307).
+%stazione("Goodge Street", -0.132736642, 51.52009307).
 stazione("Tottenham Court Road", -0.128897348, 51.51594793).
 stazione("Borough", -0.091702818, 51.50067969).
 stazione("Old Street", -0.086025441, 51.52457628).
 stazione("Angel", -0.103116359, 51.5309796).
-stazione("Aldgate East", -0.069540402, 51.51491653).
+%stazione("Aldgate East", -0.069540402, 51.51491653).
 stazione("Southwark", -0.103788452, 51.50377646).
 stazione("London Bridge", -0.088037808, 51.50455372).
 
