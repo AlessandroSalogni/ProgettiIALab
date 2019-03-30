@@ -14,7 +14,7 @@ applicabile(vai(Linea,Dir,SP,SA),[at(SP),in(Linea,Dir)]) :- tratta(Linea,Dir,SP,
 
 trasforma(sali(Linea,Dir),[at(Stazione),ground],[at(Stazione),in(Linea,Dir)]).
 trasforma(scendi(Stazione),[at(Stazione),in(_,_)],[at(Stazione),ground]).
-trasforma(vai(Linea,Dir,SP,SA),[at(SP),in(Linea,Dir)],[at(SA),in(Linea,Dir)]) :- tratta(Linea,Dir,SP,SA).
+trasforma(vai(Linea,Dir,SP,SA),[at(SP),in(Linea,Dir)],[at(SA),in(Linea,Dir)]).
 
 costo(sali(_,_), 4).
 costo(scendi(_), 1).
