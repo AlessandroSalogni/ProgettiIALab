@@ -16,14 +16,14 @@ generaFigli(nodo(S, AzioniPerS, CostoAzioniPerS), [Azione|AltreAzioni], [nodo(S_
   CostoAzioniPerSNuovo is CostoAzioniPerS + Costo,
   generaFigli(nodo(S, AzioniPerS, CostoAzioniPerS), AltreAzioni, FigliTail).
 
-coda_priorita(Coda, [], Coda).
-coda_priorita(Coda, [Nodo|AltriFigli], NuovaCoda) :-
-  inserisci_nodo(Coda, Nodo, CodaConNodo),
-  coda_priorita(CodaConNodo, AltriFigli, NuovaCoda).
+%coda_priorita(Coda, [], Coda).
+%coda_priorita(Coda, [Nodo|AltriFigli], NuovaCoda) :-
+%  inserisci_nodo(Coda, Nodo, CodaConNodo),
+%  coda_priorita(CodaConNodo, AltriFigli, NuovaCoda).
 
-inserisci_nodo([], Nodo, [Nodo]).
-inserisci_nodo([nodo(SCoda, AzioniPerSCoda, CostoAzioniPerSCoda)|TailCoda], nodo(SNodo, AzioniPerSNodo, CostoAzioniPerSNodo),
-[nodo(SCoda, AzioniPerSCoda, CostoAzioniPerSCoda)|NuovaCoda]) :-
-  CostoAzioniPerSCoda =< CostoAzioniPerSNodo, !,
-  inserisci_nodo(TailCoda, nodo(SNodo, AzioniPerSNodo, CostoAzioniPerSNodo), NuovaCoda).
-inserisci_nodo(Coda, Nodo, [Nodo|Coda]).
+%inserisci_nodo([], Nodo, [Nodo]).
+%inserisci_nodo([nodo(SCoda, AzioniPerSCoda, CostoAzioniPerSCoda)|TailCoda], nodo(SNodo, AzioniPerSNodo, CostoAzioniPerSNodo),
+%[nodo(SCoda, AzioniPerSCoda, CostoAzioniPerSCoda)|NuovaCoda]) :-
+%  CostoAzioniPerSCoda =< CostoAzioniPerSNodo, !,
+%  inserisci_nodo(TailCoda, nodo(SNodo, AzioniPerSNodo, CostoAzioniPerSNodo), NuovaCoda).
+%inserisci_nodo(Coda, Nodo, [Nodo|Coda]).
