@@ -18,10 +18,5 @@ trasforma(vai(Linea,Dir,SP,SA),[at(SP),in(Linea,Dir)],[at(SA),in(Linea,Dir)]).
 
 costo(sali(_,_), 4).
 costo(scendi(_), 1).
-costo(vai(_,_,SP,SA), Costo) :-
-  stazione(SP, SPx, SPy),
-  stazione(SA, SAx, SAy),
-  P is 0.017453292519943295,
-  A is (0.5 - cos((SAy - SPy) * P) / 2 + cos(SPy * P) * cos(SAy * P) * (1 - cos((SAx - SPx) * P)) / 2),
-  Dis is (12742 * asin(sqrt(A))),
-  Costo is (Dis * 1000 / 10) / 60. % (secondi) /60 -> minuti
+costo(vai(_,_,SP,SA), Costo) :- coords_distance(SP,SA,Costo).
+  
