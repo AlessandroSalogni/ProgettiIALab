@@ -5,11 +5,10 @@ priority_queue(Coda, [Nodo|AltriFigli], NuovaCoda) :-
   priority_queue(CodaConNodo, AltriFigli, NuovaCoda).
 
 insert_node([], Nodo, [Nodo]).
-insert_node([nodo(SCoda, AzioniPerSCoda, CostoAzioniPerSCoda, EuristicaDaSCoda)|TailCoda], 
-nodo(SNodo, AzioniPerSNodo, CostoAzioniPerSNodo, EuristicaDaSNodo),
-[nodo(SCoda, AzioniPerSCoda, CostoAzioniPerSCoda, EuristicaDaSCoda)|NuovaCoda]) :-
-  CostoAzioniPerSCoda + EuristicaDaSCoda =< CostoAzioniPerSNodo + EuristicaDaSNodo, !,
-  insert_node(TailCoda, nodo(SNodo, AzioniPerSNodo, CostoAzioniPerSNodo, EuristicaDaSNodo), NuovaCoda).
+insert_node([nodo(SCoda, AzPerSCoda, CostoAzPerSCoda, EuristicaDaSCoda)|TailCoda], nodo(SNodo, AzPerSNodo, CostoAzPerSNodo, EuristicaDaSNodo),
+[nodo(SCoda, AzPerSCoda, CostoAzPerSCoda, EuristicaDaSCoda)|NuovaCoda]) :-
+  CostoAzPerSCoda + EuristicaDaSCoda =< CostoAzPerSNodo + EuristicaDaSNodo, !,
+  insert_node(TailCoda, nodo(SNodo, AzPerSNodo, CostoAzPerSNodo, EuristicaDaSNodo), NuovaCoda).
 insert_node(Coda, Nodo, [Nodo|Coda]).
 
 %COSTO DELLA DISTANZA IN LINEA D'ARIA
