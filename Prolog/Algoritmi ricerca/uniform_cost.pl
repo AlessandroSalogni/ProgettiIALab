@@ -9,7 +9,7 @@ uc([nodo(S, AzPerS, CostoAzPerS)|_], AzPerS, _, Espansi) :- finale(S), /*!,*/ wr
 uc([nodo(S, AzPerS, CostoAzPerS)|Tail], Soluzione, Visitati, Espansi) :-
   findall(Azione, applicabile(Azione, S), ListaAzApplicabili),
   expand_children(nodo(S, AzPerS, CostoAzPerS), ListaAzApplicabili, Visitati, ListaFigli),
-  coda_priorita(Tail, ListaFigli, NuovaCoda),
+  priority_queue(Tail, ListaFigli, NuovaCoda),
   NodiEspansi is Espansi + 1,
   uc(NuovaCoda, Soluzione, [S|Visitati], NodiEspansi).
 
