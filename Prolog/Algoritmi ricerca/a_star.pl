@@ -22,7 +22,7 @@ expand_children(nodo(S, AzPerS, CostoAzPerS, EuristicaDaS), [Azione|AltreAz], Vi
   CostoAzPerSNuovo is CostoAzPerS + Costo,
   heuristic(S_Nuovo, EuristicaDaSNuovo),
   expand_children(nodo(S, AzPerS, CostoAzPerS, EuristicaDaS), AltreAz, Visitati, FigliTail).
-expand_children(nodo(S, AzPerS, CostoAzPerS, EuristicaDaS), [Azione|AltreAz], Visitati, FigliTail) :- % Viene eseguito quando not member fallisce perchè non è stato eseguito il cut
+expand_children(Nodo, [Azione|AltreAz], Visitati, FigliTail) :- % Viene eseguito quando not member fallisce perchè non è stato eseguito il cut
   %trasforma(Azione, S, S_Nuovo),
   %find_node_visitated(S_Nuovo, Visitati, NodoVisitato),
   expand_children(Nodo, AltreAz, Visitati, FigliTail).
