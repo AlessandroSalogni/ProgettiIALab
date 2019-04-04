@@ -11,20 +11,23 @@ as([nodo(S, AzPerS, CostoAzPerS, EuristicaDaS)|Tail], Soluzione, Visitati, Espan
   expand_children(nodo(S, AzPerS, CostoAzPerS, EuristicaDaS), ListaAzApplicabili, Visitati, ListaFigli),
   priority_queue(Tail, ListaFigli, NuovaCoda),
   NuovoEspansi is Espansi + 1,
-  as(NuovaCoda, Soluzione, [S|Visitati], NuovoEspansi).
+  as(NuovaCoda, Soluzione, [nodo(S, CostoAzPerS)|Visitati], NuovoEspansi).
 
 expand_children(_, [], _, []).
 expand_children(nodo(S, AzPerS, CostoAzPerS, EuristicaDaS), [Azione|AltreAz], Visitati,
 [nodo(S_Nuovo, [Azione|AzPerS], CostoAzPerSNuovo, EuristicaDaSNuovo)|FigliTail]) :-
   trasforma(Azione, S, S_Nuovo),
-  \+member(S_Nuovo, Visitati), !,
   costo(Azione, Costo),
   CostoAzPerSNuovo is CostoAzPerS + Costo,
+  revisit_node(nodo(S_Nuovo, CostoAzPerSNuovo), Visitati, NuoviVisitati), !,
   heuristic(S_Nuovo, EuristicaDaSNuovo),
-  expand_children(nodo(S, AzPerS, CostoAzPerS, EuristicaDaS), AltreAz, Visitati, FigliTail).
+  expand_children(nodo(S, AzPerS, CostoAzPerS, EuristicaDaS), AltreAz, NuoviVisitati, FigliTail).
 expand_children(Nodo, [Azione|AltreAz], Visitati, FigliTail) :- % Viene eseguito quando not member fallisce perchè non è stato eseguito il cut
-  %trasforma(Azione, S, S_Nuovo),
-  %find_node_visitated(S_Nuovo, Visitati, NodoVisitato),
   expand_children(Nodo, AltreAz, Visitati, FigliTail).
 
-%find_node_visitated(S_Nuovo, [HeadVisitati | TailVisitati], NodoVisitato) :- .
+revisit_node(_, [], []).
+revisit_node(nodo(S, CostoAzPerS), [nodo(S, CostoAzPerSVisitato)|AltriVisitati], AltriVisitati) :-
+  !, CostoAzPerS < CostoAzPerSVisitato.
+%revisit_node(nodo(S, CostoAzPerS), [nodo(S, CostoAzPerSVisitato)|AltriVisitati], [nodo(S, CostoAzPerSVisitato)|AltriVisitati]).
+revisit_node(nodo(S, CostoAzPerS), [nodo(SVisitato, CostoAzPerSVisitato)|AltriVisitati], [nodo(SVisitato, CostoAzPerSVisitato)|NuoviVisitati]) :-
+  revisit_node(nodo(S, CostoAzPerS), AltriVisitati, NuoviVisitati).
