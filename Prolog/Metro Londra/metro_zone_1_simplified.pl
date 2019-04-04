@@ -5,24 +5,15 @@ percorso("Bakerloo",0,["Paddington","Edgware Road","Marylebone","Baker Street","
 percorso("Central",0,["Notting Hill Gate","Queensway","Lancaster Gate","Marble Arch","Bond Street","Oxford Circus","Tottenham Court Road",
   "Holborn","Chancery Lane","St. Paul's","Bank","Liverpool Street"]).
 percorso("Circle",0,["Embankment","Westminster","St. James's Park","Victoria","Sloane Square","South Kensington","Gloucester Road",
-  "High Street Kensington","Notting Hill Gate","Bayswater","Paddington","Edgware Road","Baker Street","Great Portland Street",
-  "Euston Square","King's Cross St. Pancras","Farringdon","Barbican","Moorgate","Liverpool Street","Aldgate","Tower Hill",
-  "Monument","Cannon Street","Mansion House","Blackfriars","Temple","Embankment"]). %Pensare bene alla lista circolare
-percorso("District East-West",0,["Aldgate East","Tower Hill","Monument","Cannon Street","Mansion House","Blackfriars","Temple",
-  "Embankment","Westminster","St. James's Park","Victoria","Sloane Square","South Kensington","Gloucester Road","Earl's Court"]).
-percorso("District North-South",0,["Edgware Road","Paddington","Bayswater","Notting Hill Gate","High Street Kensington","Earl's Court"]).
-percorso("Hammersmith & City",0,["Paddington","Edgware Road","Baker Street","Great Portland Street","Euston Square",
-  "King's Cross St. Pancras","Farringdon","Barbican","Moorgate","Liverpool Street","Aldgate East"]).
+  "High Street Kensington","Notting Hill Gate","Bayswater","Paddington","Edgware Road","Baker Street","Great Portland Street","Euston Square",
+  "King's Cross St. Pancras","Farringdon","Barbican","Moorgate","Liverpool Street","Aldgate","Tower Hill","Monument","Cannon Street",
+  "Mansion House","Blackfriars","Temple","Embankment"]). %Pensare bene alla lista circolare
 percorso("Jubilee",0,["Baker Street","Bond Street","Green Park","Westminster","Waterloo","Southwark","London Bridge"]).
-percorso("Metropolitan",0,["Baker Street","Great Portland Street","Euston Square","King's Cross St. Pancras","Farringdon",
-  "Barbican","Moorgate","Liverpool Street","Aldgate"]).
-percorso("Northern East",0,["Euston","King's Cross St. Pancras","Angel","Old Street","Moorgate","Bank","London Bridge","Borough"]).
-percorso("Northern West",0,["Euston","Warren Street","Goodge Street","Tottenham Court Road","Leicester Square","Charing Cross",
-  "Embankment","Waterloo"]).
-percorso("Piccadilly",0,["King's Cross St. Pancras","Russell Square","Holborn","Covent Garden","Leicester Square","Piccadilly Circus","Green Park","Hyde Park Corner",
-  "Knightsbridge","South Kensington","Gloucester Road","Earl's Court"]).
+percorso("Northern",0,["Euston","King's Cross St. Pancras","Angel","Old Street","Moorgate","Bank","London Bridge","Borough"]).
+percorso("Piccadilly",0,["King's Cross St. Pancras","Russell Square","Holborn","Covent Garden","Leicester Square","Piccadilly Circus",
+  "Green Park","Hyde Park Corner","Knightsbridge","South Kensington","Gloucester Road","Earl's Court"]).
 percorso("Victoria",0,["King's Cross St. Pancras","Euston","Warren Street","Oxford Circus","Green Park","Victoria","Pimlico"]).
-percorso("Waterloo & City",0,["Bank","Waterloo"]).
+percorso("Waterloo & City",0,["Bank","Waterloo"])
 
 percorso(Linea,1,LR) :- percorso(Linea,0,L), reverse(L,LR).
 
@@ -90,12 +81,12 @@ stazione("Marylebone", -0.162637346, 51.52165079).
 stazione("Regent's Park", -0.144708117, 51.52277011).
 stazione("Sloane Square", -0.15473274, 51.49182524).
 stazione("St. James's Park", -0.132021543, 51.49905006).
-stazione("Goodge Street", -0.132736642, 51.52009307).
+%stazione("Goodge Street", -0.132736642, 51.52009307).
 stazione("Tottenham Court Road", -0.128897348, 51.51594793).
 stazione("Borough", -0.091702818, 51.50067969).
 stazione("Old Street", -0.086025441, 51.52457628).
 stazione("Angel", -0.103116359, 51.5309796).
-stazione("Aldgate East", -0.069540402, 51.51491653).
+%stazione("Aldgate East", -0.069540402, 51.51491653).
 stazione("Southwark", -0.103788452, 51.50377646).
 stazione("London Bridge", -0.088037808, 51.50455372).
 
