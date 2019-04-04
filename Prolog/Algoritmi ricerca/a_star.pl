@@ -28,6 +28,5 @@ expand_children(Nodo, [Azione|AltreAz], Visitati, FigliTail) :- % Viene eseguito
 revisit_node(_, [], []).
 revisit_node(nodo(S, CostoAzPerS), [nodo(S, CostoAzPerSVisitato)|AltriVisitati], AltriVisitati) :-
   !, CostoAzPerS < CostoAzPerSVisitato.
-%revisit_node(nodo(S, CostoAzPerS), [nodo(S, CostoAzPerSVisitato)|AltriVisitati], [nodo(S, CostoAzPerSVisitato)|AltriVisitati]).
 revisit_node(nodo(S, CostoAzPerS), [nodo(SVisitato, CostoAzPerSVisitato)|AltriVisitati], [nodo(SVisitato, CostoAzPerSVisitato)|NuoviVisitati]) :-
   revisit_node(nodo(S, CostoAzPerS), AltriVisitati, NuoviVisitati).
