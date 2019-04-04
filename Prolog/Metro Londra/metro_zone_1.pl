@@ -6,12 +6,12 @@ percorso(central,0,["Notting Hill Gate","Queensway","Lancaster Gate","Marble Arc
     "Chancery Lane","St. Paul's","Bank","Liverpool Street"]).
 percorso(circle,0,["Embankment","Westminster","St. James's Park","Victoria","Sloane Square","South Kensington","Gloucester Road","High Street Kensington",
     "Notting Hill Gate","Bayswater","Paddington","Edgware Road (Circle Line)","Baker Street","Great Portland Street","Euston Square","King's Cross St. Pancras",
-    "Farringdon","Barbican","Moorgate", "Liverpool Street","Aldgate","Tower Hill","Monument","Cannon Street","Mansion House","Blackfriars","Temple","Embankment"]). %Pensare bene alla lista circolare
+    "Farringdon","Barbican","Moorgate","Liverpool Street","Aldgate","Tower Hill","Monument","Cannon Street","Mansion House","Blackfriars","Temple","Embankment"]). %Pensare bene alla lista circolare
 %District, per ora saltiamo perche' raddoppia quasi tutta circle.
 %Hammer Smith and City, saltiamo perche' raddoppia
 percorso(jubilee,0,["Baker Street","Bond Street","Green Park","Westminster","Waterloo","Southwark","London Bridge"]).
 %Metropolitan raddoppia circle
-percorso(northern,0,["Euston","King's Cross St. Pancras","Angel", "Old Street", "Moorgate", "Bank","London Bridge", "Borough"]).
+percorso(northern,0,["Euston","King's Cross St. Pancras","Angel","Old Street","Moorgate","Bank","London Bridge","Borough"]).
 percorso(piccadilly,0,["King's Cross St. Pancras","Russell Square","Holborn","Covent Garden","Leicester Square","Piccadilly Circus","Green Park","Hyde Park Corner",
     "Knightsbridge","South Kensington","Gloucester Road","Earl's Court"]).
 percorso(victoria,0,["King's Cross St. Pancras","Euston","Warren Street","Oxford Circus","Green Park","Victoria","Pimlico"]).
