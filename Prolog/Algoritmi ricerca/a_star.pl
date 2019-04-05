@@ -11,6 +11,7 @@ as([nodo(S, AzPerS, CostoAzPerS, EurDaS)|Tail], Soluzione, Vis, Espansi) :-
   expand_children_as(nodo(S, AzPerS, CostoAzPerS, EurDaS), ListaAzApplicabili, Vis, ListaFigli),
   priority_queue(Tail, ListaFigli, NuovaCoda),
   NuovoEspansi is Espansi + 1,
+  write(nodo(S, CostoAzPerS, EurDaS)), nl,
   as(NuovaCoda, Soluzione, [nodo(S, CostoAzPerS)|Vis], NuovoEspansi).
 
 expand_children_as(_, [], _, []).

@@ -13,7 +13,7 @@ percorso("Northern",0,["Euston","King's Cross St. Pancras","Angel","Old Street",
 percorso("Piccadilly",0,["King's Cross St. Pancras","Russell Square","Holborn","Covent Garden","Leicester Square","Piccadilly Circus",
   "Green Park","Hyde Park Corner","Knightsbridge","South Kensington","Gloucester Road","Earl's Court"]).
 percorso("Victoria",0,["King's Cross St. Pancras","Euston","Warren Street","Oxford Circus","Green Park","Victoria","Pimlico"]).
-percorso("Waterloo & City",0,["Bank","Waterloo"])
+percorso("Waterloo & City",0,["Bank","Waterloo"]).
 
 percorso(Linea,1,LR) :- percorso(Linea,0,L), reverse(L,LR).
 
