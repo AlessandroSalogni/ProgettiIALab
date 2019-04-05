@@ -8,20 +8,20 @@ a_star(Soluzione) :-
 as([nodo(S, AzPerS, CostoAzPerS, _)|_], AzPerS, _, Espansi) :- finale(S), write(CostoAzPerS), nl, !, write(Espansi), nl.
 as([nodo(S, AzPerS, CostoAzPerS, EurDaS)|Tail], Soluzione, Vis, Espansi) :-
   findall(Az, applicabile(Az, S), ListaAzApplicabili),
-  expand_children(nodo(S, AzPerS, CostoAzPerS, EurDaS), ListaAzApplicabili, Vis, ListaFigli),
+  expand_children_as(nodo(S, AzPerS, CostoAzPerS, EurDaS), ListaAzApplicabili, Vis, ListaFigli),
   priority_queue(Tail, ListaFigli, NuovaCoda),
   NuovoEspansi is Espansi + 1,
   as(NuovaCoda, Soluzione, [nodo(S, CostoAzPerS)|Vis], NuovoEspansi).
 
-expand_children(_, [], _, []).
-expand_children(nodo(S, AzPerS, CostoAzPerS, EurDaS), [Az|AltreAz], Vis, [nodo(S_Nuovo, [Az|AzPerS], CostoAzPerSNuovo, EurDaSNuovo)|FigliTail]) :-
+expand_children_as(_, [], _, []).
+expand_children_as(nodo(S, AzPerS, CostoAzPerS, EurDaS), [Az|AltreAz], Vis, [nodo(S_Nuovo, [Az|AzPerS], CostoAzPerSNuovo, EurDaSNuovo)|FigliTail]) :-
   trasforma(Az, S, S_Nuovo),
   costo(Az, Costo),
   CostoAzPerSNuovo is CostoAzPerS + Costo,
   revisit_node(nodo(S_Nuovo, CostoAzPerSNuovo), Vis, NuoviVis), !,
   heuristic(S_Nuovo, EurDaSNuovo),
-  expand_children(nodo(S, AzPerS, CostoAzPerS, EurDaS), AltreAz, NuoviVis, FigliTail).
-expand_children(Nodo, [Az|AltreAz], Vis, FigliTail) :- expand_children(Nodo, AltreAz, Vis, FigliTail).
+  expand_children_as(nodo(S, AzPerS, CostoAzPerS, EurDaS), AltreAz, NuoviVis, FigliTail).
+expand_children_as(Nodo, [_|AltreAz], Vis, FigliTail) :- expand_children_as(Nodo, AltreAz, Vis, FigliTail).
 
 revisit_node(_, [], []).
 revisit_node(nodo(S, CostoAzPerS), [nodo(S, CostoAzPerSVis)|AltriVis], AltriVis) :- !, CostoAzPerS < CostoAzPerSVis.
