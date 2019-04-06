@@ -10,7 +10,7 @@ percorso("Circle",0,["Embankment","Westminster","St. James's Park","Victoria","S
   "High Street Kensington","Notting Hill Gate","Bayswater","Paddington","Edgware Road","Baker Street","Great Portland Street",
   "Euston Square","King's Cross St. Pancras","Farringdon","Barbican","Moorgate","Liverpool Street","Aldgate","Tower Hill","Monument",
   "Cannon Street","Mansion House","Blackfriars","Temple","Embankment"]). %Pensare bene alla lista circolare
-percorso("District East-West",0,["Upton Park","Plaistow","West Ham","Bromley-by-Bow","Bow Road","Mile End","Stepney Green",
+percorso("District East-West",0,["Upton Park","Plaistow","West Ham","Bromley By Bow","Bow Road","Mile End","Stepney Green",
   "Whitechapel","Aldgate East","Tower Hill","Monument","Cannon Street","Mansion House","Blackfriars","Temple","Embankment","Westminster",
   "St. James's Park","Victoria","Sloane Square","South Kensington","Gloucester Road","Earl's Court","West Kensington","Barons Court",
   "Hammersmith","Ravenscourt Park","Stamford Brook","Turnham Green","Chiswick Park","Acton Town","Ealing Common","Ealing Broadway"]).
@@ -19,7 +19,7 @@ percorso("District North-South",0,["Edgware Road","Paddington","Bayswater","Nott
 percorso("Hammersmith & City",0,["Hammersmith","Goldhawk Road","Shepherd's Bush Market","Latimer Road","Ladbroke Grove",
   "Westbourne Park","Royal Oak","Paddington","Edgware Road","Baker Street","Great Portland Street","Euston Square",
   "King's Cross St. Pancras","Farringdon","Barbican","Moorgate","Liverpool Street","Aldgate East","Whitechapel",
-  "Stepney Green","Mile End","Bow Road","Bromley-by-Bow","West Ham","Plaistow","Upton Park"]).
+  "Stepney Green","Mile End","Bow Road","Bromley By Bow","West Ham","Plaistow","Upton Park"]).
 percorso("Jubilee",0,["Neasden","Dollis Hill","Willesden Green","Kilburn","West Hampstead","Finchley Road","Swiss Cottage",
   "St. John's Wood","Baker Street","Bond Street","Green Park","Westminster","Waterloo","Southwark","London Bridge","Bermondsey",
   "Canada Water","Canary Wharf","North Greenwich","Canning Town","West Ham","Stratford"]).
@@ -36,7 +36,7 @@ percorso("Northern West",0,["Hendon Central","Brent Cross","Golders Green","Hamp
 percorso("Piccadilly",0,["Bounds Green","Wood Green","Turnpike Lane","Manor House","Finsbury Park","Arsenal","Holloway Road",
   "Caledonian Road","King's Cross St. Pancras","Russell Square","Holborn","Covent Garden","Leicester Square","Piccadilly Circus",
   "Green Park","Hyde Park Corner","Knightsbridge","South Kensington","Gloucester Road","Earl's Court","Barons Court","Hammersmith",
-  "Turnham Green","Acton Town","Ealing Common","North Ealing","Park Royal"]).
+  /*"Turnham Green",*/"Acton Town","Ealing Common","North Ealing","Park Royal"]).
 percorso("Victoria",0,["Walthamstow Central","Blackhorse Road","Tottenham Hale","Seven Sisters","Finsbury Park","Highbury & Islington",
   "King's Cross St. Pancras","Euston","Warren Street","Oxford Circus","Green Park","Victoria","Pimlico","Vauxhall","Stockwell","Brixton"]).
 percorso("Waterloo & City",0,["Bank","Waterloo"]).
@@ -193,7 +193,7 @@ stazione("Park Royal", -0.282378071, 51.52597425).
 %stazione("Hanger Lane", -0.291095909, 51.52968038).
 stazione("North Acton", -0.258167978, 51.52310534).
 stazione("Leyton", -0.00386474, 51.55609689).
-stazione("Bromley-by-Bow", -0.009841042, 51.52424987).
+stazione("Bromley By Bow", -0.009841042, 51.52424987).
 stazione("Plaistow", 0.018612643, 51.53072137).
 stazione("Upton Park", 0.036836325, 51.53487026).
 stazione("Turnpike Lane", -0.101359413, 51.58975112).
@@ -231,6 +231,7 @@ stazione("Stratford", -0.002182514, 51.54094802).
 fermata(Stazione,Linea) :- percorso(Linea,0,P), member(Stazione,P).
 
 
-iniziale([at("Bayswater"),ground]).
+iniziale([at("Ealing Broadway"),ground]).
 
-finale([at("Piccadilly Circus"),ground]).
+%finale([at("Stratford"),ground]).
+finale([at("North Greenwich"),ground]).
