@@ -1,4 +1,4 @@
-%CODA DI PRIORITA'
+% Coda di priorità
 priority_queue(Coda, [], Coda).
 priority_queue(Coda, [Nodo|AltriFigli], NuovaCoda) :-
   insert_node(Coda, Nodo, CodaConNodo),
@@ -11,11 +11,17 @@ insert_node([nodo(SCoda, AzPerSCoda, CostoAzPerSCoda, EuristicaDaSCoda)|TailCoda
   insert_node(TailCoda, nodo(SNodo, AzPerSNodo, CostoAzPerSNodo, EuristicaDaSNodo), NuovaCoda).
 insert_node(Coda, Nodo, [Nodo|Coda]).
 
-%COSTO DELLA DISTANZA IN LINEA D'ARIA
-coords_distance(SP, SA, Costo) :-
-  stazione(SP, SPx, SPy),
-  stazione(SA, SAx, SAy),
-  P is 0.017453292519943295,
-  A is (0.5 - cos((SAy - SPy) * P) / 2 + cos(SPy * P) * cos(SAy * P) * (1 - cos((SAx - SPx) * P)) / 2),
-  Dis is (12742 * asin(sqrt(A))),
-  Costo is (Dis * 1000 / 10) / 60. % (secondi) /60 -> minuti
+% Predicato per decidere se rivisitare i nodi in a star
+revisit_node(_, [], []).
+revisit_node(nodo(S, CostoAzPerS), [nodo(S, CostoAzPerSVis)|AltriVis], AltriVis) :- !, CostoAzPerS < CostoAzPerSVis.
+revisit_node(nodo(S, CostoAzPerS), [nodo(SVis, CostoAzPerSVis)|AltriVis], [nodo(SVis, CostoAzPerSVis)|NuoviVis]) :-
+  revisit_node(nodo(S, CostoAzPerS), AltriVis, NuoviVis).
+
+% Predicati che calcola il costo per salire e scendere da una Metro
+costo_sali_scendi(CostoSaliScendi) :-
+  costo_scendi(CostoScendi),
+  costo_sali(CostoSali),
+  CostoSaliScendi is CostoSali + CostoScendi.
+
+costo_scendi(CostoScendi) :- costo(scendi(_), CostoScendi).
+costo_sali(CostoSali) :- costo(sali(_,_), CostoSali).
