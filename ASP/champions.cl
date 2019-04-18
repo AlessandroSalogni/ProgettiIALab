@@ -41,8 +41,8 @@ girone("F","Blu").
 girone("G","Blu").
 girone("H","Blu").
 
-1 { assegna_girone(Squadra,G) : girone(G,_) } 1 :- dati_squadra(Squadra,_,_,_).
-4 { assegna_girone(Squadra,G) : dati_squadra(Squadra,_,_,_) } 4 :- girone(G,_).
+1 { assegna_girone(Squadra,Naz,G) : girone(G,_) } 1 :- dati_squadra(Squadra,Naz,_,_).
+4 { assegna_girone(Squadra,Naz,G) : dati_squadra(Squadra,Naz,_,_) } 4 :- girone(G,_).
 
 stessa_nazione(SquadraX,SquadraY) :-
   dati_squadra(SquadraX,Naz,_,_),
@@ -62,8 +62,18 @@ squadra_ucraina(Squadra) :-
   dati_squadra(Squadra,Naz,_,_),
   Naz == "Ucraina".
 
-:- assegna_girone(SquadraX,G), assegna_girone(SquadraY,G), stessa_nazione(SquadraX,SquadraY).
-:- assegna_girone(SquadraX,G), assegna_girone(SquadraY,G), stessa_fascia(SquadraX,SquadraY).
-:- assegna_girone(SquadraX,G), assegna_girone(SquadraY,G), squadra_russa(SquadraX), squadra_ucraina(SquadraY).
+:- assegna_girone(SquadraX,_,G), assegna_girone(SquadraY,_,G), stessa_nazione(SquadraX,SquadraY).
+:- assegna_girone(SquadraX,_,G), assegna_girone(SquadraY,_,G), stessa_fascia(SquadraX,SquadraY).
+:- assegna_girone(SquadraX,_,G), assegna_girone(SquadraY,_,G), squadra_russa(SquadraX), squadra_ucraina(SquadraY).
 
-#show assegna_girone/2.
+nazione(Naz) :- dati_squadra(_,Naz,_,_).
+n_squadre_per_nazione(Naz, N) :- N = #count{ Squadra : dati_squadra(Squadra,Naz,_,_) }, nazione(Naz).
+n_squadre_per_nazione_in_girone_rosso(Naz, N) :- N = #count{ Squadra : assegna_girone(Squadra,Naz,G),girone(G,"Rosso") }, nazione(Naz).
+n_squadre_per_nazione_in_girone_blu(Naz, N) :- N = #count{ Squadra : assegna_girone(Squadra,Naz,G),girone(G,"Blu") }, nazione(Naz).
+
+squadre_per_nazione_in_gironi_rossi(Naz) :- n_squadre_per_nazione_in_girone_rosso(Naz, NSquadreInRosso), n_squadre_per_nazione(Naz, NSquadre), NSquadreInRosso*10 <= NSquadre*10/2+5.
+squadre_per_nazione_in_gironi_blu(Naz) :- n_squadre_per_nazione_in_girone_blu(Naz, NSquadreInBlu), n_squadre_per_nazione(Naz, NSquadre), NSquadreInBlu*10 <= NSquadre*10/2+5.
+:- nazione(Naz), not squadre_per_nazione_in_gironi_rossi(Naz).
+:- nazione(Naz), not squadre_per_nazione_in_gironi_blu(Naz).
+
+#show  assegna_girone/3.
