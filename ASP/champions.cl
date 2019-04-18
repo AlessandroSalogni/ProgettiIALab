@@ -71,9 +71,23 @@ n_squadre_per_nazione(Naz, N) :- N = #count{ Squadra : dati_squadra(Squadra,Naz,
 n_squadre_per_nazione_in_girone_rosso(Naz, N) :- N = #count{ Squadra : assegna_girone(Squadra,Naz,G),girone(G,"Rosso") }, nazione(Naz).
 n_squadre_per_nazione_in_girone_blu(Naz, N) :- N = #count{ Squadra : assegna_girone(Squadra,Naz,G),girone(G,"Blu") }, nazione(Naz).
 
-squadre_per_nazione_in_gironi_rossi(Naz) :- n_squadre_per_nazione_in_girone_rosso(Naz, NSquadreInRosso), n_squadre_per_nazione(Naz, NSquadre), NSquadreInRosso*10 <= NSquadre*10/2+5.
-squadre_per_nazione_in_gironi_blu(Naz) :- n_squadre_per_nazione_in_girone_blu(Naz, NSquadreInBlu), n_squadre_per_nazione(Naz, NSquadre), NSquadreInBlu*10 <= NSquadre*10/2+5.
-:- nazione(Naz), not squadre_per_nazione_in_gironi_rossi(Naz).
-:- nazione(Naz), not squadre_per_nazione_in_gironi_blu(Naz).
+:- n_squadre_per_nazione_in_girone_rosso(Naz,NSquadreInRosso), n_squadre_per_nazione(Naz,NSquadre), NSquadreInRosso*10 > NSquadre*10/2+5.
+:- n_squadre_per_nazione_in_girone_blu(Naz,NSquadreInBlu), n_squadre_per_nazione(Naz,NSquadre), NSquadreInBlu*10 > NSquadre*10/2+5.
 
-#show  assegna_girone/3.
+
+%Partite
+
+3 { scontri(SquadraX,SquadraY,G) :  assegna_girone(SquadraY,_,G), SquadraX != SquadraY } 3 :- assegna_girone(SquadraX,_,G).
+
+giornata(1..6).
+1 { partita(SquadraX,SquadraY,Giorn,G) : giornata(Giorn) } 1 :- scontri(SquadraX,SquadraY,G).
+16 { partita(SquadraX,SquadraY,Giorn,G) : scontri(SquadraX,SquadraY,G) } 16 :- giornata(Giorn). 
+
+%partita(SquadraX,SquadraY,Giornata,G) :- scontri(SquadraX,SquadraY,G).
+
+goal :- partita(SquadraX,SquadraY,Giorn,G), partita(SquadraZ,SquadraW,Giorn,G), partita(SquadraK,SquadraJ,Giorn,G), 
+  SquadraX != SquadraZ, SquadraK != SquadraX, SquadraK != SquadraZ. 
+
+:- not goal.
+
+#show  partita/4.
