@@ -87,9 +87,7 @@ giornata(1..6).
 
 :- partita(SquadraX,SquadraY,Giorn,_), partita(SquadraX,SquadraZ,Giorn,_), SquadraY != SquadraZ. % No 2 partite di x in casa contro squadre diverse nella stessa giornata
 :- partita(SquadraY,SquadraX,Giorn,_), partita(SquadraZ,SquadraX,Giorn,_), SquadraY != SquadraZ. % No 2 partite di x in trasferta contro squadre diverse nella stessa giornata
-:- partita(SquadraX,SquadraY,Giorn,_), partita(SquadraZ,SquadraX,Giorn,_). % No 2 partite di x in casa/trasferta contro squadre diverse nella stessa giornata
-% :- partita(SquadraY,SquadraX,Giorn,_), partita(SquadraX,SquadraZ,Giorn,_), SquadraY != SquadraZ. % No 2 partite di x in trasferta/casa contro squadre diverse nella stessa giornata
-% :- partita(SquadraX,SquadraY,Giorn,_), partita(SquadraY,SquadraX,Giorn,_). % No partita di ritorno di x nella stessa giornata
+:- partita(SquadraX,SquadraY,Giorn,_), partita(SquadraZ,SquadraX,Giorn,_). % No 2 partite di x in casa/trasferta nella stessa giornata contro la stessa squadra o una squadra diversa
 
 stessa_citta(SquadraX,SquadraY) :-
   dati_squadra(SquadraX,_,Citta,_),
@@ -97,5 +95,11 @@ stessa_citta(SquadraX,SquadraY) :-
   SquadraX != SquadraY.
 
 :- partita(SquadraX,_,Giorn,_), partita(SquadraY,_,Giorn,_), stessa_citta(SquadraX,SquadraY).
+
+:- partita(Squadra,_,Giorn1,_), partita(Squadra,_,Giorn2,_), partita(Squadra,_,Giorn3,_), Giorn2 == Giorn1 + 1, Giorn3 == Giorn2 + 1. %No più di 2 partite in casa consecutive
+:- partita(_,Squadra,Giorn1,_), partita(_,Squadra,Giorn2,_), partita(_,Squadra,Giorn3,_), Giorn2 == Giorn1 + 1, Giorn3 == Giorn2 + 1. %No più di 2 partite in trasferta consecutive 
+
+:- partita(SquadraX,SquadraY,Giorn1,_), partita(SquadraY,SquadraX,Giorn2,_), Giorn1 >= 4, Giorn2 >= 4.
+:- partita(SquadraX,SquadraY,Giorn1,_), partita(SquadraY,SquadraX,Giorn2,_), Giorn1 <= 3, Giorn2 <= 3.
 
 #show  partita/4.
