@@ -81,13 +81,21 @@ n_squadre_per_nazione_in_girone_blu(Naz, N) :- N = #count{ Squadra : assegna_gir
 
 giornata(1..6).
 1 { partita(SquadraX,SquadraY,Giorn,G) : giornata(Giorn) } 1 :- scontri(SquadraX,SquadraY,G).
-16 { partita(SquadraX,SquadraY,Giorn,G) : scontri(SquadraX,SquadraY,G) } 16 :- giornata(Giorn). 
+16 { partita(SquadraX,SquadraY,Giorn,G) : scontri(SquadraX,SquadraY,G) } 16 :- giornata(Giorn).
 
 %partita(SquadraX,SquadraY,Giornata,G) :- scontri(SquadraX,SquadraY,G).
 
-goal :- partita(SquadraX,SquadraY,Giorn,G), partita(SquadraZ,SquadraW,Giorn,G), partita(SquadraK,SquadraJ,Giorn,G), 
-  SquadraX != SquadraZ, SquadraK != SquadraX, SquadraK != SquadraZ. 
+:- partita(SquadraX,SquadraY,Giorn,_), partita(SquadraX,SquadraZ,Giorn,_), SquadraY != SquadraZ. % No 2 partite di x in casa contro squadre diverse nella stessa giornata
+:- partita(SquadraY,SquadraX,Giorn,_), partita(SquadraZ,SquadraX,Giorn,_), SquadraY != SquadraZ. % No 2 partite di x in trasferta contro squadre diverse nella stessa giornata
+:- partita(SquadraX,SquadraY,Giorn,_), partita(SquadraZ,SquadraX,Giorn,_). % No 2 partite di x in casa/trasferta contro squadre diverse nella stessa giornata
+% :- partita(SquadraY,SquadraX,Giorn,_), partita(SquadraX,SquadraZ,Giorn,_), SquadraY != SquadraZ. % No 2 partite di x in trasferta/casa contro squadre diverse nella stessa giornata
+% :- partita(SquadraX,SquadraY,Giorn,_), partita(SquadraY,SquadraX,Giorn,_). % No partita di ritorno di x nella stessa giornata
 
-:- not goal.
+stessa_citta(SquadraX,SquadraY) :-
+  dati_squadra(SquadraX,_,Citta,_),
+  dati_squadra(SquadraY,_,Citta,_),
+  SquadraX != SquadraY.
+
+:- partita(SquadraX,_,Giorn,_), partita(SquadraY,_,Giorn,_), stessa_citta(SquadraX,SquadraY).
 
 #show  partita/4.
