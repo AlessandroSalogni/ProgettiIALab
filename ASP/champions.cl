@@ -83,8 +83,6 @@ giornata(1..6).
 1 { partita(SquadraX,SquadraY,Giorn,G) : giornata(Giorn) } 1 :- scontri(SquadraX,SquadraY,G).
 16 { partita(SquadraX,SquadraY,Giorn,G) : scontri(SquadraX,SquadraY,G) } 16 :- giornata(Giorn).
 
-%partita(SquadraX,SquadraY,Giornata,G) :- scontri(SquadraX,SquadraY,G).
-
 :- partita(SquadraX,SquadraY,Giorn,_), partita(SquadraX,SquadraZ,Giorn,_), SquadraY != SquadraZ. % No 2 partite di x in casa contro squadre diverse nella stessa giornata
 :- partita(SquadraY,SquadraX,Giorn,_), partita(SquadraZ,SquadraX,Giorn,_), SquadraY != SquadraZ. % No 2 partite di x in trasferta contro squadre diverse nella stessa giornata
 :- partita(SquadraX,SquadraY,Giorn,_), partita(SquadraZ,SquadraX,Giorn,_). % No 2 partite di x in casa/trasferta nella stessa giornata contro la stessa squadra o una squadra diversa
@@ -100,6 +98,6 @@ stessa_citta(SquadraX,SquadraY) :-
 :- partita(_,Squadra,Giorn1,_), partita(_,Squadra,Giorn2,_), partita(_,Squadra,Giorn3,_), Giorn2 == Giorn1 + 1, Giorn3 == Giorn2 + 1. % No più di 2 partite in trasferta consecutive
 
 :- partita(SquadraX,SquadraY,Giorn1,_), partita(SquadraY,SquadraX,Giorn2,_), Giorn1 > 3, Giorn2 > 3. % No andata e ritorno entrambe nelle ultime 3 gare
-:- partita(SquadraX,SquadraY,Giorn1,_), partita(SquadraY,SquadraX,Giorn2,_), Giorn1 <= 3, Giorn2 <= 3. % No andata e ritorno entrambe nelle prime 3 gare
+%:- partita(SquadraX,SquadraY,Giorn1,_), partita(SquadraY,SquadraX,Giorn2,_), Giorn1 <= 3, Giorn2 <= 3. % No andata e ritorno entrambe nelle prime 3 gare
 
 #show  partita/4.
