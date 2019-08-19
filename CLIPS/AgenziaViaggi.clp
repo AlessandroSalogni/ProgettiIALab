@@ -1,7 +1,6 @@
 (defmodule MAIN (export ?ALL))
 (defmodule DESTINATIONS)
 (defmodule PRINT-RESULTS)
-(defmodule FACILITIES)
 
 ;;****************
 ;;* DEFFUNCTIONS *
@@ -84,38 +83,35 @@
   (request (attributes destinazione regione) (request "Che regione/i vuoi visitare? ") (valid-answers piemonte))
 )
 
-
-
-;;**************
-;;* FACILITIES *
-;;**************
-
-(deftemplate FACILITIES::site
-    (slot name (default ?NONE))
-    (multislot coordinates (default any))
-    (multislot hotels (default any))
-
-    (slot sea_stars (default 0))
-    (slot mountain_stars (default 0))
-    (slot lake_stars (default 0))
-    (slot naturalistic_stars (default 0))
-    (slot termal_stars (default 0))
-    (slot cultural_stars (default 0))
-    (slot religious_stars (default 0))
-    (slot enogastronomic_stars (default 0))
-    (slot sport_stars (default 0))
-    (slot religious_stars (default 0))
+;;****************
+;;* DESTINATIONS *
+;;****************
+(deftemplate DESTINATIONS::place
+    (slot name (type STRING)) ;;stringa ???
+    (slot region) ;;stringa ???
+    (multislot coordinates (type FLOAT) (cardinality 2 2))
+    (slot sea_stars (type INTEGER) (default 0) (range 0 5))
+    (slot mountain_stars (type INTEGER) (default 0) (range 0 5))
+    (slot lake_stars (type INTEGER) (default 0) (range 0 5))
+    (slot naturalistic_stars (type INTEGER) (default 0) (range 0 5))
+    (slot termal_stars (type INTEGER) (default 0) (range 0 5))
+    (slot cultural_stars (type INTEGER) (default 0) (range 0 5))
+    (slot religious_stars (type INTEGER) (default 0) (range 0 5))
+    (slot enogastronomic_stars (type INTEGER) (default 0) (range 0 5))
+    (slot sport_stars (type INTEGER) (default 0) (range 0 5))
 )
 
-(deftemplate FACILITIES::hotel
-    (slot name (default ?NONE))
-    (slot stars (default 0))
+(deftemplate DESTINATIONS::facility
+    (slot name (type STRING))
+    (slot place (type STRING)) ;; Type place
+    (slot price (type INTEGER))
+    (slot stars (type INTEGER) (range 1 4))
+    (slot rooms (type INTEGER) (range 1 ?VARIABLE))
+    (slot free-rooms (type INTEGER) (range 0 ?VARIABLE)) ;; Fino a rooms
 )
 
-(deffacts FACILITIES::sites
-    ;;(site (name Massa) (coordinates 2 3) (hotels Giggi Puppi Costa) (sea_stars 2) (mountain_stars 4))
+(deffacts DESTINATIONS::sites
+    (place (name "massa") (region piemonte) (coordinates 2.0 3.0) (sea_stars 2) (mountain_stars 4))
     ;;(site (name LaSpezia) (coordinates 2 3) (hotels Giggi Puppi Costa) (sea_stars 2) (mountain_stars 4))
-    (hotel (name Puppi) (stars 4))
+    (facility (name "Puppi") (place massa) (stars 4))
 )
-
-
