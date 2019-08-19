@@ -18,6 +18,12 @@
 ;;*****************
 ;;* INITIAL STATE *
 ;;*****************
+(deftemplate MAIN::attribute
+  (slot name)
+  (slot value)
+  (slot certainty (default 100.0))
+)
+
 (defrule MAIN::start
 	(declare (salience 10000))
 	=>
@@ -87,31 +93,33 @@
 ;;* DESTINATIONS *
 ;;****************
 (deftemplate DESTINATIONS::place
-    (slot name (type STRING)) ;;stringa ???
-    (slot region) ;;stringa ???
-    (multislot coordinates (type FLOAT) (cardinality 2 2))
-    (slot sea_stars (type INTEGER) (default 0) (range 0 5))
-    (slot mountain_stars (type INTEGER) (default 0) (range 0 5))
-    (slot lake_stars (type INTEGER) (default 0) (range 0 5))
-    (slot naturalistic_stars (type INTEGER) (default 0) (range 0 5))
-    (slot termal_stars (type INTEGER) (default 0) (range 0 5))
-    (slot cultural_stars (type INTEGER) (default 0) (range 0 5))
-    (slot religious_stars (type INTEGER) (default 0) (range 0 5))
-    (slot enogastronomic_stars (type INTEGER) (default 0) (range 0 5))
-    (slot sport_stars (type INTEGER) (default 0) (range 0 5))
+  (slot name (type STRING)) ;;stringa ???
+  (slot region) ;;stringa ??? elencare regioni ??
+  (multislot coordinates (type FLOAT) (cardinality 2 2))
+  (slot sea_stars (type INTEGER) (default 0) (range 0 5))
+  (slot mountain_stars (type INTEGER) (default 0) (range 0 5))
+  (slot lake_stars (type INTEGER) (default 0) (range 0 5))
+  (slot naturalistic_stars (type INTEGER) (default 0) (range 0 5))
+  (slot termal_stars (type INTEGER) (default 0) (range 0 5))
+  (slot cultural_stars (type INTEGER) (default 0) (range 0 5))
+  (slot religious_stars (type INTEGER) (default 0) (range 0 5))
+  (slot enogastronomic_stars (type INTEGER) (default 0) (range 0 5))
+  (slot sport_stars (type INTEGER) (default 0) (range 0 5))
 )
 
 (deftemplate DESTINATIONS::facility
-    (slot name (type STRING))
-    (slot place (type STRING)) ;; Type place
-    (slot price (type INTEGER))
-    (slot stars (type INTEGER) (range 1 4))
-    (slot rooms (type INTEGER) (range 1 ?VARIABLE))
-    (slot free-rooms (type INTEGER) (range 0 ?VARIABLE)) ;; Fino a rooms
+  (slot name (type STRING))
+  (slot place (type STRING)) ;; Type place
+  (slot price (type INTEGER))
+  (slot stars (type INTEGER) (range 1 4))
+  (multislot rooms (type INTEGER) (cardinality 2 2) (range 0 ?VARIABLE))
 )
 
+; (deftemplate DESTINATIONS::visit
+;   (slot people (type INTEGER) (range 1 ?VARIABLE))
+; )
+
 (deffacts DESTINATIONS::sites
-    (place (name "massa") (region piemonte) (coordinates 2.0 3.0) (sea_stars 2) (mountain_stars 4))
-    ;;(site (name LaSpezia) (coordinates 2 3) (hotels Giggi Puppi Costa) (sea_stars 2) (mountain_stars 4))
-    (facility (name "Puppi") (place massa) (stars 4))
+  (place (name "massa") (region piemonte) (coordinates 2.0 3.0) (sea_stars 2) (mountain_stars 4))
+  (facility (name "Puppi") (place massa) (stars 4))
 )
