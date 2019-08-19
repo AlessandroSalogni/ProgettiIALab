@@ -1,6 +1,7 @@
 (defmodule MAIN (export ?ALL))
 (defmodule DESTINATIONS)
 (defmodule PRINT-RESULTS)
+(defmodule FACILITIES)
 
 ;;****************
 ;;* DEFFUNCTIONS *
@@ -82,3 +83,39 @@
   (request (attributes destinazione not-set) (request "Quale parametro di ricerca per la destinazione vuoi impostare? ") (valid-answers regione))
   (request (attributes destinazione regione) (request "Che regione/i vuoi visitare? ") (valid-answers piemonte))
 )
+
+
+
+;;**************
+;;* FACILITIES *
+;;**************
+
+(deftemplate FACILITIES::site
+    (slot name (default ?NONE))
+    (multislot coordinates (default any))
+    (multislot hotels (default any))
+
+    (slot sea_stars (default 0))
+    (slot mountain_stars (default 0))
+    (slot lake_stars (default 0))
+    (slot naturalistic_stars (default 0))
+    (slot termal_stars (default 0))
+    (slot cultural_stars (default 0))
+    (slot religious_stars (default 0))
+    (slot enogastronomic_stars (default 0))
+    (slot sport_stars (default 0))
+    (slot religious_stars (default 0))
+)
+
+(deftemplate FACILITIES::hotel
+    (slot name (default ?NONE))
+    (slot stars (default 0))
+)
+
+(deffacts FACILITIES::sites
+    ;;(site (name Massa) (coordinates 2 3) (hotels Giggi Puppi Costa) (sea_stars 2) (mountain_stars 4))
+    ;;(site (name LaSpezia) (coordinates 2 3) (hotels Giggi Puppi Costa) (sea_stars 2) (mountain_stars 4))
+    (hotel (name Puppi) (stars 4))
+)
+
+
