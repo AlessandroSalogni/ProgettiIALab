@@ -1,0 +1,7 @@
+Stabilire se una regione è di un certo tipo di turismo, potrebbe essere fatto in due modi:
+	- stabilendo tramite fatto statico (es: liguria è montana e di mare)
+	- inferendolo dalle località della regione (es: cinque terre e genova, dicono che liguria è di mare)
+
+la prima soluzione potrebbe quadrare, l'esperto del dominio sa bene che tipo di regione è la liguria.
+ma se l'agenzia vaggi non avesse localtà marittime in liguria, non ha senso trattare la liguria come regione di mare.
+per cui la soluzione tramite inferenza è preferita piu dinamca
