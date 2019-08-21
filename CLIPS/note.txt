@@ -3,8 +3,37 @@ Stabilire se una regione è di un certo tipo di turismo, potrebbe essere fatto i
 	- inferendolo dalle località della regione (es: cinque terre e genova, dicono che liguria è di mare)
 
 la prima soluzione potrebbe quadrare, l'esperto del dominio sa bene che tipo di regione è la liguria.
-ma se l'agenzia vaggi non avesse localtà marittime in liguria, non ha senso trattare la liguria come regione di mare.
+ma se l'agenzia viaggi non avesse localtà marittime in liguria, non ha senso trattare la liguria come regione di mare.
 per cui la soluzione tramite inferenza è preferita piu dinamica
 
 Si potrebbe pensare ad un modulo di inferenza sul dominio iniziale fornito, da eseguire una volta sola e ogni qualvolta
 venga aggiunto un fatto relativo alle località
+
+; CFtu  -1 -0.6 -0.2 0.2 0.6  1
+; score  0   1    2    3   4   5
+; ----------------------------- =
+;
+; score : 5 = x : 2
+;
+; (score * 2 / 5) - 1    CORRISPONDENZA cf
+; int = |cf1 - cf2|
+; sol = 1 - int
+;
+;
+; 0 = 0 - 1 = -1
+; 1 = 0.4 - 1 = -0.6
+; 2 = 0.8 - 1 = -0.2
+; 3 = 1.2 - 1 = 0.2
+; 4 = 1.6 - 1 = 0.6
+; 5 = 2 - 1 = 1
+;
+; int = |cf1 - cf2|
+; sol = 1 - int
+;
+; int 2 -> -1
+; int 1 -> 0
+; int 0 -> 1
+; int 0.4 -> 0.6
+; int 0.6 -> 0.4
+; int 1.2 -> -0.2
+; int 1.6 -> -0.6
