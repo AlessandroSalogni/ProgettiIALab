@@ -23,6 +23,7 @@
   (slot name)
   (slot value)
   (slot certainty (type FLOAT) (default 1.0) (range -1.0 1.0))
+  (slot inferred (default FALSE))
 )
 
 (defrule MAIN::start
@@ -68,7 +69,7 @@
   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)))
   =>
   (retract ?attr1)
-  (modify ?attr2 (certainty 0.0))
+  (modify ?attr2 (certainty 1.0)) ; perchè con -0.9 e 1 viene 1 l'altra regola
 )
 
 ;;*****************
@@ -173,29 +174,89 @@
 ;;****************
 (defmodule EXPERTISE (import MAIN ?ALL))
 
-(defrule EXPERTISE::region-liguria
-  (attribute (name region) (value liguria))
-  =>
-  (assert (attribute (name turism) (value sea) (certainty 0.8)))
-  (assert (attribute (name turism) (value mountain) (certainty 0.3)))
-  (assert (attribute (name turism) (value enogastronomic) (certainty 0.5)))
-  (assert (attribute (name turism) (value lake) (certainty -0.9)))
-  (assert (attribute (name turism) (value termal) (certainty -0.5)))
-  (assert (attribute (name turism) (value sport) (certainty 0.5)))
-  (assert (attribute (name turism) (value naturalistic) (certainty 0.6)))
+(deftemplate EXPERTISE::inference
+  (slot attribute)
+  (multislot expertise)
 )
 
-(defrule EXPERTISE::region-piemonte
-  (attribute (name region) (value piemonte))
-  =>
-  (assert (attribute (name turism) (value sea) (certainty -1.0)))
-  (assert (attribute (name turism) (value mountain) (certainty 0.9)))
-  (assert (attribute (name turism) (value religious) (certainty 0.4)))
-  (assert (attribute (name turism) (value lake) (certainty 0.5)))
-  (assert (attribute (name turism) (value termal) (certainty 0.2)))
-  (assert (attribute (name turism) (value lake) (certainty 0.6)))
-  (assert (attribute (name turism) (value enogastronomic) (certainty 0.7)))
+(deffacts EXPERTISE::expertise-knowledge
+  (inference (attribute liguria) (expertise exp-turism [ sea 0.8 mountain 0.3 enogastronomic 0.5 lake -0.9 termal -0.5
+    sport 0.5 naturalistic 0.6 cultural 0.0 religious 0.0 ]))
+  (inference (attribute piemonte) (expertise exp-turism [ sea -1.0 mountain 0.9 enogastronomic 0.7 lake 0.5 termal 0.2
+    sport 0.0 naturalistic 0.0 cultural 0.0 religious 0.4 ]))
 )
+
+(defrule EXPERTISE::expertise-rule
+  (attribute (name ?user-attribute) (value ?name) (inferred FALSE))
+  (inference (attribute ?name) (expertise $?prev ?attribute [ $?values ] $?next))
+  =>
+  (assert (new-attributes ?attribute $?values))
+)
+
+(defrule EXPERTISE::create-attribute
+  ?fact <- (new-attributes ?attribute ?value ?cf $?next)
+  =>
+  (retract ?fact)
+  (bind ?new-attributes ?attribute $?next)
+  (assert (new-attributes ?new-attributes))
+  (assert (attribute (name ?attribute) (value ?value) (certainty ?cf) (inferred TRUE)))
+)
+
+(defrule EXPERTISE::remove-empty-new-attributes
+  ?fact <- (new-attributes ?attribute)
+  =>
+  (retract ?fact)
+)
+
+; (defrule EXPERTISE::turism-mountain-to-region
+;   (attribute (name turism) (value mountain)) ;(certainty ?cf&:(>= ?cf 0.5)))
+;   ;(bind ?factor (- 1 ?cf))
+;   =>
+;   (assert (attribute (name region) (value piemonte) (certainty 0.9)));- 0.9 ?factor))))
+;   (assert (attribute (name region) (value liguria) (certainty -0.2)));+ -0.2 ?factor))))
+; )
+;
+; (defrule EXPERTISE::turism-sea-to-region
+;   (attribute (name turism) (value sea))
+;   =>
+;   (assert (attribute (name region) (value piemonte) (certainty -0.9)))
+;   (assert (attribute (name region) (value liguria) (certainty 0.8)))
+; )
+;
+; (defrule EXPERTISE::turism-enogastronomic-to-region
+;   (attribute (name turism) (value enogastronomic))
+;   =>
+;   (assert (attribute (name region) (value piemonte) (certainty 0.4)))
+;   (assert (attribute (name region) (value liguria) (certainty 0.2)))
+; )
+;
+; (defrule EXPERTISE::turism-sport-to-region
+;   (attribute (name turism) (value mountain))
+;   =>
+;   (assert (attribute (name region) (value piemonte) (certainty 0.0)))
+;   (assert (attribute (name region) (value liguria) (certainty 0.0)))
+; )
+;
+; (defrule EXPERTISE::turism-lake-to-region
+;   (attribute (name turism) (value lake))
+;   =>
+;   (assert (attribute (name region) (value piemonte) (certainty 0.5)))
+;   (assert (attribute (name region) (value liguria) (certainty -0.8)))
+; )
+;
+; (defrule EXPERTISE::turism-termal-to-region
+;   (attribute (name turism) (value termal))
+;   =>
+;   (assert (attribute (name region) (value piemonte) (certainty 0.6)))
+;   (assert (attribute (name region) (value liguria) (certainty -0.6)))
+; )
+;
+; (defrule EXPERTISE::turism-naturalistic-to-region
+;   (attribute (name turism) (value naturalistic))
+;   =>
+;   (assert (attribute (name region) (value piemonte) (certainty 0.7)))
+;   (assert (attribute (name region) (value liguria) (certainty 0.6)))
+; )
 
 
 ;** RULES BASED ON STARS
