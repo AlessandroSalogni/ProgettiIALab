@@ -197,6 +197,56 @@
   (assert (attribute (name turism) (value enogastronomic) (certainty 0.7)))
 )
 
+
+;** RULES BASED ON STARS
+(defrule EXPERTISE::region-facility-stars-4
+  (attribute (name stars) (value 4))
+  =>
+  (assert (attribute (name comfort) (value wifi) (certainty 1.0)))
+  (assert (attribute (name comfort) (value parking) (certainty 1.0)))
+  (assert (attribute (name comfort) (value pet-allowed) (certainty 0.8)))
+  (assert (attribute (name comfort) (value tv) (certainty 1.0)))
+  (assert (attribute (name comfort) (value gym) (certainty 1.0)))
+  (assert (attribute (name comfort) (value air-conditioning) (certainty 1.0)))
+  (assert (attribute (name comfort) (value pool) (certainty 1.0)))
+)
+
+(defrule EXPERTISE::region-facility-stars-3
+  (attribute (name stars) (value 3))
+  =>
+  (assert (attribute (name comfort) (value wifi) (certainty 1.0)))
+  (assert (attribute (name comfort) (value parking) (certainty 1.0)))
+  (assert (attribute (name comfort) (value pet-allowed) (certainty 0.4)))
+  (assert (attribute (name comfort) (value tv) (certainty 1.0)))
+  (assert (attribute (name comfort) (value gym) (certainty 0.4)))
+  (assert (attribute (name comfort) (value air-conditioning) (certainty 0.8)))
+  (assert (attribute (name comfort) (value pool) (certainty 0.8)))
+)
+
+(defrule EXPERTISE::region-facility-stars-2
+  (attribute (name stars) (value 2))
+  =>
+  (assert (attribute (name comfort) (value wifi) (certainty 0.6)))
+  (assert (attribute (name comfort) (value parking) (certainty 0.6)))
+  (assert (attribute (name comfort) (value pet-allowed) (certainty 0.2)))
+  (assert (attribute (name comfort) (value tv) (certainty 0.6)))
+  (assert (attribute (name comfort) (value gym) (certainty 0.2)))
+  (assert (attribute (name comfort) (value air-conditioning) (certainty 0.4)))
+  (assert (attribute (name comfort) (value pool) (certainty 0.2)))
+)
+
+(defrule EXPERTISE::region-facility-stars-1
+  (attribute (name stars) (value 1))
+  =>
+  (assert (attribute (name comfort) (value wifi) (certainty 0.4)))
+  (assert (attribute (name comfort) (value parking) (certainty 0.2)))
+  (assert (attribute (name comfort) (value pet-allowed) (certainty 0.0)))
+  (assert (attribute (name comfort) (value tv) (certainty 0.4)))
+  (assert (attribute (name comfort) (value gym) (certainty 0.0)))
+  (assert (attribute (name comfort) (value air-conditioning) (certainty 0.2)))
+  (assert (attribute (name comfort) (value pool) (certainty 0.0)))
+)
+
 ;;****************
 ;;* DESTINATIONS *
 ;;****************
