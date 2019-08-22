@@ -57,7 +57,7 @@
   (declare (salience 100) (auto-focus TRUE))
   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)))
   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)))
-  (test (and (neq ?c1 1.0) (neq ?c2 -1.0)))
+  (test (not (and (eq ?c1 1.0) (eq ?c2 -1.0))))
   =>
   (retract ?attr1)
   (modify ?attr2 (certainty (/ (+ ?c1 ?c2) (- 1 (min (abs ?c1) (abs ?c2))))))
@@ -162,7 +162,7 @@
   (search-parameter-history)
   (request (search-parameter start) (request "Which search parameter would you like to set? ") (valid-answers destination budget facility end))
   (request (search-parameter destination) (request "Which search parameter of destination would you like to set? ") (valid-answers region end))
-  (request (search-parameter region) (terminal-request TRUE) (request "Which region would you like to visit? ") (valid-answers piemonte liguria toscana lombardia veneto))
+  (request (search-parameter region) (terminal-request TRUE) (request "Which region would you like to visit? ") (valid-answers piemonte liguria toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
   (request (search-parameter budget) (terminal-request TRUE) (request "How much budget? ") (valid-answers 100 200 300 400 500 600 700 800 900 1000)) ; mettere un range?
   (request (search-parameter facility) (request "Which search parameter of facility would you like to set? ") (valid-answers stars comfort end))
   (request (search-parameter stars) (terminal-request TRUE) (request "How many stars would you like? ") (valid-answers 1 2 3 4))
@@ -176,19 +176,21 @@
 
 (deftemplate EXPERTISE::inference
   (slot attribute)
+  (slot value)
   (multislot expertise)
 )
 
 (deffacts EXPERTISE::expertise-knowledge
-  (inference (attribute liguria) (expertise exp-turism [ sea 0.8 mountain 0.3 enogastronomic 0.5 lake -0.9 termal -0.5
-    sport 0.5 naturalistic 0.6 cultural 0.0 religious 0.0 ]))
-  (inference (attribute piemonte) (expertise exp-turism [ sea -1.0 mountain 0.9 enogastronomic 0.7 lake 0.5 termal 0.2
-    sport 0.0 naturalistic 0.0 cultural 0.0 religious 0.4 ]))
+  (inference (attribute region) (value liguria) (expertise turism [ sea 0.8 mountain 0.3 enogastronomic 0.5 lake -0.9 termal -0.5
+    sport 0.5 naturalistic 0.6 ] region [ toscana 0.6 piemonte 0.1 valle-d'aosta -0.6 trentino-alto-adige -0.8 veneto 0.2 emilia-romagna 0.2 ] ))
+  (inference (attribute region) (value piemonte) (expertise turism [ sea -0.9 mountain 0.9 enogastronomic 0.7 lake 0.5 termal 0.2
+    religious 0.4 ] region [ valle-d'aosta 0.7 lombardia 0.5 trentino-alto-adige 0.4 liguria 0.1 toscana -0.5 ] ))
+  (inference (attribute sea) )
 )
 
 (defrule EXPERTISE::expertise-rule
   (attribute (name ?user-attribute) (value ?name) (inferred FALSE))
-  (inference (attribute ?name) (expertise $?prev ?attribute [ $?values ] $?next))
+  (inference (attribute ?user-attribute) (value ?name) (expertise $?prev ?attribute [ $?values&:(not (member ] ?values)) ] $?next))
   =>
   (assert (new-attributes ?attribute $?values))
 )
@@ -260,53 +262,53 @@
 
 
 ;** RULES BASED ON STARS
-(defrule EXPERTISE::region-facility-stars-4
-  (attribute (name stars) (value 4))
-  =>
-  (assert (attribute (name comfort) (value wifi) (certainty 1.0)))
-  (assert (attribute (name comfort) (value parking) (certainty 1.0)))
-  (assert (attribute (name comfort) (value pet-allowed) (certainty 0.8)))
-  (assert (attribute (name comfort) (value tv) (certainty 1.0)))
-  (assert (attribute (name comfort) (value gym) (certainty 1.0)))
-  (assert (attribute (name comfort) (value air-conditioning) (certainty 1.0)))
-  (assert (attribute (name comfort) (value pool) (certainty 1.0)))
-)
-
-(defrule EXPERTISE::region-facility-stars-3
-  (attribute (name stars) (value 3))
-  =>
-  (assert (attribute (name comfort) (value wifi) (certainty 1.0)))
-  (assert (attribute (name comfort) (value parking) (certainty 1.0)))
-  (assert (attribute (name comfort) (value pet-allowed) (certainty 0.4)))
-  (assert (attribute (name comfort) (value tv) (certainty 1.0)))
-  (assert (attribute (name comfort) (value gym) (certainty 0.4)))
-  (assert (attribute (name comfort) (value air-conditioning) (certainty 0.8)))
-  (assert (attribute (name comfort) (value pool) (certainty 0.8)))
-)
-
-(defrule EXPERTISE::region-facility-stars-2
-  (attribute (name stars) (value 2))
-  =>
-  (assert (attribute (name comfort) (value wifi) (certainty 0.6)))
-  (assert (attribute (name comfort) (value parking) (certainty 0.6)))
-  (assert (attribute (name comfort) (value pet-allowed) (certainty 0.2)))
-  (assert (attribute (name comfort) (value tv) (certainty 0.6)))
-  (assert (attribute (name comfort) (value gym) (certainty 0.2)))
-  (assert (attribute (name comfort) (value air-conditioning) (certainty 0.4)))
-  (assert (attribute (name comfort) (value pool) (certainty 0.2)))
-)
-
-(defrule EXPERTISE::region-facility-stars-1
-  (attribute (name stars) (value 1))
-  =>
-  (assert (attribute (name comfort) (value wifi) (certainty 0.4)))
-  (assert (attribute (name comfort) (value parking) (certainty 0.2)))
-  (assert (attribute (name comfort) (value pet-allowed) (certainty 0.0)))
-  (assert (attribute (name comfort) (value tv) (certainty 0.4)))
-  (assert (attribute (name comfort) (value gym) (certainty 0.0)))
-  (assert (attribute (name comfort) (value air-conditioning) (certainty 0.2)))
-  (assert (attribute (name comfort) (value pool) (certainty 0.0)))
-)
+; (defrule EXPERTISE::region-facility-stars-4
+;   (attribute (name stars) (value 4))
+;   =>
+;   (assert (attribute (name comfort) (value wifi) (certainty 1.0)))
+;   (assert (attribute (name comfort) (value parking) (certainty 1.0)))
+;   (assert (attribute (name comfort) (value pet-allowed) (certainty 0.8)))
+;   (assert (attribute (name comfort) (value tv) (certainty 1.0)))
+;   (assert (attribute (name comfort) (value gym) (certainty 1.0)))
+;   (assert (attribute (name comfort) (value air-conditioning) (certainty 1.0)))
+;   (assert (attribute (name comfort) (value pool) (certainty 1.0)))
+; )
+;
+; (defrule EXPERTISE::region-facility-stars-3
+;   (attribute (name stars) (value 3))
+;   =>
+;   (assert (attribute (name comfort) (value wifi) (certainty 1.0)))
+;   (assert (attribute (name comfort) (value parking) (certainty 1.0)))
+;   (assert (attribute (name comfort) (value pet-allowed) (certainty 0.4)))
+;   (assert (attribute (name comfort) (value tv) (certainty 1.0)))
+;   (assert (attribute (name comfort) (value gym) (certainty 0.4)))
+;   (assert (attribute (name comfort) (value air-conditioning) (certainty 0.8)))
+;   (assert (attribute (name comfort) (value pool) (certainty 0.8)))
+; )
+;
+; (defrule EXPERTISE::region-facility-stars-2
+;   (attribute (name stars) (value 2))
+;   =>
+;   (assert (attribute (name comfort) (value wifi) (certainty 0.6)))
+;   (assert (attribute (name comfort) (value parking) (certainty 0.6)))
+;   (assert (attribute (name comfort) (value pet-allowed) (certainty 0.2)))
+;   (assert (attribute (name comfort) (value tv) (certainty 0.6)))
+;   (assert (attribute (name comfort) (value gym) (certainty 0.2)))
+;   (assert (attribute (name comfort) (value air-conditioning) (certainty 0.4)))
+;   (assert (attribute (name comfort) (value pool) (certainty 0.2)))
+; )
+;
+; (defrule EXPERTISE::region-facility-stars-1
+;   (attribute (name stars) (value 1))
+;   =>
+;   (assert (attribute (name comfort) (value wifi) (certainty 0.4)))
+;   (assert (attribute (name comfort) (value parking) (certainty 0.2)))
+;   (assert (attribute (name comfort) (value pet-allowed) (certainty 0.0)))
+;   (assert (attribute (name comfort) (value tv) (certainty 0.4)))
+;   (assert (attribute (name comfort) (value gym) (certainty 0.0)))
+;   (assert (attribute (name comfort) (value air-conditioning) (certainty 0.2)))
+;   (assert (attribute (name comfort) (value pool) (certainty 0.0)))
+; )
 
 ;;****************
 ;;* DESTINATIONS *
@@ -375,6 +377,16 @@
     (name "Vento caldo") (price 110) (place "Savona") (stars 4) (rooms 10 21)
     (parking TRUE) (pool TRUE) (gym TRUE))
 )
+
+; (expertise turism [ sea -0.9  mountain 0.9 enogastronomic 0.7 lake 0.5 termal 0.2
+  ; religious 0.4 ] region [ valle-d'aosta 0.7 lombardia 0.5 trentino-alto-adige 0.4 liguria 0.1 toscana -0.5 ]
+
+; 0.9 - 0.7 - 0.5 - 0.3 - -0.2 - 0.4 = 0.75496
+; 0.97 - 0.5 - 0.3 - -0.2 - 0.4
+; 0.985 - 0.3 - -0.2 - 0.4
+; 0.9895 - -0.2 - 0.4
+; 0.986875 - 0.4
+; 0.992125 OK GIUSTO
 
 (defrule DESTINATIONS:generate-solution2
   (attribute (name turism) (value ?type) (certainty ?cf-turism))
