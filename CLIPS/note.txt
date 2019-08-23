@@ -9,6 +9,15 @@ per cui la soluzione tramite inferenza è preferita piu dinamica
 Si potrebbe pensare ad un modulo di inferenza sul dominio iniziale fornito, da eseguire una volta sola e ogni qualvolta
 venga aggiunto un fatto relativo alle località
 
+Se voglio andare in Liguria probabilmente voglio andare al mare,
+mentre se voglio andare al mare la Liguria non sarà la mia prima scelta
+-> esempio per spiegare perchè i valori sono diversi
+
+(bind ?cf-score (- (/ (* ?score 1.8) 5) 0.9)) -> facciamo questo calcolo per far variare lo score tra -0.9 e 0.9 del turismo in una località,
+così poi nella città non viene un valore tra 1 e -1 (valori intrattabili con certainty factor)
+
+CONTROLLARE LOOP IN CASO DI IMPOSTAZIONE DI REGIONE E TURISMO CONTEMPORANEAMENTE
+
 ; CFtu  -1 -0.6 -0.2 0.2 0.6  1
 ; score  0   1    2    3   4   5
 ; ----------------------------- =

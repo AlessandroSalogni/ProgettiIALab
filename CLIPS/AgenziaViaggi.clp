@@ -161,8 +161,9 @@
   (search-parameter start)
   (search-parameter-history)
   (request (search-parameter start) (request "Which search parameter would you like to set? ") (valid-answers destination budget facility end))
-  (request (search-parameter destination) (request "Which search parameter of destination would you like to set? ") (valid-answers region end))
-  (request (search-parameter region) (terminal-request TRUE) (request "Which region would you like to visit? ") (valid-answers piemonte liguria toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
+  (request (search-parameter destination) (request "Which search parameter of destination would you like to set? ") (valid-answers region turism end))
+  (request (search-parameter turism) (terminal-request TRUE) (request "Which turism do you prefer? ") (valid-answers sport religious enogastronomic cultural sea mountain lake termal naturalistic))
+  (request (search-parameter region) (terminal-request TRUE) (request "Which region would you like to visit? ") (valid-answers piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
   (request (search-parameter budget) (terminal-request TRUE) (request "How much budget? ") (valid-answers 100 200 300 400 500 600 700 800 900 1000)) ; mettere un range?
   (request (search-parameter facility) (request "Which search parameter of facility would you like to set? ") (valid-answers stars comfort end))
   (request (search-parameter stars) (terminal-request TRUE) (request "How many stars would you like? ") (valid-answers 1 2 3 4))
@@ -182,10 +183,18 @@
 
 (deffacts EXPERTISE::expertise-knowledge
   (inference (attribute region) (value liguria) (expertise turism [ sea 0.8 mountain 0.3 enogastronomic 0.5 lake -0.9 termal -0.5
-    sport 0.5 naturalistic 0.6 ] region [ toscana 0.6 piemonte 0.1 valle-d'aosta -0.6 trentino-alto-adige -0.8 veneto 0.2 emilia-romagna 0.2 ] ))
+    sport 0.5 naturalistic 0.6 ] region [ toscana 0.6 piemonte 0.1 valle-d'aosta -0.6 trentino-alto-adige -0.8 veneto 0.2 emilia-romagna 0.2 umbria -0.7 marche 0.3 ] ))
   (inference (attribute region) (value piemonte) (expertise turism [ sea -0.9 mountain 0.9 enogastronomic 0.7 lake 0.5 termal 0.2
-    religious 0.4 ] region [ valle-d'aosta 0.7 lombardia 0.5 trentino-alto-adige 0.4 liguria 0.1 toscana -0.5 ] ))
-  (inference (attribute sea) )
+    religious 0.4 cultural 0.4 ] region [ valle-d'aosta 0.7 lombardia 0.5 trentino-alto-adige 0.4 liguria 0.1 toscana -0.5 umbria -0.1 marche -0.8 ] ))
+  (inference (attribute turism) (value sea) (expertise region [ piemonte -0.8 liguria 0.8 toscana 0.7 lombardia -0.8 veneto 0.7 emilia-romagna 0.9 trentino-alto-adige -0.9 friuli-venezia-giulia 0.3 valle-d'aosta -0.9 umbria -0.6 marche 0.4 ]))
+  (inference (attribute turism) (value mountain) (expertise region [ piemonte 0.7 liguria -0.2 toscana -0.3 lombardia 0.4 emilia-romagna -0.9 trentino-alto-adige 0.9 friuli-venezia-giulia 0.2 valle-d'aosta 0.9 marche -0.6 ] ))
+  (inference (attribute turism) (value enogastronomic) (expertise region [ piemonte 0.5 liguria 0.5 toscana 0.7 veneto 0.4 emilia-romagna 0.8 valle-d'aosta 0.2 trentino-alto-adige 0.2 umbria 0.5 ] ))
+  (inference (attribute turism) (value sport) (expertise region [ lombardia -0.2 liguria 0.2 emilia-romagna 0.3 trentino-alto-adige 0.6 valle-d'aosta 0.6 friuli-venezia-giulia 0.3 marche 0.2 ] ))
+  (inference (attribute turism) (value lake) (expertise region [ piemonte 0.5 liguria -0.8 toscana -0.7 lombardia 0.8 veneto 0.2 trentino-alto-adige 0.5 umbria 0.3 marche -0.6 valle-d'aosta -0.2 ] ))
+  (inference (attribute turism) (value naturalistic) (expertise region [ piemonte 0.5 liguria 0.4 toscana 0.2 veneto -0.3 emilia-romagna -0.6 trentino-alto-adige 0.8 friuli-venezia-giulia 0.3 valle-d'aosta 0.7 marche -0.1 ] ))
+  (inference (attribute turism) (value cultural) (expertise region [ piemonte 0.4 liguria -0.4 toscana 0.9 lombardia 0.5 veneto 0.6 trentino-alto-adige -0.6 friuli-venezia-giulia 0.3 umbria 0.8 ] ))
+  (inference (attribute turism) (value termal) (expertise region [ lombardia 0.5 liguria -0.5 toscana 0.6 emilia-romagna -0.4 trentino-alto-adige 0.7 valle-d'aosta 0.2 ] ))
+  (inference (attribute turism) (value religious) (expertise region [ piemonte 0.5 liguria -0.3 lombardia 0.2 toscana 0.4 trentino-alto-adige -0.5 umbria 0.8 marche 0.6 ] ))
 )
 
 (defrule EXPERTISE::expertise-rule
@@ -209,56 +218,6 @@
   =>
   (retract ?fact)
 )
-
-; (defrule EXPERTISE::turism-mountain-to-region
-;   (attribute (name turism) (value mountain)) ;(certainty ?cf&:(>= ?cf 0.5)))
-;   ;(bind ?factor (- 1 ?cf))
-;   =>
-;   (assert (attribute (name region) (value piemonte) (certainty 0.9)));- 0.9 ?factor))))
-;   (assert (attribute (name region) (value liguria) (certainty -0.2)));+ -0.2 ?factor))))
-; )
-;
-; (defrule EXPERTISE::turism-sea-to-region
-;   (attribute (name turism) (value sea))
-;   =>
-;   (assert (attribute (name region) (value piemonte) (certainty -0.9)))
-;   (assert (attribute (name region) (value liguria) (certainty 0.8)))
-; )
-;
-; (defrule EXPERTISE::turism-enogastronomic-to-region
-;   (attribute (name turism) (value enogastronomic))
-;   =>
-;   (assert (attribute (name region) (value piemonte) (certainty 0.4)))
-;   (assert (attribute (name region) (value liguria) (certainty 0.2)))
-; )
-;
-; (defrule EXPERTISE::turism-sport-to-region
-;   (attribute (name turism) (value mountain))
-;   =>
-;   (assert (attribute (name region) (value piemonte) (certainty 0.0)))
-;   (assert (attribute (name region) (value liguria) (certainty 0.0)))
-; )
-;
-; (defrule EXPERTISE::turism-lake-to-region
-;   (attribute (name turism) (value lake))
-;   =>
-;   (assert (attribute (name region) (value piemonte) (certainty 0.5)))
-;   (assert (attribute (name region) (value liguria) (certainty -0.8)))
-; )
-;
-; (defrule EXPERTISE::turism-termal-to-region
-;   (attribute (name turism) (value termal))
-;   =>
-;   (assert (attribute (name region) (value piemonte) (certainty 0.6)))
-;   (assert (attribute (name region) (value liguria) (certainty -0.6)))
-; )
-;
-; (defrule EXPERTISE::turism-naturalistic-to-region
-;   (attribute (name turism) (value naturalistic))
-;   =>
-;   (assert (attribute (name region) (value piemonte) (certainty 0.7)))
-;   (assert (attribute (name region) (value liguria) (certainty 0.6)))
-; )
 
 
 ;** RULES BASED ON STARS
@@ -336,13 +295,35 @@
 )
 
 (deffacts DESTINATIONS::sites
-  (place (name "Massa") (region toscana) (coordinates 2.0 3.0) (turism sea 4))
-  (place (name "Savona") (region liguria) (coordinates 4.0 80.0) (turism sea 5 naturalistic 0))
-  (place (name "Imperia") (region liguria) (coordinates 2.0 80.0) (turism sea 4 mountain 1))
-  (place (name "Genova") (region liguria) (coordinates 6.0 80.0) (turism sea 4))
-  (place (name "Torino") (region piemonte) (coordinates 6.0 80.0) (turism mountain 3 religious 2 cultural 5))
-  (place (name "Biella") (region piemonte) (coordinates 6.0 80.0) (turism mountain 4 religious 5 naturalistic 3 lake 2 enogastronomic 3))
-  (place (name "Verona") (region veneto) (coordinates 6.0 80.0) (turism mountain 3 cultural 5 lake 5 enogastronomic 4))
+  (place (name "Assisi") (region umbria) (coordinates 2.0 3.0) (turism sea 0 mountain 2 cultural 5 sport 0 lake 0 termal 0 enogastronomic 4 naturalistic 1 religious 5))
+  (place (name "Milano") (region lombardia) (coordinates 2.0 3.0) (turism sea 0 mountain 0 cultural 4 sport 1 lake 0 termal 0 enogastronomic 1 naturalistic 0 religious 2))
+  (place (name "Desenzano del Garda") (region lombardia) (coordinates 2.0 3.0) (turism sea 0 mountain 0 cultural 0 sport 2 lake 5 termal 0 enogastronomic 1 naturalistic 3 religious 0))
+  (place (name "Como") (region lombardia) (coordinates 2.0 3.0) (turism sea 0 mountain 2 cultural 1 sport 1 lake 4 termal 0 enogastronomic 1 naturalistic 2 religious 0))
+  (place (name "Firenze") (region toscana) (coordinates 2.0 3.0) (turism sea 0 mountain 0 cultural 5 sport 0 lake 0 termal 0 enogastronomic 4 naturalistic 0 religious 3))
+  (place (name "Siena") (region toscana) (coordinates 2.0 3.0) (turism sea 0 mountain 0 cultural 4 sport 0 lake 0 termal 4 enogastronomic 4 naturalistic 0 religious 1))
+  (place (name "Pisa") (region toscana) (coordinates 2.0 3.0) (turism sea 3 mountain 0 cultural 3 sport 0 lake 0 termal 0 enogastronomic 3 naturalistic 0 religious 1))
+  (place (name "Massa") (region toscana) (coordinates 2.0 3.0) (turism sea 4 mountain 0 cultural 0 sport 1 lake 0 termal 0 enogastronomic 3 naturalistic 0 religious 0))
+  (place (name "Savona") (region liguria) (coordinates 4.0 80.0) (turism sea 5 mountain 1 cultural 0 sport 2 lake 0 termal 0 enogastronomic 2 naturalistic 1 religious 0))
+  (place (name "Imperia") (region liguria) (coordinates 2.0 80.0) (turism sea 4 mountain 1 cultural 0 sport 2 lake 0 termal 0 enogastronomic 2 naturalistic 2 religious 0))
+  (place (name "Genova") (region liguria) (coordinates 6.0 80.0) (turism sea 4 mountain 1 cultural 0 sport 2 lake 0 termal 0 enogastronomic 3 naturalistic 1 religious 0))
+  (place (name "Celle Ligure") (region liguria) (coordinates 2.0 3.0) (turism sea 5 mountain 0 cultural 0 sport 2 lake 0 termal 0 enogastronomic 2 naturalistic 2 religious 0))
+  (place (name "Sestri Levante") (region liguria) (coordinates 2.0 3.0) (turism sea 5 mountain 0 cultural 0 sport 2 lake 0 termal 0 enogastronomic 2 naturalistic 2 religious 0))
+  (place (name "Torino") (region piemonte) (coordinates 6.0 80.0) (turism sea 0 mountain 3 cultural 4 sport 1 lake 0 termal 0 enogastronomic 3 naturalistic 2 religious 2))
+  (place (name "Biella") (region piemonte) (coordinates 6.0 80.0) (turism sea 0 mountain 4 cultural 1 sport 2 lake 0 termal 0 enogastronomic 3 naturalistic 3 religious 5))
+  (place (name "Verbania") (region piemonte) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 0 sport 3 lake 5 termal 1 enogastronomic 3 naturalistic 4 religious 0))
+  (place (name "Cuneo") (region piemonte) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 0 sport 2 lake 0 termal 1 enogastronomic 3 naturalistic 4 religious 0))
+  (place (name "Verona") (region veneto) (coordinates 6.0 80.0) (turism sea 0 mountain 1 cultural 4 sport 1 lake 5 termal 0 enogastronomic 2 naturalistic 3 religious 0))
+  (place (name "Venezia") (region veneto) (coordinates 2.0 3.0) (turism sea 3 mountain 0 cultural 5 sport 1 lake 0 termal 0 enogastronomic 3 naturalistic 2 religious 2))
+  (place (name "Padova") (region veneto) (coordinates 2.0 3.0) (turism sea 0 mountain 1 cultural 5 sport 0 lake 0 termal 0 enogastronomic 1 naturalistic 0 religious 4))
+  (place (name "Gorizia") (region friuli-venezia-giulia) (coordinates 2.0 3.0) (turism sea 1 mountain 2 cultural 2 sport 0 lake 1 termal 0 enogastronomic 1 naturalistic 2 religious 0))
+  (place (name "Trieste") (region friuli-venezia-giulia) (coordinates 2.0 3.0) (turism sea 2 mountain 0 cultural 2 sport 2 lake 0 termal 0 enogastronomic 1 naturalistic 2 religious 0))
+  (place (name "Bolzano") (region trentino-alto-adige) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 0 sport 4 lake 3 termal 2 enogastronomic 3 naturalistic 3 religious 0))
+  (place (name "Trento") (region trentino-alto-adige) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 0 sport 4 lake 2 termal 2 enogastronomic 3 naturalistic 3 religious 0))
+  (place (name "Bologna") (region emilia-romagna) (coordinates 2.0 3.0) (turism sea 0 mountain 0 cultural 3 sport 0 lake 0 termal 0 enogastronomic 5 naturalistic 1 religious 0))
+  (place (name "Ravenna") (region emilia-romagna) (coordinates 2.0 3.0) (turism sea 5 mountain 0 cultural 1 sport 2 lake 0 termal 0 enogastronomic 4 naturalistic 2 religious 0))
+  (place (name "Ferrara") (region emilia-romagna) (coordinates 2.0 3.0) (turism sea 0 mountain 0 cultural 2 sport 0 lake 5 termal 0 enogastronomic 3 naturalistic 2 religious 0))
+  (place (name "Aosta") (region valle-d'aosta) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 1 sport 4 lake 1 termal 3 enogastronomic 2 naturalistic 4 religious 0))
+  (place (name "Saint Vincent") (region valle-d'aosta) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 0 sport 1 lake 0 termal 5 enogastronomic 1 naturalistic 4 religious 0))
 
   (facility
     (name "Vista Mare") (price 100) (place "Massa") (stars 4) (rooms 12 43)
@@ -378,31 +359,21 @@
     (parking TRUE) (pool TRUE) (gym TRUE))
 )
 
-; (expertise turism [ sea -0.9  mountain 0.9 enogastronomic 0.7 lake 0.5 termal 0.2
-  ; religious 0.4 ] region [ valle-d'aosta 0.7 lombardia 0.5 trentino-alto-adige 0.4 liguria 0.1 toscana -0.5 ]
-
-; 0.9 - 0.7 - 0.5 - 0.3 - -0.2 - 0.4 = 0.75496
-; 0.97 - 0.5 - 0.3 - -0.2 - 0.4
-; 0.985 - 0.3 - -0.2 - 0.4
-; 0.9895 - -0.2 - 0.4
-; 0.986875 - 0.4
-; 0.992125 OK GIUSTO
-
-(defrule DESTINATIONS:generate-solution2
-  (attribute (name turism) (value ?type) (certainty ?cf-turism))
-  (attribute (name region) (value ?region) (certainty ?cf-region))
-  (place (name ?city) (region ?region) (turism $?type-turism&:(not (member ?type ?type-turism))))
-  =>
-  (bind ?cf-place (min (- 1 (abs (- -1 ?cf-turism))) ?cf-region))
-  (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
-)
+; (defrule DESTINATIONS:generate-solution2
+;   (attribute (name turism) (value ?type) (certainty ?cf-turism))
+;   (attribute (name region) (value ?region) (certainty ?cf-region))
+;   (place (name ?city) (region ?region) (turism $?type-turism&:(not (member ?type ?type-turism))))
+;   =>
+;   (bind ?cf-place (min (- 1 (abs (- -0.9 ?cf-turism))) ?cf-region))
+;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
+; )
 
 (defrule DESTINATIONS:generate-solution
   (attribute (name turism) (value ?type) (certainty ?cf-turism))
   (attribute (name region) (value ?region) (certainty ?cf-region))
   (place (name ?city) (region ?region) (turism $? ?type ?score $?))
   =>
-  (bind ?cf-score (- (/ (* ?score 2) 5) 1))
+  (bind ?cf-score (- (/ (* ?score 1.8) 5) 0.9))
   (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
 )
