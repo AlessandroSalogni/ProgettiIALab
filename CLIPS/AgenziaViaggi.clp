@@ -23,7 +23,7 @@
   (slot name)
   (slot value)
   (slot certainty (type FLOAT) (default 1.0) (range -1.0 1.0))
-  (slot inferred (default FALSE))
+  (slot user (default FALSE))
 )
 
 (defrule MAIN::start
@@ -33,10 +33,17 @@
 	(focus SET-PARAMETER EXPERTISE DESTINATIONS PRINT-RESULTS)
 )
 
+(defrule MAIN::from-user-to-system-attribute
+  (declare (salience 100) (auto-focus TRUE))
+  ?attr <- (attribute (user TRUE))
+  =>
+  (duplicate ?attr (user FALSE))
+)
+
 (defrule MAIN::combine-certainties-both-positive
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(>= ?c2 0.0)))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (user ?from-user))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(>= ?c2 0.0)) (user ?from-user))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr1)
@@ -45,8 +52,8 @@
 
 (defrule MAIN::combine-certainties-both-negative
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(< ?c1 0.0)))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(< ?c1 0.0)) (user ?from-user))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (user ?from-user))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr1)
@@ -55,8 +62,8 @@
 
 (defrule MAIN::combine-certainties-opposite
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (user ?from-user))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (user ?from-user))
   (test (not (and (eq ?c1 1.0) (eq ?c2 -1.0))))
   =>
   (retract ?attr1)
@@ -65,8 +72,8 @@
 
 (defrule MAIN::combine-certainties-max-opposite
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(eq ?c1 1.0)))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(eq ?c1 1.0)) (user ?from-user))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)) (user ?from-user))
   =>
   (retract ?attr1)
   (modify ?attr2 (certainty 1.0)) ; perchè con -0.9 e 1 viene 1 l'altra regola
@@ -153,6 +160,7 @@
   (assert (attribute
             (name ?parameter)
             (value (ask-question ?request ?valid-answers))
+            (user TRUE)
           )
   )
 )
@@ -198,7 +206,7 @@
 )
 
 (defrule EXPERTISE::expertise-rule
-  (attribute (name ?user-attribute) (value ?name) (inferred FALSE))
+  (attribute (name ?user-attribute) (value ?name) (user TRUE))
   (inference (attribute ?user-attribute) (value ?name) (expertise $?prev ?attribute [ $?values&:(not (member ] ?values)) ] $?next))
   =>
   (assert (new-attributes ?attribute $?values))
@@ -210,7 +218,7 @@
   (retract ?fact)
   (bind ?new-attributes ?attribute $?next)
   (assert (new-attributes ?new-attributes))
-  (assert (attribute (name ?attribute) (value ?value) (certainty ?cf) (inferred TRUE)))
+  (assert (attribute (name ?attribute) (value ?value) (certainty ?cf)))
 )
 
 (defrule EXPERTISE::remove-empty-new-attributes
@@ -369,8 +377,8 @@
 ; )
 
 (defrule DESTINATIONS:generate-solution
-  (attribute (name turism) (value ?type) (certainty ?cf-turism))
-  (attribute (name region) (value ?region) (certainty ?cf-region))
+  (attribute (name turism) (value ?type) (certainty ?cf-turism) (user FALSE))
+  (attribute (name region) (value ?region) (certainty ?cf-region) (user FALSE))
   (place (name ?city) (region ?region) (turism $? ?type ?score $?))
   =>
   (bind ?cf-score (- (/ (* ?score 1.8) 5) 0.9))
