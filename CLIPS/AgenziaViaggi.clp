@@ -76,7 +76,7 @@
   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)) (user ?from-user))
   =>
   (retract ?attr1)
-  (modify ?attr2 (certainty 1.0)) ; perchè con -0.9 e 1 viene 1 l'altra regola
+  (modify ?attr2 (certainty 1.0) (inferred FALSE)) ; perchè con -0.9 e 1 viene 1 l'altra regola
 )
 
 ;;*****************
