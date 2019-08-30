@@ -16,7 +16,38 @@ mentre se voglio andare al mare la Liguria non sarà la mia prima scelta
 (bind ?cf-score (- (/ (* ?score 1.8) 5) 0.9)) -> facciamo questo calcolo per far variare lo score tra -0.9 e 0.9 del turismo in una località,
 così poi nella città non viene un valore tra 1 e -1 (valori intrattabili con certainty factor)
 
-CONTROLLARE LOOP IN CASO DI IMPOSTAZIONE DI REGIONE E TURISMO CONTEMPORANEAMENTE
+
+******************************
+**   Domande obbligatorie   **
+******************************
+ - Nome Cognome
+ - Numero di persone
+
+
+*****************************
+**   Profilazione utente   **
+*****************************
+ - Nome Cognome
+ - Età
+ - Giorni di ferie
+ - Regione abitata
+ - Servizi
+ - Tipi di turismo preferiti e non
+ - (Dove sei stato l'altr'anno?)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ; CFtu  -1 -0.6 -0.2 0.2 0.6  1
 ; score  0   1    2    3   4   5

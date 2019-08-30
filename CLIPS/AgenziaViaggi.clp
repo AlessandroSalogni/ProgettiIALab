@@ -22,7 +22,7 @@
 (deftemplate MAIN::attribute
   (slot name)
   (slot value)
-  (slot certainty (type FLOAT) (default 1.0) (range -1.0 1.0))
+  (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
   (slot user (default FALSE))
 )
 
@@ -70,26 +70,155 @@
   (modify ?attr2 (certainty (/ (+ ?c1 ?c2) (- 1 (min (abs ?c1) (abs ?c2))))))
 )
 
-(defrule MAIN::combine-certainties-max-opposite
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(eq ?c1 1.0)) (user ?from-user))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)) (user ?from-user))
-  =>
-  (retract ?attr1)
-  (modify ?attr2 (certainty 1.0) (inferred FALSE)) ; perchè con -0.9 e 1 viene 1 l'altra regola
+;Non viene mai 1 in teoria
+; (defrule MAIN::combine-certainties-max-opposite
+;   (declare (salience 100) (auto-focus TRUE))
+;   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(eq ?c1 1.0)) (user ?from-user))
+;   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)) (user ?from-user))
+;   =>
+;   (retract ?attr1)
+;   (modify ?attr2 (certainty 1.0) (inferred FALSE)) ; perchè con -0.9 e 1 viene 1 l'altra regola
+; )
+
+;;****************
+;;* USER-PROFILE *
+;;****************
+(defmodule USER-PROFILE (import MAIN ?ALL))
+
+(deftemplate profile
+  (slot name (type STRING))
+  (slot birth-year (type INTEGER))
+  (slot live-region)
+  (multislot comfort)
+  (multislot turism)
 )
+
+(deffacts USER-PROFILE::profile-definition
+  (profile (name "Riccardo Perotti") (birth-year 1996) (live-region piemonte) (comfort wifi )  )
+)
+
 
 ;;*****************
 ;;* SET-PARAMETER *
 ;;*****************
 (defmodule SET-PARAMETER (import MAIN ?ALL))
 
-(deftemplate SET-PARAMETER::request
+(deftemplate SET-PARAMETER::menu-request
   (slot search-parameter)
-  (slot terminal-request (default FALSE))
   (slot request (type STRING))
   (multislot valid-answers)
 )
+
+(deftemplate SET-PARAMETER::preference-request
+  (slot search-parameter)
+  (slot request (type STRING))
+  (multislot valid-answers)
+  ; (multislot valid-patterns)
+)
+;
+; (deftemplate user-answer
+;   (multislot user-answer)
+;   (multislot answer)
+;   (multislot valid-answers)
+;   (multislot valid-patterns)
+; )
+;
+; (defrule SET-PARAMETER::start-pattern-check-user-answer
+;   (declare (salience 100))
+;   ?answer <- (user-answer (valid-patterns [ $?next-pattern))
+;   =>
+;   (modify ?answer (valid-patterns ?next-pattern))
+; )
+;
+; (defrule SET-PARAMETER::end-pattern-and-answer-check-user-answer
+;   (declare (salience 100))
+;   ?search-parameter <- (search-parameter ?parameter)
+;   ?history <- (search-parameter-history $?history-parameter)
+;   ?answer <- (user-answer
+;     (answer)
+;     (valid-patterns ] $?next-pattern)
+;   )
+;   =>
+;   (retract ?answer)
+;   (retract ?search-parameter)
+;   (assert (search-parameter end))
+;   (retract ?history)
+;   (assert (search-parameter-history $?history-parameter ?parameter))
+; )
+;
+; (defrule SET-PARAMETER::end-answer-not-pattern-check-user-answer
+;   (declare (salience 100))
+;   ?search-parameter <- (search-parameter ?parameter)
+;   ?answer <- (user-answer
+;     (answer)
+;     (valid-patterns ?token&~] $?next-pattern)
+;   )
+;   =>
+;   (retract ?answer)
+;   (retract ?search-parameter)
+;   (assert (search-parameter ?parameter))
+; )
+;
+; (defrule SET-PARAMETER::end-pattern-not-answer-check-user-answer
+;   (declare (salience 100))
+;   ?search-parameter <- (search-parameter ?parameter)
+;   ?answer <- (user-answer
+;     (answer ?word)
+;     (valid-patterns ] $?next-pattern)
+;   )
+;   =>
+;   (retract ?answer)
+;   (retract ?search-parameter)
+;   (assert (search-parameter ?parameter))
+; )
+;
+; (defrule SET-PARAMETER::word-wrong-check-user-answer
+;   (declare (salience 100))
+;   ?search-parameter <- (search-parameter ?parameter)
+;   ?answer <- (user-answer
+;     (valid-answers $?valid-answers)
+;     (answer ?word&:(not (member ?word ?valid-answers)) $?next-answer)
+;     (valid-patterns * $?next-pattern)
+;   )
+;   =>
+;   (retract ?answer)
+;   (retract ?search-parameter)
+;   (assert (search-parameter ?parameter))
+; )
+;
+; (defrule SET-PARAMETER::word-correct-check-user-answer
+;   (declare (salience 100))
+;   ?answer <- (user-answer
+;     (valid-answers $?valid-answers)
+;     (answer ?word&:(member ?word ?valid-answers) $?next-answer)
+;     (valid-patterns * $?next-pattern)
+;   )
+;   =>
+;   (modify ?answer (answer ?next-answer) (valid-patterns ?next-pattern))
+; )
+;
+; (defrule SET-PARAMETER::not-star-pattern-check-user-answer
+;   (declare (salience 100))
+;   ?search-parameter <- (search-parameter ?parameter)
+;   ?answer <- (user-answer
+;     (answer ?word $?next-answer)
+;     (valid-patterns ?token&~*&~?word $?next-pattern)
+;   )
+;   =>
+;   (retract ?answer)
+;   (retract ?search-parameter)
+;   (assert (search-parameter ?parameter))
+; )
+;
+; (defrule SET-PARAMETER::logical-connectors-check-user-answer
+;   (declare (salience 100))
+;   ?answer <- (user-answer
+;     (answer ?word $?next-answer)
+;     (valid-patterns ?word $?next-pattern)
+;   )
+;   =>
+;   (modify ?answer (answer ?next-answer) (valid-patterns ?next-pattern))
+; )
 
 (defrule SET-PARAMETER::leave-focus
   ?search-parameter <- (search-parameter end)
@@ -112,10 +241,10 @@
   (assert (search-parameter-history $?history-parameter))
 )
 
-(defrule SET-PARAMETER::start-request
+(defrule SET-PARAMETER::start-menu-request
   ?search-parameter <- (search-parameter start)
   ?history <- (search-parameter-history)
-  (request
+  (menu-request
     (search-parameter start)
     (request ?request)
     (valid-answers $?valid-answers)
@@ -127,12 +256,11 @@
   (assert (search-parameter-history start))
 )
 
-(defrule SET-PARAMETER::non-terminal-request
+(defrule SET-PARAMETER::menu-request
   ?search-parameter <- (search-parameter ?parameter&~start&~end)
   ?history <- (search-parameter-history $?history-parameter)
-  (request
+  (menu-request
     (search-parameter ?parameter)
-    (terminal-request FALSE)
     (request ?request)
     (valid-answers $?valid-answers)
   )
@@ -143,20 +271,26 @@
   (assert (search-parameter-history $?history-parameter ?parameter))
 )
 
-(defrule SET-PARAMETER::terminal-request
+(defrule SET-PARAMETER::preference-request
   ?search-parameter <- (search-parameter ?parameter&~start&~end)
   ?history <- (search-parameter-history $?history-parameter)
-  (request
+  (preference-request
     (search-parameter ?parameter)
-    (terminal-request TRUE)
     (request ?request)
     (valid-answers $?valid-answers)
+    ; (valid-patterns $?valid-patterns)
   )
   =>
-  (retract ?search-parameter)
-  (assert (search-parameter end))
-  (retract ?history)
-  (assert (search-parameter-history $?history-parameter ?parameter))
+  ; (printout t ?request)
+  ; (bind ?answer (explode$ (readline)))
+  ; (assert (user-answer
+  ;           (user-answer ?answer)
+  ;           (answer ?answer)
+  ;           (valid-answers ?valid-answers)
+  ;           (valid-patterns ?valid-patterns)
+  ;         )
+  ; )
+
   (assert (attribute
             (name ?parameter)
             (value (ask-question ?request ?valid-answers))
@@ -168,14 +302,15 @@
 (deffacts SET-PARAMETER::define-requests
   (search-parameter start)
   (search-parameter-history)
-  (request (search-parameter start) (request "Which search parameter would you like to set? ") (valid-answers destination budget facility end))
-  (request (search-parameter destination) (request "Which search parameter of destination would you like to set? ") (valid-answers region turism end))
-  (request (search-parameter turism) (terminal-request TRUE) (request "Which turism do you prefer? ") (valid-answers sport religious enogastronomic cultural sea mountain lake termal naturalistic))
-  (request (search-parameter region) (terminal-request TRUE) (request "Which region would you like to visit? ") (valid-answers piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
-  (request (search-parameter budget) (terminal-request TRUE) (request "How much budget? ") (valid-answers 100 200 300 400 500 600 700 800 900 1000)) ; mettere un range?
-  (request (search-parameter facility) (request "Which search parameter of facility would you like to set? ") (valid-answers stars comfort end))
-  (request (search-parameter stars) (terminal-request TRUE) (request "How many stars would you like? ") (valid-answers 1 2 3 4))
-  (request (search-parameter comfort) (terminal-request TRUE) (request "Which comfort would you like to have? ") (valid-answers parking pool air-conditioning pet-allowed wifi tv gym))
+  (menu-request (search-parameter start) (request "Which search parameter would you like to set? ") (valid-answers destination budget facility end))
+  (menu-request (search-parameter destination) (request "Which search parameter of destination would you like to set? ") (valid-answers region turism end))
+  (preference-request (search-parameter turism) (request "Which turism do you prefer? ") (valid-answers sport religious enogastronomic cultural sea mountain lake termal naturalistic))
+  ;(valid-patterns [ * o * ]))
+  (preference-request (search-parameter region) (request "Which region would you like to visit? ") (valid-answers piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
+  (preference-request (search-parameter budget) (request "How much budget? ") (valid-answers 100 200 300 400 500 600 700 800 900 1000)) ; mettere un range?
+  (menu-request (search-parameter facility) (request "Which search parameter of facility would you like to set? ") (valid-answers stars comfort end))
+  (preference-request (search-parameter stars) (request "How many stars would you like? ") (valid-answers 1 2 3 4))
+  (preference-request (search-parameter comfort) (request "Which comfort would you like to have? ") (valid-answers parking pool air-conditioning pet-allowed wifi tv gym))
 )
 
 ;;****************
@@ -227,7 +362,6 @@
   (retract ?fact)
 )
 
-
 ;** RULES BASED ON STARS
 ; (defrule EXPERTISE::region-facility-stars-4
 ;   (attribute (name stars) (value 4))
@@ -276,6 +410,12 @@
 ;   (assert (attribute (name comfort) (value air-conditioning) (certainty 0.2)))
 ;   (assert (attribute (name comfort) (value pool) (certainty 0.0)))
 ; )
+
+;;***********************
+;;* Profilazione UTENTE *
+;;***********************
+
+
 
 ;;****************
 ;;* DESTINATIONS *
@@ -381,7 +521,7 @@
   (attribute (name region) (value ?region) (certainty ?cf-region) (user FALSE))
   (place (name ?city) (region ?region) (turism $? ?type ?score $?))
   =>
-  (bind ?cf-score (- (/ (* ?score 1.8) 5) 0.9))
+  (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
   (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
 )
