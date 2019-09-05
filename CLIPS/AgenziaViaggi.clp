@@ -218,6 +218,27 @@
   (assert (search-parameter ?parameter))
 )
 
+(defrule CHECK-USER-ANSWER::single-word-pattern
+  ?search-parameter <- (search-parameter ?parameter)
+  ?history <- (search-parameter-history $?history-parameter)
+  ?answer <- (answer
+    (valid-answers $?valid-answers)
+    (user-answer ?word&:(member ?word ?valid-answers))
+  )
+  =>
+  (retract ?search-parameter)
+  (assert (search-parameter end))
+  (retract ?history)
+  (assert (search-parameter-history $?history-parameter ?parameter))
+  (retract ?answer)
+  (assert (attribute
+            (name ?parameter)
+            (value ?word)
+            (user TRUE)
+          )
+  )
+)
+
 (defrule CHECK-USER-ANSWER::single-or-pattern
   ?search-parameter <- (search-parameter ?parameter)
   ?history <- (search-parameter-history $?history-parameter)
