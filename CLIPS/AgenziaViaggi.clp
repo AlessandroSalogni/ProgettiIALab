@@ -101,7 +101,7 @@
 ;;*****************
 ;;* SET-PARAMETER *
 ;;*****************
-(defmodule SET-PARAMETER (import MAIN ?ALL))
+(defmodule SET-PARAMETER (import MAIN ?ALL) (export ?ALL))
 
 (deftemplate SET-PARAMETER::menu-request
   (slot search-parameter)
@@ -113,112 +113,12 @@
   (slot search-parameter)
   (slot request (type STRING))
   (multislot valid-answers)
-  ; (multislot valid-patterns)
 )
-;
-; (deftemplate user-answer
-;   (multislot user-answer)
-;   (multislot answer)
-;   (multislot valid-answers)
-;   (multislot valid-patterns)
-; )
-;
-; (defrule SET-PARAMETER::start-pattern-check-user-answer
-;   (declare (salience 100))
-;   ?answer <- (user-answer (valid-patterns [ $?next-pattern))
-;   =>
-;   (modify ?answer (valid-patterns ?next-pattern))
-; )
-;
-; (defrule SET-PARAMETER::end-pattern-and-answer-check-user-answer
-;   (declare (salience 100))
-;   ?search-parameter <- (search-parameter ?parameter)
-;   ?history <- (search-parameter-history $?history-parameter)
-;   ?answer <- (user-answer
-;     (answer)
-;     (valid-patterns ] $?next-pattern)
-;   )
-;   =>
-;   (retract ?answer)
-;   (retract ?search-parameter)
-;   (assert (search-parameter end))
-;   (retract ?history)
-;   (assert (search-parameter-history $?history-parameter ?parameter))
-; )
-;
-; (defrule SET-PARAMETER::end-answer-not-pattern-check-user-answer
-;   (declare (salience 100))
-;   ?search-parameter <- (search-parameter ?parameter)
-;   ?answer <- (user-answer
-;     (answer)
-;     (valid-patterns ?token&~] $?next-pattern)
-;   )
-;   =>
-;   (retract ?answer)
-;   (retract ?search-parameter)
-;   (assert (search-parameter ?parameter))
-; )
-;
-; (defrule SET-PARAMETER::end-pattern-not-answer-check-user-answer
-;   (declare (salience 100))
-;   ?search-parameter <- (search-parameter ?parameter)
-;   ?answer <- (user-answer
-;     (answer ?word)
-;     (valid-patterns ] $?next-pattern)
-;   )
-;   =>
-;   (retract ?answer)
-;   (retract ?search-parameter)
-;   (assert (search-parameter ?parameter))
-; )
-;
-; (defrule SET-PARAMETER::word-wrong-check-user-answer
-;   (declare (salience 100))
-;   ?search-parameter <- (search-parameter ?parameter)
-;   ?answer <- (user-answer
-;     (valid-answers $?valid-answers)
-;     (answer ?word&:(not (member ?word ?valid-answers)) $?next-answer)
-;     (valid-patterns * $?next-pattern)
-;   )
-;   =>
-;   (retract ?answer)
-;   (retract ?search-parameter)
-;   (assert (search-parameter ?parameter))
-; )
-;
-; (defrule SET-PARAMETER::word-correct-check-user-answer
-;   (declare (salience 100))
-;   ?answer <- (user-answer
-;     (valid-answers $?valid-answers)
-;     (answer ?word&:(member ?word ?valid-answers) $?next-answer)
-;     (valid-patterns * $?next-pattern)
-;   )
-;   =>
-;   (modify ?answer (answer ?next-answer) (valid-patterns ?next-pattern))
-; )
-;
-; (defrule SET-PARAMETER::not-star-pattern-check-user-answer
-;   (declare (salience 100))
-;   ?search-parameter <- (search-parameter ?parameter)
-;   ?answer <- (user-answer
-;     (answer ?word $?next-answer)
-;     (valid-patterns ?token&~*&~?word $?next-pattern)
-;   )
-;   =>
-;   (retract ?answer)
-;   (retract ?search-parameter)
-;   (assert (search-parameter ?parameter))
-; )
-;
-; (defrule SET-PARAMETER::logical-connectors-check-user-answer
-;   (declare (salience 100))
-;   ?answer <- (user-answer
-;     (answer ?word $?next-answer)
-;     (valid-patterns ?word $?next-pattern)
-;   )
-;   =>
-;   (modify ?answer (answer ?next-answer) (valid-patterns ?next-pattern))
-; )
+
+(deftemplate answer
+  (multislot user-answer)
+  (multislot valid-answers)
+)
 
 (defrule SET-PARAMETER::leave-focus
   ?search-parameter <- (search-parameter end)
@@ -278,25 +178,16 @@
     (search-parameter ?parameter)
     (request ?request)
     (valid-answers $?valid-answers)
-    ; (valid-patterns $?valid-patterns)
   )
   =>
-  ; (printout t ?request)
-  ; (bind ?answer (explode$ (readline)))
-  ; (assert (user-answer
-  ;           (user-answer ?answer)
-  ;           (answer ?answer)
-  ;           (valid-answers ?valid-answers)
-  ;           (valid-patterns ?valid-patterns)
-  ;         )
-  ; )
-
-  (assert (attribute
-            (name ?parameter)
-            (value (ask-question ?request ?valid-answers))
-            (user TRUE)
+  (printout t ?request)
+  (bind ?answer (explode$ (readline)))
+  (assert (answer
+            (user-answer ?answer)
+            (valid-answers ?valid-answers)
           )
   )
+  (focus CHECK-USER-ANSWER)
 )
 
 (deffacts SET-PARAMETER::define-requests
@@ -305,12 +196,55 @@
   (menu-request (search-parameter start) (request "Which search parameter would you like to set? ") (valid-answers destination budget facility end))
   (menu-request (search-parameter destination) (request "Which search parameter of destination would you like to set? ") (valid-answers region turism end))
   (preference-request (search-parameter turism) (request "Which turism do you prefer? ") (valid-answers sport religious enogastronomic cultural sea mountain lake termal naturalistic))
-  ;(valid-patterns [ * o * ]))
   (preference-request (search-parameter region) (request "Which region would you like to visit? ") (valid-answers piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
   (preference-request (search-parameter budget) (request "How much budget? ") (valid-answers 100 200 300 400 500 600 700 800 900 1000)) ; mettere un range?
   (menu-request (search-parameter facility) (request "Which search parameter of facility would you like to set? ") (valid-answers stars comfort end))
   (preference-request (search-parameter stars) (request "How many stars would you like? ") (valid-answers 1 2 3 4))
   (preference-request (search-parameter comfort) (request "Which comfort would you like to have? ") (valid-answers parking pool air-conditioning pet-allowed wifi tv gym))
+)
+
+;;************************
+;;*  CHECK-USER-ANSWER   *
+;;************************
+(defmodule CHECK-USER-ANSWER (import SET-PARAMETER ?ALL))
+
+(defrule CHECK-USER-ANSWER::no-pattern-match
+  (declare (salience -10))
+  ?search-parameter <- (search-parameter ?parameter)
+  ?answer <- (answer)
+  =>
+  (retract ?answer)
+  (retract ?search-parameter)
+  (assert (search-parameter ?parameter))
+)
+
+(defrule CHECK-USER-ANSWER::single-or-pattern
+  ?search-parameter <- (search-parameter ?parameter)
+  ?history <- (search-parameter-history $?history-parameter)
+  ?answer <- (answer
+    (valid-answers $?valid-answers)
+    (user-answer ?first-word&:(member ?first-word ?valid-answers) or ?second-word&:(member ?second-word ?valid-answers))
+  )
+  =>
+  (retract ?search-parameter)
+  (assert (search-parameter end))
+  (retract ?history)
+  (assert (search-parameter-history $?history-parameter ?parameter))
+  (retract ?answer)
+  (assert (attribute
+            (name ?parameter)
+            (value ?first-word)
+            (certainty 0.50)
+            (user TRUE)
+          )
+  )
+  (assert (attribute
+            (name ?parameter)
+            (value ?second-word)
+            (certainty 0.50)
+            (user TRUE)
+          )
+  )
 )
 
 ;;****************
