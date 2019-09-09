@@ -17,6 +17,20 @@ mentre se voglio andare al mare la Liguria non sarà la mia prima scelta
 così poi nella città non viene un valore tra 1 e -1 (valori intrattabili con certainty factor)
 
 
+Se un utente risponde piu volte alla stessa domanda la risposta precedente alla domanda se esistente, viene ritrattata.
+Questo succede anche quando l'utente voglia raffinare le risposte dopo il ragionamento: nel caso abbia inserito come regione liguria,
+e dopo il ragionamento vorrebbe considerare ANCHE il piemonte, dovrà RISCRIVERE "liguria or piemonte"
+
+Valutare se inserire una regola che elimini una risposta (magari che ritratti il fatto se inserisce NONE)
+
+in caso di pattern un po' piu mischiati ( and or and..) potrei assegnare con gensym uno stesso id alle risposte in and fra loro
+e le restanti senza nulla saranno in OR
+
+Se le regioni sono distanti piu di 100 km (le localita scelte) allora si stampa un messaggio di "errore", ovvero non ci sono
+soluzioni che fanno al caso
+
+
+
 ******************************
 **   Domande obbligatorie   **
 ******************************
