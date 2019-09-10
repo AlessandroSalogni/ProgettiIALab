@@ -26,6 +26,13 @@
   (slot user (default FALSE))
 )
 
+(deftemplate MAIN::attribute-pattern
+  (slot name)
+  (multislot values)
+  (slot conjunction (allowed-symbols and or not))
+  (slot id (default (gensym*)))
+)
+
 (defrule MAIN::start
 	(declare (salience 10000))
 	=>
@@ -252,19 +259,28 @@
   (retract ?history)
   (assert (search-parameter-history $?history-parameter ?parameter))
   (retract ?answer)
-  (assert (attribute
-            (name ?parameter)
-            (value ?first-word)
-            (certainty 0.80)
-            (user TRUE)
-          )
+  (assert
+    (attribute
+      (name ?parameter)
+      (value ?first-word)
+      (certainty 0.80)
+      (user TRUE)
+    )
   )
-  (assert (attribute
-            (name ?parameter)
-            (value ?second-word)
-            (certainty 0.80)
-            (user TRUE)
-          )
+  (assert
+    (attribute
+      (name ?parameter)
+      (value ?second-word)
+      (certainty 0.80)
+      (user TRUE)
+    )
+  )
+  (assert
+    (attribute-pattern
+      (name ?parameter)
+      (values ?first-word ?second-word)
+      (conjunction or)
+    )
   )
 )
 
@@ -281,23 +297,26 @@
   (retract ?history)
   (assert (search-parameter-history $?history-parameter ?parameter))
   (retract ?answer)
-  (assert (attribute
-            (name ?parameter)
-            (value ?first-word)
-            (user TRUE)
-          )
+  (assert
+    (attribute
+      (name ?parameter)
+      (value ?first-word)
+      (user TRUE)
+    )
   )
-  (assert (attribute
-            (name ?parameter)
-            (value ?second-word)
-            (user TRUE)
-          )
+  (assert
+    (attribute
+      (name ?parameter)
+      (value ?second-word)
+      (user TRUE)
+    )
   )
-  (assert (attribute
-            (name (sym-cat different- ?parameter))
-            (value 2)
-            (user TRUE)
-          )
+  (assert
+    (attribute
+      (name (sym-cat different- ?parameter))
+      (value 2)
+      (user TRUE)
+    )
   )
 )
 
@@ -495,7 +514,7 @@
     (parking TRUE) (pool TRUE) (gym TRUE))
 )
 
-; (defrule DESTINATIONS:generate-solution2
+; (defrule DESTINATIONS:generate-city2
 ;   (attribute (name turism) (value ?type) (certainty ?cf-turism))
 ;   (attribute (name region) (value ?region) (certainty ?cf-region))
 ;   (place (name ?city) (region ?region) (turism $?type-turism&:(not (member ?type ?type-turism))))
@@ -504,7 +523,14 @@
 ;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
 ; )
 
-(defrule DESTINATIONS:generate-solution
+(deftemplate DESTINATIONS::partial-attribute
+  (slot name)
+  (slot value)
+  (slot certainty)
+  (slot conjunction (allowed-values or and not))
+)
+
+(defrule DESTINATIONS::generate-city
   (attribute (name turism) (value ?type) (certainty ?cf-turism) (user FALSE))
   (attribute (name region) (value ?region) (certainty ?cf-region) (user FALSE))
   (place (name ?city) (region ?region) (turism $? ?type ?score $?))
@@ -512,4 +538,24 @@
   (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
   (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
+)
+
+(defrule DESTINATIONS::generate-city3
+  (attribute-pattern (name turism) (values $? ?value $?) (conjunction or))
+  (attribute (name region) (value ?region) (certainty ?cf-region) (user FALSE))
+  (place (name ?city) (region ?region) (turism $? ?type ?score $?))
+  =>
+  (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
+  (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
+  (assert (partial-attribute (name city) (value ?city) (certainty ?cf-place)))
+)
+
+(defrule DESTINATIONS::combine-partial-attribute-or
+  (declare (salience 100) (auto-focus TRUE))
+  ?attr1 <- (partial-attribute (name ?name) (value ?val) (certainty ?c1))
+  ?attr2 <- (partial-attribute (name ?name) (value ?val) (certainty ?c2))
+  (test (neq ?attr1 ?attr2))
+  =>
+  (retract ?attr1)
+  (modify ?attr2 (certainty (max ?c1 ?c2)))
 )
