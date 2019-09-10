@@ -255,14 +255,47 @@
   (assert (attribute
             (name ?parameter)
             (value ?first-word)
-            (certainty 0.50)
+            (certainty 0.80)
             (user TRUE)
           )
   )
   (assert (attribute
             (name ?parameter)
             (value ?second-word)
-            (certainty 0.50)
+            (certainty 0.80)
+            (user TRUE)
+          )
+  )
+)
+
+(defrule CHECK-USER-ANSWER::single-and-pattern
+  ?search-parameter <- (search-parameter ?parameter)
+  ?history <- (search-parameter-history $?history-parameter)
+  ?answer <- (answer
+    (valid-answers $?valid-answers)
+    (user-answer ?first-word&:(member ?first-word ?valid-answers) and ?second-word&:(member ?second-word ?valid-answers))
+  )
+  =>
+  (retract ?search-parameter)
+  (assert (search-parameter end))
+  (retract ?history)
+  (assert (search-parameter-history $?history-parameter ?parameter))
+  (retract ?answer)
+  (assert (attribute
+            (name ?parameter)
+            (value ?first-word)
+            (user TRUE)
+          )
+  )
+  (assert (attribute
+            (name ?parameter)
+            (value ?second-word)
+            (user TRUE)
+          )
+  )
+  (assert (attribute
+            (name (sym-cat different- ?parameter))
+            (value 2)
             (user TRUE)
           )
   )
