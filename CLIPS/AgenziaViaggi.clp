@@ -23,7 +23,7 @@
   (slot name)
   (slot value)
   (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
-  (slot user (default FALSE))
+  (slot type (allowed-symbols user system) (default system))
 )
 
 (deftemplate MAIN::attribute-pattern
@@ -42,15 +42,15 @@
 
 (defrule MAIN::from-user-to-system-attribute
   (declare (salience 100) (auto-focus TRUE))
-  ?attr <- (attribute (user TRUE))
+  ?attr <- (attribute (type user))
   =>
-  (duplicate ?attr (user FALSE))
+  (duplicate ?attr (type system))
 )
 
 (defrule MAIN::combine-certainties-both-positive
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (user ?from-user))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(>= ?c2 0.0)) (user ?from-user))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (type system))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(>= ?c2 0.0)) (type system))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr1)
@@ -59,8 +59,8 @@
 
 (defrule MAIN::combine-certainties-both-negative
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(< ?c1 0.0)) (user ?from-user))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (user ?from-user))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(< ?c1 0.0)) (type system))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (type system))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr1)
@@ -69,8 +69,8 @@
 
 (defrule MAIN::combine-certainties-opposite
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (user ?from-user))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (user ?from-user))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (type system))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (type system))
   (test (not (and (eq ?c1 1.0) (eq ?c2 -1.0))))
   =>
   (retract ?attr1)
@@ -80,8 +80,8 @@
 ;Non viene mai 1 in teoria
 ; (defrule MAIN::combine-certainties-max-opposite
 ;   (declare (salience 100) (auto-focus TRUE))
-;   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(eq ?c1 1.0)) (user ?from-user))
-;   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)) (user ?from-user))
+;   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(eq ?c1 1.0)) (type system))
+;   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)) (type system))
 ;   =>
 ;   (retract ?attr1)
 ;   (modify ?attr2 (certainty 1.0) (inferred FALSE)) ; perchè con -0.9 e 1 viene 1 l'altra regola
@@ -241,7 +241,7 @@
   (assert (attribute
             (name ?parameter)
             (value ?word)
-            (user TRUE)
+            (type user)
           )
   )
 )
@@ -264,7 +264,7 @@
       (name ?parameter)
       (value ?first-word)
       (certainty 0.80)
-      (user TRUE)
+      (type user)
     )
   )
   (assert
@@ -272,7 +272,7 @@
       (name ?parameter)
       (value ?second-word)
       (certainty 0.80)
-      (user TRUE)
+      (type user)
     )
   )
   (assert
@@ -301,21 +301,21 @@
     (attribute
       (name ?parameter)
       (value ?first-word)
-      (user TRUE)
+      (type user)
     )
   )
   (assert
     (attribute
       (name ?parameter)
       (value ?second-word)
-      (user TRUE)
+      (type user)
     )
   )
   (assert
     (attribute
       (name (sym-cat different- ?parameter))
       (value 2)
-      (user TRUE)
+      (type user)
     )
   )
 )
@@ -329,6 +329,13 @@
   (slot attribute)
   (slot value)
   (multislot expertise)
+)
+
+(deftemplate MAIN::expertise-attribute
+  (slot name)
+  (slot value)
+  (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
+  (slot created-by)
 )
 
 (deffacts EXPERTISE::expertise-knowledge
@@ -347,26 +354,64 @@
   (inference (attribute turism) (value religious) (expertise region [ piemonte 0.5 liguria -0.3 lombardia 0.2 toscana 0.4 trentino-alto-adige -0.5 umbria 0.8 marche 0.6 ] ))
 )
 
+;*********************************************************
+;
+; (defrule EXPERTISE::expertise-rule-conj
+;   (attribute-pattern (name ?user-attribute) (values $? ?name1 ?name2 $?) (conjunction ?conj))
+;   (inference (attribute ?user-attribute) (value ?name1) (expertise $?prev1 ?attribute1 [ $?values1&:(not (member ] ?values1)) ] $?next1))
+;   (inference (attribute ?user-attribute) (value ?name2) (expertise $?prev2 ?attribute2 [ $?values2&:(not (member ] ?values2)) ] $?next2))
+;   =>
+;   (assert (new-attributes ?attribute1 $?values1))
+;   (assert (new-attributes ?attribute2 $?values2))
+;   (halt)
+; )
+;
+; (defrule EXPERTISE::create-attribute-conj
+;   ?fact1 <- (new-attributes ?attribute ?value ?cf1 $?next1)
+;   ?fact2 <- (new-attributes ?attribute ?value ?cf2 $?next2)
+;   =>
+;   (retract ?fact1)
+;   (retract ?fact2)
+;   (bind ?new-attributes1 ?attribute $?next1)
+;   (bind ?new-attributes2 ?attribute $?next2)
+;   (assert (new-attributes ?new-attributes1))
+;   (assert (new-attributes ?new-attributes2))
+;
+;   (assert (attribute (name ?attribute) (value ?value) (certainty (max ?cf1 ?cf2))))
+; )
+
+;*********************************************************
+
+
 (defrule EXPERTISE::expertise-rule
-  (attribute (name ?user-attribute) (value ?name) (user TRUE))
+  (attribute (name ?user-attribute) (value ?name) (type user))
   (inference (attribute ?user-attribute) (value ?name) (expertise $?prev ?attribute [ $?values&:(not (member ] ?values)) ] $?next))
   =>
-  (assert (new-attributes ?attribute $?values))
+  (assert (new-attributes ?user-attribute ?attribute $?values))
 )
 
-(defrule EXPERTISE::create-attribute
-  ?fact <- (new-attributes ?attribute ?value ?cf $?next)
+(defrule EXPERTISE::create-expertise-attribute
+  ?fact <- (new-attributes ?from-attribute ?attribute ?value ?cf $?next)
   =>
   (retract ?fact)
-  (bind ?new-attributes ?attribute $?next)
-  (assert (new-attributes ?new-attributes))
-  (assert (attribute (name ?attribute) (value ?value) (certainty ?cf)))
+  (assert (new-attributes ?from-attribute ?attribute $?next))
+  (assert (expertise-attribute (name ?attribute) (value ?value) (certainty ?cf) (created-by ?from-attribute)))
 )
 
 (defrule EXPERTISE::remove-empty-new-attributes
-  ?fact <- (new-attributes ?attribute)
+  ?fact <- (new-attributes ?from-attribute ?attribute)
   =>
   (retract ?fact)
+)
+
+(defrule EXPERTISE::pattern-or-from-expertise-to-system
+  ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?c1) (created-by ?from-attribute))
+  ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?c2) (created-by ?from-attribute))
+  (test (neq ?attr1 ?attr2))
+  (attribute-pattern (name ?from-attribute) (conjunction or))
+  =>
+  (retract ?attr1 ?attr2)
+  (assert (attribute (name ?name) (value ?value) (certainty (max ?c1 ?c2))))
 )
 
 ;** RULES BASED ON STARS
@@ -523,39 +568,48 @@
 ;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
 ; )
 
-(deftemplate DESTINATIONS::partial-attribute
+(deftemplate DESTINATIONS::pre-attribute
   (slot name)
   (slot value)
-  (slot certainty)
-  (slot conjunction (allowed-values or and not))
+  (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
+  (slot conjunction (allowed-values and or not))
+  (slot id)
 )
-
-(defrule DESTINATIONS::generate-city
-  (attribute (name turism) (value ?type) (certainty ?cf-turism) (user FALSE))
-  (attribute (name region) (value ?region) (certainty ?cf-region) (user FALSE))
-  (place (name ?city) (region ?region) (turism $? ?type ?score $?))
-  =>
-  (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
-  (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
-  (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
-)
+;
+; (defrule DESTINATIONS::generate-city
+;   (attribute (name turism) (value ?type) (certainty ?cf-turism) (type system))
+;   (attribute (name region) (value ?region) (certainty ?cf-region) (type system))
+;   (place (name ?city) (region ?region) (turism $? ?type ?score $?))
+;   =>
+;   (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
+;   (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
+;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
+; )
 
 (defrule DESTINATIONS::generate-city3
-  (attribute-pattern (name turism) (values $? ?value $?) (conjunction or))
-  (attribute (name region) (value ?region) (certainty ?cf-region) (user FALSE))
-  (place (name ?city) (region ?region) (turism $? ?type ?score $?))
+  (attribute-pattern (name turism) (values $? ?turism&:(not (eq (type ?turism) INTEGER)) $?) (conjunction ?conj) (id ?id))
+  (attribute (name turism) (value ?turism) (certainty ?cf-turism) (type system))
+  (attribute (name region) (value ?region) (certainty ?cf-region) (type system))
+  (place (name ?city) (region ?region) (turism $? ?turism ?score $?))
   =>
   (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
   (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
-  (assert (partial-attribute (name city) (value ?city) (certainty ?cf-place)))
+  (assert (pre-attribute (name city) (value ?city) (certainty ?cf-place) (conjunction ?conj) (id ?id)))
 )
 
-(defrule DESTINATIONS::combine-partial-attribute-or
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (partial-attribute (name ?name) (value ?val) (certainty ?c1))
-  ?attr2 <- (partial-attribute (name ?name) (value ?val) (certainty ?c2))
+(defrule DESTINATIONS::combine-pre-or-attribute
+  ?attr1 <- (pre-attribute (name ?name) (value ?value) (certainty ?c1) (conjunction or))
+  ?attr2 <- (pre-attribute (name ?name) (value ?value) (certainty ?c2) (conjunction or))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr1)
   (modify ?attr2 (certainty (max ?c1 ?c2)))
+)
+
+(defrule DESTINATIONS::complex-pattern
+  (declare (salience -10))
+  ?attr <- (pre-attribute (id ?old-id))
+  (attribute-pattern (values $? ?old-id $?) (conjunction ?conj) (id ?new-id))
+  =>
+  (modify ?attr (id ?new-id) (conjunction ?conj))
 )
