@@ -38,7 +38,7 @@
 
 (deffacts MAIN::parameter
   (parameter (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
-  (parameter (name turism) (values turism sport religious enogastronomic cultural sea mountain lake termal naturalistic))
+  (parameter (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
 )
 
 (defrule MAIN::start
