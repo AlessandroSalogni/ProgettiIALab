@@ -1,91 +1,6 @@
-(defmodule MAIN (export ?ALL))
 (defmodule DESTINATIONS (import MAIN ?ALL))
 (defmodule PRINT-RESULTS)
 
-;;****************
-;;* DEFFUNCTIONS *
-;;****************
-(deffunction MAIN::ask-question (?question ?allowed-values)
-   (printout t ?question)
-   (bind ?answer (read))
-   (if (lexemep ?answer) then (bind ?answer (lowcase ?answer)))
-   (while (not (member ?answer ?allowed-values)) do
-      (printout t ?question)
-      (bind ?answer (read))
-      (if (lexemep ?answer) then (bind ?answer (lowcase ?answer))))
-   ?answer
-)
-
-;;*****************
-;;* INITIAL STATE *
-;;*****************
-(deftemplate MAIN::attribute
-  (slot name)
-  (slot value)
-  (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
-  (slot type (allowed-symbols user system) (default system))
-)
-
-(deftemplate MAIN::attribute-pattern
-  (slot name)
-  (multislot values)
-  (slot conjunction (allowed-symbols and or not))
-  (slot id (default (gensym*)))
-)
-
-(defrule MAIN::start
-	(declare (salience 10000))
-	=>
-	(set-fact-duplication TRUE)
-	(focus SET-PARAMETER EXPERTISE DESTINATIONS PRINT-RESULTS)
-)
-
-(defrule MAIN::from-user-to-system-attribute
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr <- (attribute (type user))
-  =>
-  (duplicate ?attr (type system))
-)
-
-(defrule MAIN::combine-certainties-both-positive
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (type system))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(>= ?c2 0.0)) (type system))
-  (test (neq ?attr1 ?attr2))
-  =>
-  (retract ?attr1)
-  (modify ?attr2 (certainty (- (+ ?c1 ?c2) (* ?c1 ?c2))))
-)
-
-(defrule MAIN::combine-certainties-both-negative
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(< ?c1 0.0)) (type system))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (type system))
-  (test (neq ?attr1 ?attr2))
-  =>
-  (retract ?attr1)
-  (modify ?attr2 (certainty (+ (+ ?c1 ?c2) (* ?c1 ?c2))))
-)
-
-(defrule MAIN::combine-certainties-opposite
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (type system))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (type system))
-  (test (not (and (eq ?c1 1.0) (eq ?c2 -1.0))))
-  =>
-  (retract ?attr1)
-  (modify ?attr2 (certainty (/ (+ ?c1 ?c2) (- 1 (min (abs ?c1) (abs ?c2))))))
-)
-
-;Non viene mai 1 in teoria
-; (defrule MAIN::combine-certainties-max-opposite
-;   (declare (salience 100) (auto-focus TRUE))
-;   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(eq ?c1 1.0)) (type system))
-;   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)) (type system))
-;   =>
-;   (retract ?attr1)
-;   (modify ?attr2 (certainty 1.0) (inferred FALSE)) ; perchè con -0.9 e 1 viene 1 l'altra regola
-; )
 
 ;;****************
 ;;* USER-PROFILE *
@@ -103,7 +18,6 @@
 (deffacts USER-PROFILE::profile-definition
   (profile (name "Riccardo Perotti") (birth-year 1996) (live-region piemonte) (comfort wifi )  )
 )
-
 
 ;;*****************
 ;;* SET-PARAMETER *
@@ -251,7 +165,7 @@
   ?history <- (search-parameter-history $?history-parameter)
   ?answer <- (answer
     (valid-answers $?valid-answers)
-    (user-answer ?first-word&:(member ?first-word ?valid-answers) or ?second-word&:(member ?second-word ?valid-answers))
+    (user-answer ?first-word&:(member ?first-word ?valid-answers) or ?second-word&~?first-word&:(member ?second-word ?valid-answers))
   )
   =>
   (retract ?search-parameter)
@@ -275,11 +189,85 @@
       (type user)
     )
   )
+  (bind ?id (gensym*))
   (assert
     (attribute-pattern
       (name ?parameter)
       (values ?first-word ?second-word)
       (conjunction or)
+      (id ?id)
+    )
+  )
+  (assert
+    (attribute-pattern
+      (name ?parameter)
+      (values ?id)
+      (conjunction none)
+    )
+  )
+)
+
+(defrule CHECK-USER-ANSWER::double-or-pattern
+  ?search-parameter <- (search-parameter ?parameter)
+  ?history <- (search-parameter-history $?history-parameter)
+  ?answer <- (answer
+    (valid-answers $?valid-answers)
+    (user-answer ?first-word&:(member ?first-word ?valid-answers) or ?second-word&~?first-word&:(member ?second-word ?valid-answers)
+      or ?third-word&~?first-word&~?second-word&:(member ?third-word ?valid-answers))
+  )
+  =>
+  (retract ?search-parameter)
+  (assert (search-parameter end))
+  (retract ?history)
+  (assert (search-parameter-history $?history-parameter ?parameter))
+  (retract ?answer)
+  (assert
+    (attribute
+      (name ?parameter)
+      (value ?first-word)
+      (certainty 0.65)
+      (type user)
+    )
+  )
+  (assert
+    (attribute
+      (name ?parameter)
+      (value ?second-word)
+      (certainty 0.65)
+      (type user)
+    )
+  )
+  (assert
+    (attribute
+      (name ?parameter)
+      (value ?third-word)
+      (certainty 0.65)
+      (type user)
+    )
+  )
+  (bind ?id1 (gensym*))
+  (bind ?id2 (gensym*))
+  (assert
+    (attribute-pattern
+      (name ?parameter)
+      (values ?first-word ?second-word)
+      (conjunction or)
+      (id ?id1)
+    )
+  )
+  (assert
+    (attribute-pattern
+      (name ?parameter)
+      (values ?id1 ?third-word)
+      (conjunction or)
+      (id ?id2)
+    )
+  )
+  (assert
+    (attribute-pattern
+      (name ?parameter)
+      (values ?id2)
+      (conjunction none)
     )
   )
 )
@@ -311,11 +299,20 @@
       (type user)
     )
   )
+  (bind ?id (gensym*))
   (assert
-    (attribute
-      (name (sym-cat different- ?parameter))
-      (value 2)
-      (type user)
+    (attribute-pattern
+      (name ?parameter)
+      (values ?first-word ?second-word)
+      (conjunction and)
+      (id ?id)
+    )
+  )
+  (assert
+    (attribute-pattern
+      (name ?parameter)
+      (values ?id)
+      (conjunction none)
     )
   )
 )
@@ -331,143 +328,87 @@
   (multislot expertise)
 )
 
-(deftemplate MAIN::expertise-attribute
+(deftemplate EXPERTISE::expertise-attribute
   (slot name)
   (slot value)
   (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
-  (slot created-by)
+  (multislot created-by (cardinality 2 2))
 )
 
 (deffacts EXPERTISE::expertise-knowledge
   (inference (attribute region) (value liguria) (expertise turism [ sea 0.8 mountain 0.3 enogastronomic 0.5 lake -0.9 termal -0.5
-    sport 0.5 naturalistic 0.6 ] region [ toscana 0.6 piemonte 0.1 valle-d'aosta -0.6 trentino-alto-adige -0.8 veneto 0.2 emilia-romagna 0.2 umbria -0.7 marche 0.3 ] ))
+    sport 0.5 naturalistic 0.6 religious 0.0 cultural 0.0 ] region [ piemonte 0.1 toscana 0.6 lombardia 0.0 valle-d'aosta -0.6
+    trentino-alto-adige -0.8 veneto 0.2 emilia-romagna 0.2 umbria -0.7 marche 0.3 friuli-venezia-giulia 0.0 ] ))
   (inference (attribute region) (value piemonte) (expertise turism [ sea -0.9 mountain 0.9 enogastronomic 0.7 lake 0.5 termal 0.2
-    religious 0.4 cultural 0.4 ] region [ valle-d'aosta 0.7 lombardia 0.5 trentino-alto-adige 0.4 liguria 0.1 toscana -0.5 umbria -0.1 marche -0.8 ] ))
-  (inference (attribute turism) (value sea) (expertise region [ piemonte -0.8 liguria 0.8 toscana 0.7 lombardia -0.8 veneto 0.7 emilia-romagna 0.9 trentino-alto-adige -0.9 friuli-venezia-giulia 0.3 valle-d'aosta -0.9 umbria -0.6 marche 0.4 ]))
-  (inference (attribute turism) (value mountain) (expertise region [ piemonte 0.7 liguria -0.2 toscana -0.3 lombardia 0.4 emilia-romagna -0.9 trentino-alto-adige 0.9 friuli-venezia-giulia 0.2 valle-d'aosta 0.9 marche -0.6 ] ))
-  (inference (attribute turism) (value enogastronomic) (expertise region [ piemonte 0.5 liguria 0.5 toscana 0.7 veneto 0.4 emilia-romagna 0.8 valle-d'aosta 0.2 trentino-alto-adige 0.2 umbria 0.5 ] ))
-  (inference (attribute turism) (value sport) (expertise region [ lombardia -0.2 liguria 0.2 emilia-romagna 0.3 trentino-alto-adige 0.6 valle-d'aosta 0.6 friuli-venezia-giulia 0.3 marche 0.2 ] ))
-  (inference (attribute turism) (value lake) (expertise region [ piemonte 0.5 liguria -0.8 toscana -0.7 lombardia 0.8 veneto 0.2 trentino-alto-adige 0.5 umbria 0.3 marche -0.6 valle-d'aosta -0.2 ] ))
-  (inference (attribute turism) (value naturalistic) (expertise region [ piemonte 0.5 liguria 0.4 toscana 0.2 veneto -0.3 emilia-romagna -0.6 trentino-alto-adige 0.8 friuli-venezia-giulia 0.3 valle-d'aosta 0.7 marche -0.1 ] ))
-  (inference (attribute turism) (value cultural) (expertise region [ piemonte 0.4 liguria -0.4 toscana 0.9 lombardia 0.5 veneto 0.6 trentino-alto-adige -0.6 friuli-venezia-giulia 0.3 umbria 0.8 ] ))
-  (inference (attribute turism) (value termal) (expertise region [ lombardia 0.5 liguria -0.5 toscana 0.6 emilia-romagna -0.4 trentino-alto-adige 0.7 valle-d'aosta 0.2 ] ))
-  (inference (attribute turism) (value religious) (expertise region [ piemonte 0.5 liguria -0.3 lombardia 0.2 toscana 0.4 trentino-alto-adige -0.5 umbria 0.8 marche 0.6 ] ))
+    sport 0.0 naturalistic 0.0 religious 0.4 cultural 0.4 ] region [ liguria 0.1 toscana -0.5 lombardia 0.5 valle-d'aosta 0.7
+    trentino-alto-adige 0.4 veneto 0.0 emilia-romagna 0.0 umbria -0.1 marche -0.8 friuli-venezia-giulia 0.0 ] ))
+  (inference (attribute turism) (value sea) (expertise region [ piemonte -0.8 liguria 0.8 toscana 0.7 lombardia -0.8 valle-d'aosta -0.9
+    trentino-alto-adige -0.9 veneto 0.7 emilia-romagna 0.9 umbria -0.6 marche 0.4 friuli-venezia-giulia 0.3 ]))
+  (inference (attribute turism) (value mountain) (expertise region [ piemonte 0.7 liguria -0.2 toscana -0.3 lombardia 0.4 valle-d'aosta 0.9
+    trentino-alto-adige 0.9 veneto 0.0 emilia-romagna -0.9 umbria 0.0 marche -0.6 friuli-venezia-giulia 0.2 ] ))
+  (inference (attribute turism) (value enogastronomic) (expertise region [ piemonte 0.5 liguria 0.5 toscana 0.7 lombardia 0.0 valle-d'aosta 0.2
+    trentino-alto-adige 0.2 veneto 0.4 emilia-romagna 0.8 umbria 0.5 marche 0.0 friuli-venezia-giulia 0.0 ] ))
+  (inference (attribute turism) (value sport) (expertise region [ piemonte 0.0 liguria 0.2 toscana 0.0 lombardia -0.2 valle-d'aosta 0.6
+    trentino-alto-adige 0.6 veneto 0.0 emilia-romagna 0.3 umbria 0.0 marche 0.2 friuli-venezia-giulia 0.3 ] ))
+  (inference (attribute turism) (value lake) (expertise region [ piemonte 0.5 liguria -0.8 toscana -0.7 lombardia 0.8 valle-d'aosta -0.2
+    trentino-alto-adige 0.5 veneto 0.2 emilia-romagna 0.0 umbria 0.3 marche -0.6 friuli-venezia-giulia 0.0 ] ))
+  (inference (attribute turism) (value naturalistic) (expertise region [ piemonte 0.5 liguria 0.4 toscana 0.2 lombardia 0.0 valle-d'aosta 0.7
+    trentino-alto-adige 0.8 veneto -0.3 emilia-romagna -0.6 umbria 0.0 marche -0.1 friuli-venezia-giulia 0.3 ] ))
+  (inference (attribute turism) (value cultural) (expertise region [ piemonte 0.4 liguria -0.4 toscana 0.9 lombardia 0.5 valle-d'aosta 0.0
+    trentino-alto-adige -0.6 veneto 0.6 emilia-romagna 0.0 umbria 0.8 marche 0.0 friuli-venezia-giulia 0.3 ] ))
+  (inference (attribute turism) (value termal) (expertise region [ piemonte 0.0 liguria -0.5 toscana 0.6 lombardia 0.5 valle-d'aosta 0.2
+    trentino-alto-adige 0.7 veneto 0.0 emilia-romagna -0.4 umbria 0.0 marche 0.0 friuli-venezia-giulia 0.0 ] ))
+  (inference (attribute turism) (value religious) (expertise region [ piemonte 0.5 liguria -0.3 toscana 0.4 lombardia 0.2 valle-d'aosta 0.0
+    trentino-alto-adige -0.5 veneto 0.0 emilia-romagna 0.0 umbria 0.8 marche 0.6 friuli-venezia-giulia 0.0 ] ))
 )
 
-;*********************************************************
-;
-; (defrule EXPERTISE::expertise-rule-conj
-;   (attribute-pattern (name ?user-attribute) (values $? ?name1 ?name2 $?) (conjunction ?conj))
-;   (inference (attribute ?user-attribute) (value ?name1) (expertise $?prev1 ?attribute1 [ $?values1&:(not (member ] ?values1)) ] $?next1))
-;   (inference (attribute ?user-attribute) (value ?name2) (expertise $?prev2 ?attribute2 [ $?values2&:(not (member ] ?values2)) ] $?next2))
-;   =>
-;   (assert (new-attributes ?attribute1 $?values1))
-;   (assert (new-attributes ?attribute2 $?values2))
-;   (halt)
-; )
-;
-; (defrule EXPERTISE::create-attribute-conj
-;   ?fact1 <- (new-attributes ?attribute ?value ?cf1 $?next1)
-;   ?fact2 <- (new-attributes ?attribute ?value ?cf2 $?next2)
-;   =>
-;   (retract ?fact1)
-;   (retract ?fact2)
-;   (bind ?new-attributes1 ?attribute $?next1)
-;   (bind ?new-attributes2 ?attribute $?next2)
-;   (assert (new-attributes ?new-attributes1))
-;   (assert (new-attributes ?new-attributes2))
-;
-;   (assert (attribute (name ?attribute) (value ?value) (certainty (max ?cf1 ?cf2))))
-; )
-
-;*********************************************************
-
-
 (defrule EXPERTISE::expertise-rule
-  (attribute (name ?user-attribute) (value ?name) (type user))
-  (inference (attribute ?user-attribute) (value ?name) (expertise $?prev ?attribute [ $?values&:(not (member ] ?values)) ] $?next))
+  (attribute (name ?user-attribute) (value ?value) (type user))
+  (inference (attribute ?user-attribute) (value ?value) (expertise $?prev ?attribute [ $?values&:(not (member ] ?values)) ] $?next))
   =>
-  (assert (new-attributes ?user-attribute ?attribute $?values))
+  (assert (new-attributes ?user-attribute ?value ?attribute $?values))
 )
 
 (defrule EXPERTISE::create-expertise-attribute
-  ?fact <- (new-attributes ?from-attribute ?attribute ?value ?cf $?next)
+  ?fact <- (new-attributes ?from-attribute ?from-value ?attribute ?value ?cf $?next)
   =>
   (retract ?fact)
-  (assert (new-attributes ?from-attribute ?attribute $?next))
-  (assert (expertise-attribute (name ?attribute) (value ?value) (certainty ?cf) (created-by ?from-attribute)))
+  (assert (new-attributes ?from-attribute ?from-value ?attribute $?next))
+  (assert (expertise-attribute (name ?attribute) (value ?value) (certainty ?cf) (created-by ?from-attribute ?from-value)))
 )
 
 (defrule EXPERTISE::remove-empty-new-attributes
-  ?fact <- (new-attributes ?from-attribute ?attribute)
+  ?fact <- (new-attributes ?from-attribute ?from-value ?attribute)
   =>
   (retract ?fact)
 )
 
 (defrule EXPERTISE::pattern-or-from-expertise-to-system
-  ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?c1) (created-by ?from-attribute))
-  ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?c2) (created-by ?from-attribute))
-  (test (neq ?attr1 ?attr2))
-  (attribute-pattern (name ?from-attribute) (conjunction or))
+  (attribute-pattern (name ?from-attribute) (values ?from-value1 ?from-value2) (conjunction or) (id ?id))
+  ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf1) (created-by ?from-attribute ?from-value1))
+  ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf2) (created-by ?from-attribute ?from-value2))
   =>
-  (retract ?attr1 ?attr2)
-  (assert (attribute (name ?name) (value ?value) (certainty (max ?c1 ?c2))))
+  (retract ?attr1)
+  (modify ?attr2 (certainty (max ?cf1 ?cf2)) (created-by ?from-attribute ?id))
 )
 
-;** RULES BASED ON STARS
-; (defrule EXPERTISE::region-facility-stars-4
-;   (attribute (name stars) (value 4))
-;   =>
-;   (assert (attribute (name comfort) (value wifi) (certainty 1.0)))
-;   (assert (attribute (name comfort) (value parking) (certainty 1.0)))
-;   (assert (attribute (name comfort) (value pet-allowed) (certainty 0.8)))
-;   (assert (attribute (name comfort) (value tv) (certainty 1.0)))
-;   (assert (attribute (name comfort) (value gym) (certainty 1.0)))
-;   (assert (attribute (name comfort) (value air-conditioning) (certainty 1.0)))
-;   (assert (attribute (name comfort) (value pool) (certainty 1.0)))
-; )
-;
-; (defrule EXPERTISE::region-facility-stars-3
-;   (attribute (name stars) (value 3))
-;   =>
-;   (assert (attribute (name comfort) (value wifi) (certainty 1.0)))
-;   (assert (attribute (name comfort) (value parking) (certainty 1.0)))
-;   (assert (attribute (name comfort) (value pet-allowed) (certainty 0.4)))
-;   (assert (attribute (name comfort) (value tv) (certainty 1.0)))
-;   (assert (attribute (name comfort) (value gym) (certainty 0.4)))
-;   (assert (attribute (name comfort) (value air-conditioning) (certainty 0.8)))
-;   (assert (attribute (name comfort) (value pool) (certainty 0.8)))
-; )
-;
-; (defrule EXPERTISE::region-facility-stars-2
-;   (attribute (name stars) (value 2))
-;   =>
-;   (assert (attribute (name comfort) (value wifi) (certainty 0.6)))
-;   (assert (attribute (name comfort) (value parking) (certainty 0.6)))
-;   (assert (attribute (name comfort) (value pet-allowed) (certainty 0.2)))
-;   (assert (attribute (name comfort) (value tv) (certainty 0.6)))
-;   (assert (attribute (name comfort) (value gym) (certainty 0.2)))
-;   (assert (attribute (name comfort) (value air-conditioning) (certainty 0.4)))
-;   (assert (attribute (name comfort) (value pool) (certainty 0.2)))
-; )
-;
-; (defrule EXPERTISE::region-facility-stars-1
-;   (attribute (name stars) (value 1))
-;   =>
-;   (assert (attribute (name comfort) (value wifi) (certainty 0.4)))
-;   (assert (attribute (name comfort) (value parking) (certainty 0.2)))
-;   (assert (attribute (name comfort) (value pet-allowed) (certainty 0.0)))
-;   (assert (attribute (name comfort) (value tv) (certainty 0.4)))
-;   (assert (attribute (name comfort) (value gym) (certainty 0.0)))
-;   (assert (attribute (name comfort) (value air-conditioning) (certainty 0.2)))
-;   (assert (attribute (name comfort) (value pool) (certainty 0.0)))
-; )
+(defrule EXPERTISE::pattern-and-turism-from-expertise-to-system
+  (attribute-pattern (name turism) (values ?from-value1 ?from-value2) (conjunction and) (id ?id))
+  ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf1) (created-by turism ?from-value1))
+  ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf2) (created-by turism ?from-value2))
+  =>
+  (retract ?attr1)
+  (modify ?attr2 (certainty (min ?cf1 ?cf2)) (created-by turism ?id))
+  (assert (attribute (name different-region) (value 1))) ; TODO valutare certezza
+)
 
-;;***********************
-;;* Profilazione UTENTE *
-;;***********************
-
-
+(defrule EXPERTISE::pattern-none-from-expertise-to-system
+  (attribute-pattern (name ?from-attribute) (values ?from-value) (conjunction none))
+  ?attr <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf) (created-by ?from-attribute ?from-value))
+  =>
+  (retract ?attr)
+  (assert (attribute (name ?name) (value ?value) (certainty ?cf)))
+)
 
 ;;****************
 ;;* DESTINATIONS *
