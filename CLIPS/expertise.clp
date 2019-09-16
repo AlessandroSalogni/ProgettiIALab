@@ -69,7 +69,7 @@
 
 (defrule EXPERTISE::create-not-find-expertise-attribute
   (new-attributes ?from-attribute ?from-value ?attribute $?values)
-  (parameter (name ?attribute) (values $?prev ?value&:(not (member ?value ?values)) $?next))
+  (parameter (name ?attribute) (values $?prev ?value&:(not (member ?value ?values))&~?from-value $?next))
   =>
   (assert (expertise-attribute (name ?attribute) (value ?value) (certainty 0.0) (created-by ?from-attribute ?from-value)))
 )
@@ -84,6 +84,7 @@
 )
 
 (defrule EXPERTISE::pattern-and-turism-from-expertise-to-system
+  (halt)
   (attribute-pattern (name turism) (values ?from-value1 ?from-value2) (conjunction and) (id ?id))
   ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf1) (created-by turism ?from-value1))
   ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf2) (created-by turism ?from-value2))
