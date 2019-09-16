@@ -84,10 +84,11 @@
   =>
   (printout t ?request)
   (bind ?answer (explode$ (readline)))
-  (assert (answer
-            (user-answer ?answer)
-            (valid-answers ?valid-answers)
-          )
+  (assert
+    (answer
+      (user-answer ?answer)
+      (valid-answers ?valid-answers)
+    )
   )
   (focus CHECK-USER-ANSWER)
 )
