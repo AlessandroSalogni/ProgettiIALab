@@ -12,7 +12,6 @@
 (deftemplate SET-PARAMETER::preference-request
   (slot search-parameter)
   (slot request (type STRING))
-  (multislot valid-answers)
 )
 
 (deftemplate answer
@@ -77,7 +76,10 @@
   (preference-request
     (search-parameter ?parameter)
     (request ?request)
-    (valid-answers $?valid-answers)
+  )
+  (parameter
+    (name ?parameter)
+    (values $?valid-answers)
   )
   =>
   (printout t ?request)
@@ -95,10 +97,10 @@
   (search-parameter-history)
   (menu-request (search-parameter start) (request "Which search parameter would you like to set? ") (valid-answers destination budget facility end))
   (menu-request (search-parameter destination) (request "Which search parameter of destination would you like to set? ") (valid-answers region turism end))
-  (preference-request (search-parameter turism) (request "Which turism do you prefer? ") (valid-answers sport religious enogastronomic cultural sea mountain lake termal naturalistic))
-  (preference-request (search-parameter region) (request "Which region would you like to visit? ") (valid-answers piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
-  (preference-request (search-parameter budget) (request "How much budget? ") (valid-answers 100 200 300 400 500 600 700 800 900 1000)) ; mettere un range?
+  (preference-request (search-parameter turism) (request "Which turism do you prefer? "))
+  (preference-request (search-parameter region) (request "Which region would you like to visit? "))
+  (preference-request (search-parameter budget) (request "How much budget? "))
   (menu-request (search-parameter facility) (request "Which search parameter of facility would you like to set? ") (valid-answers stars comfort end))
-  (preference-request (search-parameter stars) (request "How many stars would you like? ") (valid-answers 1 2 3 4))
-  (preference-request (search-parameter comfort) (request "Which comfort would you like to have? ") (valid-answers parking pool air-conditioning pet-allowed wifi tv gym))
+  (preference-request (search-parameter stars) (request "How many stars would you like? "))
+  (preference-request (search-parameter comfort) (request "Which comfort would you like to have? "))
 )

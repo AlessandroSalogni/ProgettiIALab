@@ -39,6 +39,9 @@
 (deffacts MAIN::parameter
   (parameter (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
   (parameter (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
+  (parameter (name budget) (values 100 200 300 400 500 600 700 800 900 1000)) ; mettere un range?
+  (parameter (name stars) (values 1 2 3 4))
+  (parameter (name comfort) (values parking pool air-conditioning pet-allowed wifi tv gym))
 )
 
 (defrule MAIN::start
