@@ -17,22 +17,24 @@ public class mpeEliminationAsk implements BayesInference {
     public CategoricalDistribution mpeEliminationAsk(AssignmentProposition[] e, BayesianNetwork bn) {
         List<RandomVariable> topologicOrderVar = new ArrayList();
         topologicOrderVar.addAll(bn.getVariablesInTopologicalOrder());
-        reverseOrder(topologicOrderVar);
+        List<RandomVariable> reverseTopologicOrderVar = reverseOrder(topologicOrderVar);
 
         List<Factor> factors = new ArrayList();
-
-        for(RandomVariable var : topologicOrderVar) {
-            factors.add(0, this.makeFactor(var, e, bn));
+        for(RandomVariable var : reverseTopologicOrderVar) {
+            ArrayList<Factor> multiplyFactor = new ArrayList<>();
+            multiplyFactor.add(makeFactor(var, e, bn));
+            
         }
 
-        while(topologicOrderVar.hasNext()) {
-            if (hidden.contains(var)) {
-                factors = this.sumOut(var, (List)factors, bn);
-            }
-        }
-
-        Factor product = this.pointwiseProduct((List)factors);
-        return ((ProbabilityTable)product.pointwiseProductPOS(_identity, X)).normalize();
+//        while(topologicOrderVar.hasNext()) {
+//            if (hidden.contains(var)) {
+//                factors = this.sumOut(var, (List)factors, bn);
+//            }
+//        }
+//
+//        Factor product = this.pointwiseProduct((List)factors);
+//        return ((ProbabilityTable)product.pointwiseProductPOS(_identity, X)).normalize();
+        return null;
     }
 
     public CategoricalDistribution ask(RandomVariable[] X, AssignmentProposition[] observedEvidence, BayesianNetwork bn) {
@@ -62,6 +64,29 @@ public class mpeEliminationAsk implements BayesInference {
 
             return fn.getCPT().getFactorFor((AssignmentProposition[])evidence.toArray(new AssignmentProposition[evidence.size()]));
         }
+    }
+
+    private List<Factor> maxOut(RandomVariable var, List<Factor> oldFactors, BayesianNetwork bn) {
+        List<Factor> newFactors = new ArrayList();
+        List<Factor> factorToMultiply = new ArrayList();
+
+        for(Factor factor : oldFactors)
+            if (factor.contains(var))
+                factorToMultiply.add(factor);
+            else
+                newFactors.add(factor);
+
+        newFactors.add(this.pointwiseProduct(factorToMultiply).maxOut(new RandomVariable[]{var}));
+        return newFactors;
+    }
+
+    private Factor pointwiseProduct(List<Factor> factors) {
+        Factor product = factors.get(0);
+
+        for(int i = 1; i < factors.size(); i++)
+            product = product.pointwiseProduct(factors.get(i));
+
+        return product;
     }
 
     /*USO del parser
