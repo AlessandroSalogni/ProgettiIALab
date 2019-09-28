@@ -5,14 +5,14 @@ import aima.core.probability.bayes.BayesInference;
 import aima.core.probability.bayes.BayesianNetwork;
 import aima.core.probability.bayes.FiniteNode;
 import aima.core.probability.bayes.Node;
-import aima.core.probability.bayes.impl.FullCPTNode;
 import aima.core.probability.proposition.AssignmentProposition;
-import aima.core.probability.util.ProbabilityTable;
-import bifparser.BifBNReader;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-public class mpeEliminationAsk implements BayesInference {
+public class MpeEliminationAsk implements BayesInference {
 
     public CategoricalDistribution mpeEliminationAsk(AssignmentProposition[] e, BayesianNetwork bn) {
         List<RandomVariable> topologicOrderVar = new ArrayList();
@@ -21,20 +21,11 @@ public class mpeEliminationAsk implements BayesInference {
 
         List<Factor> factors = new ArrayList();
         for(RandomVariable var : reverseTopologicOrderVar) {
-            ArrayList<Factor> multiplyFactor = new ArrayList<>();
-            multiplyFactor.add(makeFactor(var, e, bn));
-            
+            factors.add(makeFactor(var, e, bn));
+            factors = this.maxOut(var, (List)factors);
         }
 
-//        while(topologicOrderVar.hasNext()) {
-//            if (hidden.contains(var)) {
-//                factors = this.sumOut(var, (List)factors, bn);
-//            }
-//        }
-//
-//        Factor product = this.pointwiseProduct((List)factors);
-//        return ((ProbabilityTable)product.pointwiseProductPOS(_identity, X)).normalize();
-        return null;
+        return (CategoricalDistribution) factors.get(0);//TODO controllare indice
     }
 
     public CategoricalDistribution ask(RandomVariable[] X, AssignmentProposition[] observedEvidence, BayesianNetwork bn) {
@@ -66,7 +57,7 @@ public class mpeEliminationAsk implements BayesInference {
         }
     }
 
-    private List<Factor> maxOut(RandomVariable var, List<Factor> oldFactors, BayesianNetwork bn) {
+    private List<Factor> maxOut(RandomVariable var, List<Factor> oldFactors) {
         List<Factor> newFactors = new ArrayList();
         List<Factor> factorToMultiply = new ArrayList();
 
@@ -76,7 +67,9 @@ public class mpeEliminationAsk implements BayesInference {
             else
                 newFactors.add(factor);
 
-        newFactors.add(this.pointwiseProduct(factorToMultiply).maxOut(new RandomVariable[]{var}));
+        if(factorToMultiply.size() != 0)
+            newFactors.add((this.pointwiseProduct(factorToMultiply)).maxOut(var));
+
         return newFactors;
     }
 
@@ -88,18 +81,4 @@ public class mpeEliminationAsk implements BayesInference {
 
         return product;
     }
-
-    /*USO del parser
-
-    public static void main(String[] args) throws Exception {
-        BifBNReader bnReader = new BifBNReader("earthquake.bif") {
-            @Override
-            protected Node nodeCreation(RandomVariable var, double[] probs, Node... parents) {
-                return new FullCPTNode(var, probs, parents);
-            }
-        };
-
-        BayesianNetwork bn = bnReader.getBayesianNetwork();
-    }
-    */
 }

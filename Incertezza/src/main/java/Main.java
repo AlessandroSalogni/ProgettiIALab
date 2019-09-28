@@ -1,17 +1,25 @@
+import aima.core.probability.CategoricalDistribution;
 import aima.core.probability.RandomVariable;
 import aima.core.probability.bayes.BayesianNetwork;
-import aima.core.probability.bayes.exact.EliminationAsk;
 import aima.core.probability.example.BayesNetExampleFactory;
 import aima.core.probability.example.ExampleRV;
 import aima.core.probability.proposition.AssignmentProposition;
+
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
         BayesianNetwork bn = BayesNetExampleFactory.constructBurglaryAlarmNetwork();
         RandomVariable[] var = {ExampleRV.ALARM_RV};
-        AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.JOHN_CALLS_RV, true)};
+//        AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.JOHN_CALLS_RV, true), new AssignmentProposition(ExampleRV.MARY_CALLS_RV, true)};
+        AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.BURGLARY_RV, true)};
 
-        new EliminationAsk().ask(var, e, bn);
+        CategoricalDistribution res = new MpeEliminationAsk().ask(var, e, bn);
+
+        System.out.println("Probability: " +  res.getValues()[0]);
+        for(Map.Entry<RandomVariable,Object> varValue : res.getBestVarsValues()[0].entrySet())
+            System.out.println(varValue.getKey() + " -> " + varValue.getValue());
+
 
 //        BifBNReader bnReader = new BifBNReader("earthquake.bif") {
 //            @Override
