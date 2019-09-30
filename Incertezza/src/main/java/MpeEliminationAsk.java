@@ -25,7 +25,7 @@ public class MpeEliminationAsk implements BayesInference {
             factors = this.maxOut(var, (List)factors);
         }
 
-        return (CategoricalDistribution) factors.get(0);//TODO controllare indice
+        return (CategoricalDistribution) pointwiseProduct(factors);
     }
 
     public CategoricalDistribution ask(RandomVariable[] X, AssignmentProposition[] observedEvidence, BayesianNetwork bn) {

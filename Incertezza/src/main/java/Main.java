@@ -11,8 +11,9 @@ public class Main {
     public static void main(String[] args) {
         BayesianNetwork bn = BayesNetExampleFactory.constructBurglaryAlarmNetwork();
         RandomVariable[] var = {ExampleRV.ALARM_RV};
-//        AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.JOHN_CALLS_RV, true), new AssignmentProposition(ExampleRV.MARY_CALLS_RV, true)};
-        AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.BURGLARY_RV, true)};
+        AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.BURGLARY_RV, false),
+                new AssignmentProposition(ExampleRV.EARTHQUAKE_RV, true),
+                new AssignmentProposition(ExampleRV.MARY_CALLS_RV, true)};
 
         CategoricalDistribution res = new MpeEliminationAsk().ask(var, e, bn);
 

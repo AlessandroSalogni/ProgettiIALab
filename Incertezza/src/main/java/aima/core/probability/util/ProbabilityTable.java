@@ -521,6 +521,9 @@ public class ProbabilityTable implements CategoricalDistribution, Factor {
 		// If no variables in the product
 		if (1 == product.getValues().length) {
 			product.getValues()[0] = getValues()[0] * multiplier.getValues()[0];
+
+			product.bestVars[0] = new LinkedHashMap<>(bestVars[0]);
+			product.bestVars[0].putAll(multiplier.bestVars[0]);
 		} else {
 			// Otherwise need to iterate through the product
 			// to calculate its values based on the terms.
