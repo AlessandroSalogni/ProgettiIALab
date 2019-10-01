@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MpeEliminationAsk implements BayesInference {
 
-    public CategoricalDistribution mpeEliminationAsk(AssignmentProposition[] e, BayesianNetwork bn) {
+    private CategoricalDistribution mpeEliminationAsk(AssignmentProposition[] e, BayesianNetwork bn) {
         List<RandomVariable> topologicOrderVar = new ArrayList();
         topologicOrderVar.addAll(bn.getVariablesInTopologicalOrder());
         List<RandomVariable> reverseTopologicOrderVar = reverseOrder(topologicOrderVar);
@@ -22,7 +22,7 @@ public class MpeEliminationAsk implements BayesInference {
         List<Factor> factors = new ArrayList();
         for(RandomVariable var : reverseTopologicOrderVar) {
             factors.add(makeFactor(var, e, bn));
-            factors = this.maxOut(var, (List)factors);
+            factors = maxOut(var, factors);
         }
 
         return (CategoricalDistribution) pointwiseProduct(factors);
@@ -30,6 +30,20 @@ public class MpeEliminationAsk implements BayesInference {
 
     public CategoricalDistribution ask(RandomVariable[] X, AssignmentProposition[] observedEvidence, BayesianNetwork bn) {
         return mpeEliminationAsk(observedEvidence, bn);
+    }
+
+    private CategoricalDistribution mpeEliminationAsk(Factor factor, RandomVariable[] X, BayesianNetwork bn) {
+        List<Factor> factors = new ArrayList();
+        factors.add(factor);
+
+        for(RandomVariable var : X)
+            factors = maxOut(var, factors);
+
+        return (CategoricalDistribution) pointwiseProduct(factors);
+    }
+
+    public CategoricalDistribution ask(Factor factor, RandomVariable[] X, BayesianNetwork bn) {
+        return mpeEliminationAsk(factor, X, bn);
     }
 
     protected List<RandomVariable> reverseOrder(Collection<RandomVariable> vars) {

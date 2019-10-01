@@ -6,20 +6,10 @@ import aima.core.probability.bayes.BayesianNetwork;
 import aima.core.probability.bayes.exact.EliminationAsk;
 import aima.core.probability.proposition.AssignmentProposition;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MapEliminationAsk implements BayesInference {
     @Override
-    public CategoricalDistribution ask(RandomVariable[] X, AssignmentProposition[] e, BayesianNetwork bn) {
-        List<RandomVariable> mapVar = new ArrayList<>(bn.getVariablesInTopologicalOrder());
-
-        for(RandomVariable rv : X)
-            mapVar.remove(rv);
-        for (AssignmentProposition ap : e)
-            mapVar.removeAll(ap.getScope());
-
-        Factor factor = (Factor) new EliminationAsk().ask((RandomVariable[]) mapVar.toArray(), e, bn);
-        return null;
+    public CategoricalDistribution ask(RandomVariable[] mapVar, AssignmentProposition[] e, BayesianNetwork bn) {
+        Factor eliminationFactor = (Factor) new EliminationAsk().ask(mapVar, e, bn);
+        return new MpeEliminationAsk().ask(eliminationFactor, mapVar, bn);
     }
 }

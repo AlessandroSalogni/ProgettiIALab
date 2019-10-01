@@ -1,3 +1,4 @@
+import aima.core.learning.framework.Example;
 import aima.core.probability.CategoricalDistribution;
 import aima.core.probability.RandomVariable;
 import aima.core.probability.bayes.BayesianNetwork;
@@ -11,10 +12,10 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
         BayesianNetwork bn = BayesNetExampleFactory.constructBurglaryAlarmNetwork();
-        RandomVariable[] var = {ExampleRV.ALARM_RV};
-        AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.BURGLARY_RV, false)};
+        RandomVariable[] mapVar = {ExampleRV.EARTHQUAKE_RV, ExampleRV.ALARM_RV, ExampleRV.BURGLARY_RV};
+        AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.JOHN_CALLS_RV, false)};
 
-        CategoricalDistribution res = new MapEliminationAsk().ask(var, e, bn);
+        CategoricalDistribution res = new MapEliminationAsk().ask(mapVar, e, bn);
 
         System.out.println("Probability: " +  res.getValues()[0]);
         for(Map.Entry<RandomVariable,Object> varValue : res.getBestVarsValues()[0].entrySet())
