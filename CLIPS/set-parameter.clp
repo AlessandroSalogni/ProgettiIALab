@@ -14,10 +14,10 @@
   (slot request (type STRING))
 )
 
-(deftemplate answer
-  (multislot user-answer)
-  (multislot valid-answers)
-)
+; (deftemplate SET-PARAMETER::answer
+;   (multislot user-answer)
+;   (multislot valid-answers)
+; )
 
 (defrule SET-PARAMETER::leave-focus
   ?search-parameter <- (search-parameter end)
@@ -82,15 +82,25 @@
     (values $?valid-answers)
   )
   =>
-  (printout t ?request)
-  (bind ?answer (explode$ (readline)))
-  (assert
-    (answer
-      (user-answer ?answer)
-      (valid-answers ?valid-answers)
-    )
+  (retract ?search-parameter)
+  (assert (search-parameter end))
+  (retract ?history)
+  (assert (search-parameter-history $?history-parameter ?parameter))
+  (assert (attribute
+            (name ?parameter)
+            (value (ask-question ?request ?valid-answers))
+            (type user)
+          )
   )
-  (focus CHECK-USER-ANSWER)
+  ; (printout t ?request)
+  ; (bind ?answer (explode$ (readline)))
+  ; (assert
+  ;   (answer
+  ;     (user-answer ?answer)
+  ;     (valid-answers ?valid-answers)
+  ;   )
+  ; )
+  ; (focus CHECK-USER-ANSWER)
 )
 
 (deffacts SET-PARAMETER::define-requests

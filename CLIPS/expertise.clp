@@ -74,29 +74,29 @@
   (assert (expertise-attribute (name ?attribute) (value ?value) (certainty 0.0) (created-by ?from-attribute ?from-value)))
 )
 
-(defrule EXPERTISE::pattern-or-from-expertise-to-system
-  (attribute-pattern (name ?from-attribute) (values ?from-value1 ?from-value2) (conjunction or) (id ?id))
-  ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf1) (created-by ?from-attribute ?from-value1))
-  ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf2) (created-by ?from-attribute ?from-value2))
-  =>
-  (retract ?attr1)
-  (modify ?attr2 (certainty (max ?cf1 ?cf2)) (created-by ?from-attribute ?id))
-)
-
-(defrule EXPERTISE::pattern-and-turism-from-expertise-to-system
-  (attribute-pattern (name turism) (values ?from-value1 ?from-value2) (conjunction and) (id ?id))
-  ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf1) (created-by turism ?from-value1))
-  ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf2) (created-by turism ?from-value2))
-  =>
-  (retract ?attr1)
-  (modify ?attr2 (certainty (min ?cf1 ?cf2)) (created-by turism ?id))
-  (assert (attribute (name different-region) (value 1))) ; TODO valutare certezza
-)
-
-(defrule EXPERTISE::pattern-none-from-expertise-to-system
-  (attribute-pattern (name ?from-attribute) (values ?from-value) (conjunction none))
-  ?attr <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf) (created-by ?from-attribute ?from-value))
-  =>
-  (retract ?attr)
-  (assert (attribute (name ?name) (value ?value) (certainty ?cf)))
-)
+; (defrule EXPERTISE::pattern-or-from-expertise-to-system
+;   (attribute-pattern (name ?from-attribute) (values ?from-value1 ?from-value2) (conjunction or) (id ?id))
+;   ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf1) (created-by ?from-attribute ?from-value1))
+;   ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf2) (created-by ?from-attribute ?from-value2))
+;   =>
+;   (retract ?attr1)
+;   (modify ?attr2 (certainty (max ?cf1 ?cf2)) (created-by ?from-attribute ?id))
+; )
+;
+; (defrule EXPERTISE::pattern-and-turism-from-expertise-to-system
+;   (attribute-pattern (name turism) (values ?from-value1 ?from-value2) (conjunction and) (id ?id))
+;   ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf1) (created-by turism ?from-value1))
+;   ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf2) (created-by turism ?from-value2))
+;   =>
+;   (retract ?attr1)
+;   (modify ?attr2 (certainty (min ?cf1 ?cf2)) (created-by turism ?id))
+;   (assert (attribute (name different-region) (value 1))) ; TODO valutare certezza
+; )
+;
+; (defrule EXPERTISE::pattern-none-from-expertise-to-system
+;   (attribute-pattern (name ?from-attribute) (values ?from-value) (conjunction none))
+;   ?attr <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf) (created-by ?from-attribute ?from-value))
+;   =>
+;   (retract ?attr)
+;   (assert (attribute (name ?name) (value ?value) (certainty ?cf)))
+; )

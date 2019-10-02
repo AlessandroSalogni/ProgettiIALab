@@ -99,13 +99,13 @@
 ;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
 ; )
 
-(deftemplate DESTINATIONS::pre-attribute
-  (slot name)
-  (slot value)
-  (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
-  (slot conjunction (allowed-values and or not))
-  (slot id)
-)
+; (deftemplate DESTINATIONS::pre-attribute
+;   (slot name)
+;   (slot value)
+;   (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
+;   (slot conjunction (allowed-values and or not))
+;   (slot id)
+; )
 ;
 ; (defrule DESTINATIONS::generate-city
 ;   (attribute (name turism) (value ?type) (certainty ?cf-turism) (type system))
@@ -117,30 +117,30 @@
 ;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
 ; )
 
-(defrule DESTINATIONS::generate-city3
-  (attribute-pattern (name turism) (values $? ?turism&:(not (eq (type ?turism) INTEGER)) $?) (conjunction ?conj) (id ?id))
-  (attribute (name turism) (value ?turism) (certainty ?cf-turism) (type system))
-  (attribute (name region) (value ?region) (certainty ?cf-region) (type system))
-  (place (name ?city) (region ?region) (turism $? ?turism ?score $?))
-  =>
-  (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
-  (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
-  (assert (pre-attribute (name city) (value ?city) (certainty ?cf-place) (conjunction ?conj) (id ?id)))
-)
+; (defrule DESTINATIONS::generate-city3
+;   (attribute-pattern (name turism) (values $? ?turism&:(not (eq (type ?turism) INTEGER)) $?) (conjunction ?conj) (id ?id))
+;   (attribute (name turism) (value ?turism) (certainty ?cf-turism) (type system))
+;   (attribute (name region) (value ?region) (certainty ?cf-region) (type system))
+;   (place (name ?city) (region ?region) (turism $? ?turism ?score $?))
+;   =>
+;   (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
+;   (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
+;   (assert (pre-attribute (name city) (value ?city) (certainty ?cf-place) (conjunction ?conj) (id ?id)))
+; )
 
-(defrule DESTINATIONS::combine-pre-or-attribute
-  ?attr1 <- (pre-attribute (name ?name) (value ?value) (certainty ?c1) (conjunction or))
-  ?attr2 <- (pre-attribute (name ?name) (value ?value) (certainty ?c2) (conjunction or))
-  (test (neq ?attr1 ?attr2))
-  =>
-  (retract ?attr1)
-  (modify ?attr2 (certainty (max ?c1 ?c2)))
-)
+; (defrule DESTINATIONS::combine-pre-or-attribute
+;   ?attr1 <- (pre-attribute (name ?name) (value ?value) (certainty ?c1) (conjunction or))
+;   ?attr2 <- (pre-attribute (name ?name) (value ?value) (certainty ?c2) (conjunction or))
+;   (test (neq ?attr1 ?attr2))
+;   =>
+;   (retract ?attr1)
+;   (modify ?attr2 (certainty (max ?c1 ?c2)))
+; )
 
-(defrule DESTINATIONS::complex-pattern
-  (declare (salience -10))
-  ?attr <- (pre-attribute (id ?old-id))
-  (attribute-pattern (values $? ?old-id $?) (conjunction ?conj) (id ?new-id))
-  =>
-  (modify ?attr (id ?new-id) (conjunction ?conj))
-)
+; (defrule DESTINATIONS::complex-pattern
+;   (declare (salience -10))
+;   ?attr <- (pre-attribute (id ?old-id))
+;   (attribute-pattern (values $? ?old-id $?) (conjunction ?conj) (id ?new-id))
+;   =>
+;   (modify ?attr (id ?new-id) (conjunction ?conj))
+; )

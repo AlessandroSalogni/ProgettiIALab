@@ -24,12 +24,12 @@
   (slot type (allowed-symbols user system) (default system))
 )
 
-(deftemplate MAIN::attribute-pattern
-  (slot name)
-  (multislot values (cardinality 1 2))
-  (slot conjunction (allowed-symbols and or not none))
-  (slot id (default (gensym*)))
-)
+; (deftemplate MAIN::attribute-pattern
+;   (slot name)
+;   (multislot values (cardinality 1 2))
+;   (slot conjunction (allowed-symbols and or not none))
+;   (slot id (default (gensym*)))
+; )
 
 (deftemplate MAIN::parameter
   (slot name)
