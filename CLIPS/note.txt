@@ -31,16 +31,24 @@ soluzioni che fanno al caso
 
 
 
+
+
 ******************************
 **   Domande obbligatorie   **
 ******************************
  - Nome Cognome
  - Numero di persone
-
+ - Numero minimo-massimo di giorni consecutivi
+ - Stagione (inferiamo poi turismo - inverno montagna,...-)
+ - Budget? O nostra expertise?
 
 *****************************
 **   Profilazione utente   **
 *****************************
+Il sistema parte con la supposizione di avere una profilazione completa per l'utente. Se non esiste la
+profilazione (vedere se continuare lo stesso con il sistema oppure no)
+
+
  - Nome Cognome
  - Età
  - Giorni di ferie

@@ -9,12 +9,12 @@
   (multislot expertise)
 )
 
-(deftemplate EXPERTISE::expertise-attribute
-  (slot name)
-  (slot value)
-  (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
-  (multislot created-by (cardinality 2 2))
-)
+; (deftemplate EXPERTISE::expertise-attribute
+;   (slot name)
+;   (slot value)
+;   (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
+;   (multislot created-by (cardinality 2 2))
+; )
 
 (deffacts EXPERTISE::expertise-knowledge
   ; ----- Region -----
@@ -55,23 +55,23 @@
 )
 
 (defrule EXPERTISE::expertise-rule
-  (attribute (name ?user-attribute) (value ?value) (type user))
+  (user-attribute (name ?user-attribute) (value ?value))
   (inference (attribute ?user-attribute) (value ?value) (expertise $?prev ?attribute [ $?values&:(not (member ] ?values)) ] $?next))
   =>
-  (assert (new-attributes ?user-attribute ?value ?attribute $?values)) ;; TODO Fare template con new-attributes???
+  (assert (new-attributes ?attribute $?values)) ;; TODO Fare template con new-attributes???
 )
 
 (defrule EXPERTISE::create-expertise-attribute
-  (new-attributes ?from-attribute ?from-value ?attribute $?prev ?value ?cf&:(eq (type ?cf) FLOAT) $?next)
+  (new-attributes ?attribute $?prev ?value ?cf&:(eq (type ?cf) FLOAT) $?next)
   =>
-  (assert (expertise-attribute (name ?attribute) (value ?value) (certainty ?cf) (created-by ?from-attribute ?from-value)))
+  (assert (attribute (name ?attribute) (value ?value) (certainty ?cf)))
 )
 
 (defrule EXPERTISE::create-not-find-expertise-attribute
-  (new-attributes ?from-attribute ?from-value ?attribute $?values)
-  (parameter (name ?attribute) (values $?prev ?value&:(not (member ?value ?values))&~?from-value $?next))
+  (new-attributes ?attribute $?values)
+  (parameter (name ?attribute) (values $?prev ?value&:(not (member ?value ?values)) $?next))
   =>
-  (assert (expertise-attribute (name ?attribute) (value ?value) (certainty 0.0) (created-by ?from-attribute ?from-value)))
+  (assert (attribute (name ?attribute) (value ?value) (certainty 0.0)))
 )
 
 ; (defrule EXPERTISE::pattern-or-from-expertise-to-system

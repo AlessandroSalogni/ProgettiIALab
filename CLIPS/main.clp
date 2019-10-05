@@ -21,7 +21,12 @@
   (slot name)
   (slot value)
   (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
-  (slot type (allowed-symbols user system) (default system))
+)
+
+(deftemplate MAIN::user-attribute
+  (slot name)
+  (slot value)
+  (slot type (allowed-symbols mandatory optional) (default optional))
 )
 
 ; (deftemplate MAIN::attribute-pattern

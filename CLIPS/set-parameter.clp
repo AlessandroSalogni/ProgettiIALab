@@ -86,10 +86,9 @@
   (assert (search-parameter end))
   (retract ?history)
   (assert (search-parameter-history $?history-parameter ?parameter))
-  (assert (attribute
+  (assert (user-attribute
             (name ?parameter)
             (value (ask-question ?request ?valid-answers))
-            (type user)
           )
   )
   ; (printout t ?request)
