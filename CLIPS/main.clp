@@ -58,15 +58,19 @@
 
 (defrule MAIN::from-user-to-system-attribute
   (declare (salience 100) (auto-focus TRUE))
-  ?attr <- (attribute (type user))
+  (user-attribute 
+    (name ?name) 
+    (value ?value) 
+    (type optional)
+  )
   =>
-  (duplicate ?attr (type system))
+  (assert (attribute (name ?name) (value ?value)))
 )
 
 (defrule MAIN::combine-certainties-both-positive
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (type system))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(>= ?c2 0.0)) (type system))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(>= ?c2 0.0)))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr1)
@@ -75,8 +79,8 @@
 
 (defrule MAIN::combine-certainties-both-negative
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(< ?c1 0.0)) (type system))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (type system))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(< ?c1 0.0)))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr1)
@@ -85,8 +89,8 @@
 
 (defrule MAIN::combine-certainties-opposite
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (type system))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (type system))
+  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)))
+  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)))
   (test (not (and (eq ?c1 1.0) (eq ?c2 -1.0))))
   =>
   (retract ?attr1)
