@@ -53,7 +53,7 @@
 	(declare (salience 10000))
 	=>
 	(set-fact-duplication TRUE)
-	(focus SET-PARAMETER EXPERTISE DESTINATIONS PRINT-RESULTS)
+	(focus MANDATORY-QUESTIONS SET-PARAMETER EXPERTISE DESTINATIONS PRINT-RESULTS)
 )
 
 (defrule MAIN::from-user-to-system-attribute
