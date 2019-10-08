@@ -32,24 +32,14 @@
   (assert (user-attribute (name number-holiday-days) (value ?number-holiday-days) (type profile)))
   (assert (user-attribute (name live-region) (value ?live-region) (type profile)))
   (assert (user-attribute (name last-holiday-region) (value ?last-holiday-region) (type profile)))
-  (assert (comforts $?comforts))
-  (assert (favourite-turisms $?favourite-turisms))
+  (assert (new-profile-attributes comfort $?comforts))
+  (assert (new-profile-attributes favourite-turism $?favourite-turisms))
 )
 
-(defrule USER-PROFILE::generate-comforts-attributes
-  ?profile-comforts <- (comforts $?comforts ?comfort)
+(defrule USER-PROFILE::generate-multislot-attributes
+  ?profile-comforts <- (new-profile-attributes ?attribute-name $? ?value $?)
   =>
-  (assert (user-attribute (name comfort) (value ?comfort) (type profile)))
-  (retract ?profile-comforts)
-  (assert (comforts $?comforts))
-)
-
-(defrule USER-PROFILE::generate-turisms-attributes
-  ?profile-favourite-turisms <- (favourite-turisms $?favourite-turisms ?favourite-turism)
-  =>
-  (assert (user-attribute (name favourite-turism) (value ?favourite-turism) (type profile)))
-  (retract ?profile-favourite-turisms)
-  (assert (favourite-turisms $?favourite-turisms))
+  (assert (user-attribute (name ?attribute-name) (value ?value) (type profile)))
 )
 
 (deffacts USER-PROFILE::profile-definition
