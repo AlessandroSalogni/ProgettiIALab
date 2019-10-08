@@ -26,7 +26,7 @@
 (deftemplate MAIN::user-attribute
   (slot name)
   (slot value)
-  (slot type (allowed-symbols mandatory optional) (default optional))
+  (slot type (allowed-symbols mandatory optional profile) (default optional))
 )
 
 ; (deftemplate MAIN::attribute-pattern
@@ -53,14 +53,14 @@
 	(declare (salience 10000))
 	=>
 	(set-fact-duplication TRUE)
-	(focus MANDATORY-QUESTIONS SET-PARAMETER EXPERTISE DESTINATIONS PRINT-RESULTS)
+	(focus MANDATORY-QUESTIONS USER-PROFILE SET-PARAMETER EXPERTISE DESTINATIONS PRINT-RESULTS)
 )
 
 (defrule MAIN::from-user-to-system-attribute
   (declare (salience 100) (auto-focus TRUE))
-  (user-attribute 
-    (name ?name) 
-    (value ?value) 
+  (user-attribute
+    (name ?name)
+    (value ?value)
     (type optional)
   )
   =>
