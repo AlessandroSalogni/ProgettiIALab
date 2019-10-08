@@ -37,7 +37,7 @@
 )
 
 (defrule USER-PROFILE::generate-multislot-attributes
-  ?profile-comforts <- (new-profile-attributes ?attribute-name $? ?value $?)
+  (new-profile-attributes ?attribute-name $? ?value $?)
   =>
   (assert (user-attribute (name ?attribute-name) (value ?value) (type profile)))
 )
