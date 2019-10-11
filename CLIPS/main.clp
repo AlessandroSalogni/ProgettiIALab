@@ -25,28 +25,22 @@
 
 (deftemplate MAIN::user-attribute
   (slot name)
-  (slot value)
+  (multislot values)
   (slot type (allowed-symbols mandatory optional profile) (default optional))
 )
-
-; (deftemplate MAIN::attribute-pattern
-;   (slot name)
-;   (multislot values (cardinality 1 2))
-;   (slot conjunction (allowed-symbols and or not none))
-;   (slot id (default (gensym*)))
-; )
 
 (deftemplate MAIN::parameter
   (slot name)
   (multislot values)
+  (multislot range (cardinality 2 2) (type INTEGER))
 )
 
 (deffacts MAIN::parameter
   (parameter (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
   (parameter (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
-  (parameter (name budget) (values 100 200 300 400 500 600 700 800 900 1000)) ; mettere un range?
   (parameter (name stars) (values 1 2 3 4))
   (parameter (name comfort) (values parking pool air-conditioning pet-allowed wifi tv gym))
+  (parameter (name budget) (range 50 1000))
 )
 
 (defrule MAIN::start
@@ -60,11 +54,21 @@
   (declare (salience 100) (auto-focus TRUE))
   (user-attribute
     (name ?name)
-    (value ?value)
+    (values $? $?value $?)
     (type optional)
   )
   =>
   (assert (attribute (name ?name) (value ?value)))
+)
+
+(defrule MAIN::combine-user-attribute-value ; TODO controllare quando i val hanno alcuni valori in comune? magari 2 regole per l'inserimento dell'utente
+  (declare (salience 100) (auto-focus TRUE))
+  ?attr1 <- (user-attribute (name ?name) (values $?val1) (type ?type))
+  ?attr2 <- (user-attribute (name ?name) (values $?val2) (type ?type))
+  (test (neq ?attr1 ?attr2))
+  =>
+  (retract ?attr1)
+  (modify ?attr2 (values $?val1 $?val2))
 )
 
 (defrule MAIN::combine-certainties-both-positive
