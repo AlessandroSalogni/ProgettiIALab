@@ -9,13 +9,6 @@
   (multislot expertise)
 )
 
-; (deftemplate EXPERTISE::expertise-attribute
-;   (slot name)
-;   (slot value)
-;   (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
-;   (multislot created-by (cardinality 2 2))
-; )
-
 (deffacts EXPERTISE::expertise-knowledge
   ; ----- Region -----
   (inference (attribute region) (value liguria) (expertise
@@ -52,10 +45,21 @@
   (inference (attribute turism) (value religious) (expertise
     region [ piemonte 0.5 liguria -0.3 toscana 0.4 lombardia 0.2 trentino-alto-adige -0.5 umbria 0.8 marche 0.6 ]
     turism [ cultural 0.5 ] ))
+  (inference-from-old-age enogastronomic religious cultural )
+)
+
+(defrule EXPERTISE::convert-optional-user-attribute ;TODO spostare nel main??
+  (user-attribute
+    (name ?name)
+    (values $? ?value $?)
+    (type optional)
+  )
+  =>
+  (assert (attribute (name ?name) (value ?value)))
 )
 
 (defrule EXPERTISE::expertise-rule
-  (user-attribute (name ?user-attribute) (value ?value))
+  (user-attribute (name ?user-attribute) (values $? ?value $?))
   (inference (attribute ?user-attribute) (value ?value) (expertise $?prev ?attribute [ $?values&:(not (member ] ?values)) ] $?next))
   =>
   (assert (new-attributes ?attribute $?values)) ;; TODO Fare template con new-attributes???
@@ -73,30 +77,11 @@
   =>
   (assert (attribute (name ?attribute) (value ?value) (certainty 0.0)))
 )
-
-; (defrule EXPERTISE::pattern-or-from-expertise-to-system
-;   (attribute-pattern (name ?from-attribute) (values ?from-value1 ?from-value2) (conjunction or) (id ?id))
-;   ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf1) (created-by ?from-attribute ?from-value1))
-;   ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf2) (created-by ?from-attribute ?from-value2))
+;(values $?turisms&:(not (member ?inference-attribute $?turisms))))
+; (defrule EXPERTISE::infer-turism-from-age
+;   (user-attribute (name turism) (values $?turisms))
+;   (inference-from-old-age $? ?inference-attribute&:(not (member ?inference-attribute $?turisms)) $?)
+;   (user-attribute (name age) (values ?age&:(>= ?age 60) $?) (type profile))
 ;   =>
-;   (retract ?attr1)
-;   (modify ?attr2 (certainty (max ?cf1 ?cf2)) (created-by ?from-attribute ?id))
-; )
-;
-; (defrule EXPERTISE::pattern-and-turism-from-expertise-to-system
-;   (attribute-pattern (name turism) (values ?from-value1 ?from-value2) (conjunction and) (id ?id))
-;   ?attr1 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf1) (created-by turism ?from-value1))
-;   ?attr2 <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf2) (created-by turism ?from-value2))
-;   =>
-;   (retract ?attr1)
-;   (modify ?attr2 (certainty (min ?cf1 ?cf2)) (created-by turism ?id))
-;   (assert (attribute (name different-region) (value 1))) ; TODO valutare certezza
-; )
-;
-; (defrule EXPERTISE::pattern-none-from-expertise-to-system
-;   (attribute-pattern (name ?from-attribute) (values ?from-value) (conjunction none))
-;   ?attr <- (expertise-attribute (name ?name) (value ?value) (certainty ?cf) (created-by ?from-attribute ?from-value))
-;   =>
-;   (retract ?attr)
-;   (assert (attribute (name ?name) (value ?value) (certainty ?cf)))
+;   (assert (attribute (name turism) (value ?inference-attribute) (certainty 0.5)))
 ; )

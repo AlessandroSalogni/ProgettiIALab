@@ -25,23 +25,25 @@
   )
   (user-attribute
     (name name-surname)
-    (value ?name-surname)
+    (values ?name-surname)
   )
   (local-time ?current-year $?)
   =>
-  (assert (user-attribute (name age) (value (- ?current-year ?birth-year)) (type profile)))
-  (assert (user-attribute (name number-holiday-days) (value ?number-holiday-days) (type profile)))
-  (assert (user-attribute (name live-region) (value ?live-region) (type profile)))
-  (assert (user-attribute (name last-holiday-region) (value ?last-holiday-region) (type profile)))
-  (assert (new-profile-attributes comfort $?comforts))
-  (assert (new-profile-attributes favourite-turism $?favourite-turisms))
+  (assert (user-attribute (name age) (values (- ?current-year ?birth-year)) (type profile)))
+  (assert (user-attribute (name number-holiday-days) (values ?number-holiday-days) (type profile)))
+  (assert (user-attribute (name live-region) (values ?live-region) (type profile)))
+  (assert (user-attribute (name last-holiday-region) (values ?last-holiday-region) (type profile)))
+  (assert (user-attribute (name comforts) (values $?comforts) (type profile)))
+  (assert (user-attribute (name favourite-turisms) (values $?favourite-turisms) (type profile)))
+  ; (assert (new-profile-attributes comfort $?comforts))
+  ; (assert (new-profile-attributes favourite-turism $?favourite-turisms))
 )
 
-(defrule USER-PROFILE::generate-multislot-attributes
-  (new-profile-attributes ?attribute-name $? ?value $?)
-  =>
-  (assert (user-attribute (name ?attribute-name) (value ?value) (type profile)))
-)
+; (defrule USER-PROFILE::generate-multislot-attributes
+;   (new-profile-attributes ?attribute-name $? ?value $?)
+;   =>
+;   (assert (user-attribute (name ?attribute-name) (value ?value) (type profile)))
+; )
 
 (deffacts USER-PROFILE::profile-definition
   (local-time (local-time))
@@ -56,7 +58,7 @@
   )
   (profile
     (name-surname "Alessandro Salogni")
-    (birth-year 1996)
+    (birth-year 1950)
     (number-holiday-days 7)
     (live-region lombardia)
     (last-holiday-region emilia-romagna)

@@ -88,18 +88,9 @@
   (assert (search-parameter-history $?history-parameter ?parameter))
   (assert (user-attribute
             (name ?parameter)
-            (value (ask-question ?request ?valid-answers))
+            (values (ask-question ?request ?valid-answers))
           )
   )
-  ; (printout t ?request)
-  ; (bind ?answer (explode$ (readline)))
-  ; (assert
-  ;   (answer
-  ;     (user-answer ?answer)
-  ;     (valid-answers ?valid-answers)
-  ;   )
-  ; )
-  ; (focus CHECK-USER-ANSWER)
 )
 
 (deffacts SET-PARAMETER::define-requests
