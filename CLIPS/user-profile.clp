@@ -27,8 +27,9 @@
     (name name-surname)
     (value ?name-surname)
   )
+  (local-time ?current-year $?)
   =>
-  (assert (user-attribute (name birth-year) (value ?birth-year) (type profile)))
+  (assert (user-attribute (name age) (value (- ?current-year ?birth-year)) (type profile)))
   (assert (user-attribute (name number-holiday-days) (value ?number-holiday-days) (type profile)))
   (assert (user-attribute (name live-region) (value ?live-region) (type profile)))
   (assert (user-attribute (name last-holiday-region) (value ?last-holiday-region) (type profile)))
@@ -37,12 +38,13 @@
 )
 
 (defrule USER-PROFILE::generate-multislot-attributes
-  ?profile-comforts <- (new-profile-attributes ?attribute-name $? ?value $?)
+  (new-profile-attributes ?attribute-name $? ?value $?)
   =>
   (assert (user-attribute (name ?attribute-name) (value ?value) (type profile)))
 )
 
 (deffacts USER-PROFILE::profile-definition
+  (local-time (local-time))
   (profile
     (name-surname "Riccardo Perotti")
     (birth-year 1996)
