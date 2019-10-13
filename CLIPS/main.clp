@@ -1,19 +1,5 @@
 (defmodule MAIN (export ?ALL))
 
-;;****************
-;;* DEFFUNCTIONS *
-;;****************
-(deffunction MAIN::ask-question (?question ?allowed-values)
-   (printout t ?question)
-   (bind ?answer (read))
-   (if (lexemep ?answer) then (bind ?answer (lowcase ?answer)))
-   (while (not (member ?answer ?allowed-values)) do
-      (printout t ?question)
-      (bind ?answer (read))
-      (if (lexemep ?answer) then (bind ?answer (lowcase ?answer))))
-   ?answer
-)
-
 ;;*****************
 ;;* INITIAL STATE *
 ;;*****************
@@ -41,6 +27,8 @@
   (parameter (name stars) (values 1 2 3 4))
   (parameter (name comfort) (values parking pool air-conditioning pet-allowed wifi tv gym))
   (parameter (name budget) (range 50 1000))
+  (parameter (name number-people) (range 1 10))
+  (parameter (name number-days) (range 1 30))
 )
 
 (defrule MAIN::start
@@ -50,16 +38,16 @@
 	(focus MANDATORY-QUESTIONS USER-PROFILE SET-PARAMETER EXPERTISE DESTINATIONS PRINT-RESULTS)
 )
 
-(defrule MAIN::from-user-to-system-attribute
-  (declare (salience 100) (auto-focus TRUE))
-  (user-attribute
-    (name ?name)
-    (values $? $?value $?)
-    (type optional)
-  )
-  =>
-  (assert (attribute (name ?name) (value ?value)))
-)
+; (defrule MAIN::from-user-to-system-attribute
+;   (declare (salience 100) (auto-focus TRUE))
+;   (user-attribute
+;     (name ?name)
+;     (values $? ?value $?)
+;     (type optional)
+;   )
+;   =>
+;   (assert (attribute (name ?name) (value ?value)))
+; )
 
 (defrule MAIN::combine-user-attribute-value ; TODO controllare quando i val hanno alcuni valori in comune? magari 2 regole per l'inserimento dell'utente
   (declare (salience 100) (auto-focus TRUE))

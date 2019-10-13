@@ -1,7 +1,7 @@
 ;;*****************
 ;;* SET-PARAMETER *
 ;;*****************
-(defmodule SET-PARAMETER (import MAIN ?ALL) (export ?ALL))
+(defmodule SET-PARAMETER (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (export ?ALL))
 
 (deftemplate SET-PARAMETER::menu-request
   (slot search-parameter)
@@ -50,9 +50,15 @@
   )
   =>
   (retract ?search-parameter)
-  (assert (search-parameter (ask-question ?request ?valid-answers)))
   (retract ?history)
   (assert (search-parameter-history start))
+  (assert 
+    (menu-question
+      (question ?request)
+      (valid-answers ?valid-answers)
+    )
+  )
+  (focus USER-INTERACTION)
 )
 
 (defrule SET-PARAMETER::menu-request
@@ -65,9 +71,15 @@
   )
   =>
   (retract ?search-parameter)
-  (assert (search-parameter (ask-question ?request ?valid-answers)))
   (retract ?history)
   (assert (search-parameter-history $?history-parameter ?parameter))
+  (assert 
+    (menu-question
+      (question ?request)
+      (valid-answers ?valid-answers)
+    )
+  )
+  (focus USER-INTERACTION)
 )
 
 (defrule SET-PARAMETER::preference-request
@@ -86,11 +98,15 @@
   (assert (search-parameter end))
   (retract ?history)
   (assert (search-parameter-history $?history-parameter ?parameter))
-  (assert (user-attribute
-            (name ?parameter)
-            (values (ask-question ?request ?valid-answers))
-          )
+  (assert 
+    (limit-attribute-question
+      (name ?parameter)
+      (question ?request)
+      (type-user-interaction optional)
+      (valid-answers ?valid-answers)
+    )
   )
+  (focus USER-INTERACTION)
 )
 
 (deffacts SET-PARAMETER::define-requests
