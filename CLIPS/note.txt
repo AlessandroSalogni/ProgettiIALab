@@ -30,7 +30,7 @@ Se le regioni sono distanti piu di 100 km (le localita scelte) allora si stampa 
 soluzioni che fanno al caso
 
 
-
+TODO Mettere default ?NONE nei template per campi obbligatori??
 
 
 ******************************
