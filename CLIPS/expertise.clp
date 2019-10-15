@@ -5,7 +5,7 @@
 
 (deftemplate EXPERTISE::expertise
   (slot inference)
-  (slot certainty (type INTEGER))
+  (slot certainty (type FLOAT))
   (multislot optional-values)
   (multislot expertise)
 )
@@ -53,8 +53,8 @@
     region [ piemonte 0.5 liguria -0.2 toscana 0.5 lombardia 0.2 trentino-alto-adige -0.5 umbria 0.8 marche 0.5 ]
     turism [ cultural 0.5 ] ))
 
-  (expertise (inference age) (certainty 0.5) (optional-values 60 70) (expertise enogastronomic)))  
-  (expertise (inference age) (certainty 0.5) (optional-values 71 120) (expertise cultural religious)))
+  (expertise (inference age) (certainty 0.5) (optional-values 60 70) (expertise enogastronomic))  
+  (expertise (inference age) (certainty 0.5) (optional-values 71 120) (expertise cultural religious))
 )
 
 (defrule EXPERTISE::convert-optional-user-attribute ;TODO spostare nel main??
