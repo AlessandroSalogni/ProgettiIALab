@@ -39,6 +39,13 @@
   ; (assert (new-profile-attributes favourite-turism $?favourite-turisms))
 )
 
+(defrule USER-PROFILE::create-age-class
+  (age-class ?class ?min ?max)
+  (user-attribute (name age) (values ?age&:(and (>= ?age ?min) (<= ?age ?max))))
+  =>
+  (assert (user-attribute (name age-class) (values ?class) (type profile)))
+)
+
 ; (defrule USER-PROFILE::generate-multislot-attributes
 ;   (new-profile-attributes ?attribute-name $? ?value $?)
 ;   =>
@@ -46,7 +53,13 @@
 ; )
 
 (deffacts USER-PROFILE::profile-definition
+  (age-class young 14 29)
+  (age-class middle-young 30 49)
+  (age-class middle-old 50 69)
+  (age-class old 70 99)
+  
   (local-time (local-time))
+  
   (profile
     (name-surname "Riccardo Perotti")
     (birth-year 1996)
