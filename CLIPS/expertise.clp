@@ -3,11 +3,11 @@
 ;;****************
 (defmodule EXPERTISE (import MAIN ?ALL))
 
-(deftemplate EXPERTISE::expertise-from-age
-  (slot certainty (type FLOAT))
-  (multislot age-range (cardinality 2 2) (type INTEGER))
-  (multislot expertise)
-)
+; (deftemplate EXPERTISE::expertise-from-age
+;   (slot attribute)
+;   (multislot age-range (cardinality 2 2) (type INTEGER))
+;   (multislot expertise)
+; )
 
 (deftemplate EXPERTISE::expertise-from-attribute
   (slot attribute)
@@ -52,8 +52,14 @@
     region [ piemonte 0.5 liguria -0.2 toscana 0.5 lombardia 0.2 trentino-alto-adige -0.5 umbria 0.8 marche 0.5 ]
     turism [ cultural 0.5 ] ))
 
-  (expertise-from-age (certainty 0.5) (age-range 60 70) (expertise enogastronomic))  
-  (expertise-from-age (certainty 0.5) (age-range 71 120) (expertise cultural religious))
+  (expertise-from-attribute (attribute age-class) (value young) (expertise 
+    turism [ sport 0.5 sea 0.5 religious -0.5 ]))  
+  (expertise-from-attribute (attribute age-class) (value middle-young) (expertise 
+    turism [ cultural 0.5 enogastronomic 0.5 ]))  
+  (expertise-from-attribute (attribute age-class) (value middle-old) (expertise 
+    turism [ cultural 0.5 enogastronomic 0.5 mountain 0.5 ]))  
+  (expertise-from-attribute (attribute age-class) (value old) (expertise 
+    turism [ cultural 0.5 religious 0.5 sport -0.5 termal 0.5 ]))
 )
 
 (defrule EXPERTISE::convert-optional-user-attribute ;TODO spostare nel main??
@@ -68,7 +74,12 @@
 
 (defrule EXPERTISE::expertise-rule
   (user-attribute (name ?user-attribute) (values $? ?value $?))
-  (expertise-from-attribute (attribute ?user-attribute) (value ?value) (expertise $?prev ?attribute [ $?values&:(not (member ] ?values)) ] $?next))
+  ; (or
+  (expertise-from-attribute (attribute ?user-attribute) (value ?value)
+  (expertise $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
+    ; (expertise-from-age (attribute ?user-attribute) (age-range ?min&:(<= ?min ?value) ?max&:(<= ?value ?max)) 
+    ;   (expertise $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))
+  ;)
   =>
   (assert (new-attributes ?attribute $?values)) ;; TODO Fare template con new-attributes???
 )
@@ -86,10 +97,8 @@
   (assert (attribute (name ?attribute) (value ?value) (certainty 0.0)))
 )
 
-;(defrule EXPERTISE::infer-turism-from-age
-;  (expertise )
-;  (expertise-from-attribute-from-old-age $? ?inference-attribute $?)
-;  (user-attribute (name age) (values ?age&:(>= ?age 60) $?) (type profile))
-;  =>
-;  (assert (attribute (name turism) (value ?inference-attribute) (certainty 0.5)))
-;)
+(defrule EXPERTISE::expertise-from-live-region
+  (user-attribute (name live-region) (values ?region))
+  =>
+  (assert (attribute (name region) (value ?region) (certainty -0.5)))
+)
