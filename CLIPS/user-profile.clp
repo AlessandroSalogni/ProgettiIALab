@@ -35,22 +35,14 @@
   (assert (user-attribute (name last-holiday-region) (values ?last-holiday-region) (type profile)))
   (assert (user-attribute (name comforts) (values $?comforts) (type profile)))
   (assert (user-attribute (name favourite-turisms) (values $?favourite-turisms) (type profile)))
-  ; (assert (new-profile-attributes comfort $?comforts))
-  ; (assert (new-profile-attributes favourite-turism $?favourite-turisms))
 )
 
 (defrule USER-PROFILE::create-age-class
   (age-class ?class ?min ?max)
-  (user-attribute (name age) (values ?age&:(and (>= ?age ?min) (<= ?age ?max))))
+  (user-attribute (name age) (values ?age&:(and (<= ?min ?age) (<= ?age ?max))))
   =>
   (assert (user-attribute (name age-class) (values ?class) (type profile)))
 )
-
-; (defrule USER-PROFILE::generate-multislot-attributes
-;   (new-profile-attributes ?attribute-name $? ?value $?)
-;   =>
-;   (assert (user-attribute (name ?attribute-name) (value ?value) (type profile)))
-; )
 
 (deffacts USER-PROFILE::profile-definition
   (age-class young 14 29)
