@@ -3,62 +3,56 @@
 ;;****************
 (defmodule EXPERTISE (import MAIN ?ALL))
 
-; (deftemplate EXPERTISE::expertise-from-age
-;   (slot attribute)
-;   (multislot age-range (cardinality 2 2) (type INTEGER))
-;   (multislot expertise)
-; )
-
-(deftemplate EXPERTISE::expertise-from-attribute
+(deftemplate EXPERTISE::expertise
   (slot attribute)
   (slot value)
-  (multislot expertise)
+  (multislot inference)
 )
 
 (deffacts EXPERTISE::expertise-knowledge
   ; ----- Region -----
-  (expertise-from-attribute (attribute region) (value liguria) (expertise
+  (expertise (attribute region) (value liguria) (inference
     turism [ sea 0.8 mountain 0.2 enogastronomic 0.5 lake -0.8 termal -0.5 sport 0.5 naturalistic 0.5 ]
     region [ piemonte 0.2 toscana 0.5 valle-d'aosta -0.5 trentino-alto-adige -0.8 veneto 0.2 emilia-romagna 0.2 umbria -0.8 marche 0.2 ] ))
-  (expertise-from-attribute (attribute region) (value piemonte) (expertise
+  (expertise (attribute region) (value piemonte) (inference
     turism [ sea -0.8 mountain 0.8 enogastronomic 0.8 lake 0.5 termal 0.2 religious 0.5 cultural 0.5 ]
     region [ liguria 0.2 toscana -0.5 lombardia 0.5 valle-d'aosta 0.8 trentino-alto-adige 0.5 umbria -0.2 marche -0.8 ] ))
   ; ----- Turism -----
-  (expertise-from-attribute (attribute turism) (value sea) (expertise
+  (expertise (attribute turism) (value sea) (inference
     region [ piemonte -0.8 liguria 0.8 toscana 0.8 lombardia -0.8 valle-d'aosta -0.8 trentino-alto-adige -0.8 veneto 0.8 emilia-romagna 0.8 umbria -0.5 marche 0.5 friuli-venezia-giulia 0.2 ]
     turism [ mountain -0.8 lake 0.5 ] ))
-  (expertise-from-attribute (attribute turism) (value mountain) (expertise
+  (expertise (attribute turism) (value mountain) (inference
     region [ piemonte 0.8 liguria -0.2 toscana -0.2 lombardia 0.5 valle-d'aosta 0.8 trentino-alto-adige 0.8 emilia-romagna -0.8  marche -0.5 friuli-venezia-giulia 0.2 ]
     turism [ sea -0.8 lake 0.5 termal 0.2 naturalistic 0.5 ] ))
-  (expertise-from-attribute (attribute turism) (value enogastronomic) (expertise
+  (expertise (attribute turism) (value enogastronomic) (inference
     region [ piemonte 0.5 liguria 0.5 toscana 0.8 valle-d'aosta 0.2 trentino-alto-adige 0.2 veneto 0.5 emilia-romagna 0.8 umbria 0.5 ]
     turism [ ] ))
-  (expertise-from-attribute (attribute turism) (value sport) (expertise
+  (expertise (attribute turism) (value sport) (inference
     region [ liguria 0.2 lombardia -0.2 valle-d'aosta 0.5 trentino-alto-adige 0.5 emilia-romagna 0.2 marche 0.2 friuli-venezia-giulia 0.2 ]
     turism [ mountain 0.5 lake 0.2 sea 0.5 ] ))
-  (expertise-from-attribute (attribute turism) (value lake) (expertise
+  (expertise (attribute turism) (value lake) (inference
     region [ piemonte 0.5 liguria -0.8 toscana -0.8 lombardia 0.8 valle-d'aosta -0.2 trentino-alto-adige 0.5 veneto 0.2 umbria 0.2 marche -0.5 ]
     turism [ sea 0.5 naturalistic 0.5 ] ))
-  (expertise-from-attribute (attribute turism) (value naturalistic) (expertise
+  (expertise (attribute turism) (value naturalistic) (inference
     region [ piemonte 0.5 liguria 0.5 toscana 0.2 valle-d'aosta 0.8 trentino-alto-adige 0.8 veneto -0.2 emilia-romagna -0.5 marche -0.2 friuli-venezia-giulia 0.2 ]
     turism [ mountain 0.5 lake 0.5 ] ))
-  (expertise-from-attribute (attribute turism) (value cultural) (expertise
+  (expertise (attribute turism) (value cultural) (inference
     region [ piemonte 0.5 liguria -0.5 toscana 0.8 lombardia 0.5 trentino-alto-adige -0.5 veneto 0.5 umbria 0.8 friuli-venezia-giulia 0.2 ]
     turism [ religious 0.5 ] ))
-  (expertise-from-attribute (attribute turism) (value termal) (expertise
+  (expertise (attribute turism) (value termal) (inference
     region [ liguria -0.5 toscana 0.5 lombardia 0.5 valle-d'aosta 0.2 trentino-alto-adige 0.8 emilia-romagna -0.5 ]
     turism [ mountain 0.2 ] ))
-  (expertise-from-attribute (attribute turism) (value religious) (expertise
+  (expertise (attribute turism) (value religious) (inference
     region [ piemonte 0.5 liguria -0.2 toscana 0.5 lombardia 0.2 trentino-alto-adige -0.5 umbria 0.8 marche 0.5 ]
     turism [ cultural 0.5 ] ))
 
-  (expertise-from-attribute (attribute age-class) (value young) (expertise 
+  (expertise (attribute age-class) (value young) (inference 
     turism [ sport 0.5 sea 0.5 religious -0.5 ]))  
-  (expertise-from-attribute (attribute age-class) (value middle-young) (expertise 
+  (expertise (attribute age-class) (value middle-young) (inference 
     turism [ cultural 0.5 enogastronomic 0.5 ]))  
-  (expertise-from-attribute (attribute age-class) (value middle-old) (expertise 
+  (expertise (attribute age-class) (value middle-old) (inference 
     turism [ cultural 0.5 enogastronomic 0.5 mountain 0.5 ]))  
-  (expertise-from-attribute (attribute age-class) (value old) (expertise 
+  (expertise (attribute age-class) (value old) (inference 
     turism [ cultural 0.5 religious 0.5 sport -0.5 termal 0.5 ]))
 )
 
@@ -72,14 +66,9 @@
   (assert (attribute (name ?name) (value ?value)))
 )
 
-(defrule EXPERTISE::expertise-rule
+(defrule EXPERTISE::expertise-general-rule
   (user-attribute (name ?user-attribute) (values $? ?value $?))
-  ; (or
-  (expertise-from-attribute (attribute ?user-attribute) (value ?value)
-  (expertise $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
-    ; (expertise-from-age (attribute ?user-attribute) (age-range ?min&:(<= ?min ?value) ?max&:(<= ?value ?max)) 
-    ;   (expertise $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))
-  ;)
+  (expertise (attribute ?user-attribute) (value ?value) (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
   =>
   (assert (new-attributes ?attribute $?values)) ;; TODO Fare template con new-attributes???
 )
@@ -99,6 +88,20 @@
 
 (defrule EXPERTISE::expertise-from-live-region
   (user-attribute (name live-region) (values ?region))
+  =>
+  (assert (attribute (name region) (value ?region) (certainty -0.5)))
+)
+
+(defrule EXPERTISE::expertise-from-last-region-visited-old-people
+  (user-attribute (name last-region-visited) (values ?region))
+  (user-attribute (name age-class) (values old))
+  =>
+  (assert (attribute (name region) (value ?region) (certainty 0.5)))
+)
+
+(defrule EXPERTISE::expertise-from-last-region-visited-young-people
+  (user-attribute (name last-region-visited) (values ?region))
+  (user-attribute (name age-class) (values young))
   =>
   (assert (attribute (name region) (value ?region) (certainty -0.5)))
 )
