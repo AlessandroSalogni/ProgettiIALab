@@ -9,7 +9,7 @@
   (slot number-holiday-days (type INTEGER))
   (slot live-region)
   (slot last-region-visited)
-  (multislot favourite-comforts)
+  (multislot favourite-services)
   (multislot favourite-turisms)
 )
 
@@ -20,20 +20,21 @@
     (number-holiday-days ?number-holiday-days)
     (live-region ?live-region)
     (last-region-visited ?last-region-visited)
-    (favourite-comforts $?comforts)
+    (favourite-services $?services)
     (favourite-turisms $?turisms)
   )
   (user-attribute
     (name name-surname)
     (values ?name-surname)
   )
-  (local-time ?current-year $?)
+  ; (local-time ?current-year $?)
   =>
-  (assert (user-attribute (name age) (values (- ?current-year ?birth-year)) (type profile)))
+  ; (assert (user-attribute (name age) (values (- ?current-year ?birth-year)) (type profile)))
+  (assert (user-attribute (name age) (values 65) (type profile)))
   (assert (user-attribute (name number-holiday-days) (values ?number-holiday-days) (type profile)))
   (assert (user-attribute (name live-region) (values ?live-region) (type profile)))
   (assert (user-attribute (name last-region-visited) (values ?last-region-visited) (type profile)))
-  (assert (user-attribute (name comfort) (values $?comforts) (type profile)))
+  (assert (user-attribute (name service) (values $?services) (type profile)))
   (assert (user-attribute (name turism) (values $?turisms) (type profile)))
 )
 
@@ -50,7 +51,7 @@
   (age-class middle-old 50 69)
   (age-class old 70 99)
   
-  (local-time (local-time))
+  ; (local-time (local-time))
   
   (profile
     (name-surname "Riccardo Perotti")
@@ -58,7 +59,7 @@
     (number-holiday-days 10)
     (live-region piemonte)
     (last-region-visited liguria)
-    (favourite-comforts wifi)
+    (favourite-services wifi)
     (favourite-turisms mountain)
   )
   (profile
@@ -67,6 +68,6 @@
     (number-holiday-days 7)
     (live-region lombardia)
     (last-region-visited emilia-romagna)
-    (favourite-comforts tv pet)
+    (favourite-services tv pet)
     (favourite-turisms sea sport))
 )

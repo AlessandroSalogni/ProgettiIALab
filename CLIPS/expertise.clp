@@ -65,7 +65,7 @@
 
 (defrule EXPERTISE::convert-profile-user-attribute ;TODO spostare nel main??
   (user-attribute 
-    (name ?name&:(or (eq ?name turism) (eq ?name comfort))) 
+    (name ?name&:(or (eq ?name turism) (eq ?name service))) 
     (values $? ?value $?) 
     (type profile)
   )
