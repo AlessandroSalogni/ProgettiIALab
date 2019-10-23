@@ -110,5 +110,6 @@
   (current-order-question name-surname)
   (mandatory-question (name name-surname) (question "Name and surname? "))
   (mandatory-question (name number-people) (question "How many people? ") (type range))
-  (mandatory-question (name number-days) (question "How many consecutive days? ") (type range))
+  (mandatory-question (name number-days) (next budget) (question "How many consecutive days? ") (type range))
+  (mandatory-question (name budget-per-day) (question "How much is your budget per day? ") (type range))
 )
