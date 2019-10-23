@@ -10,6 +10,12 @@
   (multislot inference)
 )
 
+(deftemplate EXPERTISE::new-attributes
+  (slot attribute)
+  (multislot values)
+  (slot deviation (type FLOAT) (range 0.0 1.0) (default 0.0))
+)
+
 (deffacts EXPERTISE::expertise-knowledge
   ; ----- Region -----
   (expertise (user-attribute region) (value liguria) (inference
@@ -20,7 +26,7 @@
     region [ liguria 0.2 toscana -0.5 lombardia 0.5 valle-d'aosta 0.8 trentino-alto-adige 0.5 umbria -0.2 marche -0.8 ] ))
   ; ----- Turism -----
   (expertise (user-attribute turism) (value sea) (inference
-    region [ piemonte -0.8 liguria 0.8 toscana 0.8 lombardia -0.8 valle-d'aosta -0.8 trentino-alto-adige -0.8 veneto 0.8 emilia-romagna 0.8 umbria -0.5 marche 0.5 friuli-venezia-giulia 0.2 ]
+    region [ piemonte -0.8 liguria 0.8 toscana 0.8 lombardia -0.8 valle-d'aosta -0.8 trentino-alto-adige -0.8 veneto 0.5 emilia-romagna 0.8 umbria -0.5 marche 0.5 friuli-venezia-giulia 0.2 ]
     turism [ mountain -0.8 lake 0.5 ] ))
   (expertise (user-attribute turism) (value mountain) (inference
     region [ piemonte 0.8 liguria -0.2 toscana -0.2 lombardia 0.5 valle-d'aosta 0.8 trentino-alto-adige 0.8 emilia-romagna -0.8  marche -0.5 friuli-venezia-giulia 0.2 ]
@@ -78,21 +84,40 @@
   (expertise (user-attribute ?user-attribute) (value ?value) (type ?type) 
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
   =>
-  (assert (new-attributes ?attribute $?values)) ;; TODO Fare template con new-attributes???
+  (assert (new-attributes (attribute ?attribute) (values $?values)))
 )
 
-(defrule EXPERTISE::create-expertise-attribute
-  (new-attributes ?attribute $?prev ?value ?cf&:(eq (type ?cf) FLOAT) $?next)
+(defrule EXPERTISE::create-positive-expertise-attribute
+  (new-attributes 
+    (attribute ?attribute) 
+    (values $?prev ?value ?cf&:(eq (type ?cf) FLOAT)&:(> ?cf 0.0) $?next)
+    (deviation ?deviation)
+  )
   =>
-  (assert (attribute (name ?attribute) (value ?value) (certainty ?cf)))
+  (assert 
+    (attribute 
+      (name ?attribute) 
+      (value ?value) 
+      (certainty (max (- ?cf ?deviation) 0))
+    )
+  )
 )
 
-; (defrule EXPERTISE::create-not-find-expertise-attribute
-;   (new-attributes ?attribute $?values)
-;   (parameter (name ?attribute) (values $?prev ?value&:(not (member ?value ?values)) $?next))
-;   =>
-;   (assert (attribute (name ?attribute) (value ?value) (certainty 0.0)))
-; )
+(defrule EXPERTISE::create-negative-expertise-attribute
+  (new-attributes 
+    (attribute ?attribute) 
+    (values $?prev ?value ?cf&:(eq (type ?cf) FLOAT)&:(< ?cf 0.0) $?next)
+    (deviation ?deviation)
+  )
+  =>
+  (assert 
+    (attribute 
+      (name ?attribute) 
+      (value ?value) 
+      (certainty (min (+ ?cf ?deviation) 0))
+    )
+  )
+)
 
 (defrule EXPERTISE::expertise-from-live-region
   (user-attribute (name live-region) (values ?region))
@@ -112,4 +137,12 @@
   (user-attribute (name age-class) (values young))
   =>
   (assert (attribute (name region) (value ?region) (certainty -0.5)))
+)
+
+(defrule EXPERTISE::expertise-from-favourite-turism
+  (user-attribute (name turism) (values $? ?turism $?) (type profile))
+  (expertise (user-attribute turism) (value ?turism)
+    (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
+  =>
+  (assert (new-attributes (attribute ?attribute) (values $?values) (deviation 0.6)))
 )
