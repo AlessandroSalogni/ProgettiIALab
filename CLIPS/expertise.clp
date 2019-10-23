@@ -61,6 +61,26 @@
     turism [ cultural 0.5 enogastronomic 0.5 mountain 0.5 ]))  
   (expertise (user-attribute age-class) (value old) (type profile) (inference 
     turism [ cultural 0.5 religious 0.5 sport -0.5 termal 0.5 ]))
+
+  ;parking pool air-conditioning pet wifi tv gym room-service  
+  ;low <-49
+  ;middle 50 -> 149
+  ;high 150 -> 300
+  (expertise (user-attribute budget-per-day-class) (value low) (type mandatory) (inference
+    stars [ 1 0.8 2 0.2 3 -0.5 4 -0.8 ] 
+    comfort [ pool -0.8 room-service -0.8 gym -0.8 ]
+    region [ emilia-romagna 0.2 ] ))
+  (expertise (user-attribute budget-per-day-class) (value middle-low) (type mandatory) (inference
+    stars [ 1 0.2 2 0.8 4 -0.5 ] 
+    comfort [ pool -0.2 room-service -0.5 gym -0.5 parking 0.2 wifi 0.2 tv 0.5 ] ))
+  (expertise (user-attribute budget-per-day-class) (value middle-high) (type mandatory) (inference
+    stars [ 1 -0.5 3 0.8 4 0.2 ] 
+    comfort [ pool 0.5 room-service 0.5 gym 0.2 parking 0.5 wifi 0.5 tv 0.8 ] ))
+  (expertise (user-attribute budget-per-day-class) (value high) (type mandatory) (inference
+    stars [ 1 -0.8 2 -0.5 3 0.2 4 0.8 ] 
+    comfort [ pool 0.8 room-service 0.8 gym 0.5 parking 0.8 wifi 0.8 tv 0.8 ] 
+    region [ liguria 0.2 valle-d'aosta 0.2 ] ))
+  ;Pensare a cosa potrebbe influenzare le stelle di altro 
 )
 
 (defrule EXPERTISE::convert-optional-user-attribute ;TODO spostare nel main??
@@ -146,3 +166,9 @@
   =>
   (assert (new-attributes (attribute ?attribute) (values $?values) (deviation 0.6)))
 )
+
+; (defrule EXPERTISE::expertise-from-budget-class
+;   (user-attribute (name budget-per-day-class) (value ?class))
+; =>
+
+; )
