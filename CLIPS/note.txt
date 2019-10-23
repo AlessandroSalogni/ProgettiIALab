@@ -34,6 +34,10 @@ TODO Mettere default ?NONE nei template per campi obbligatori??
 
 La profilazione è valida per un periodo di tempo limitato 
 
+Se non ci sono abbastanza camere in un hotel che possono ospitare tutta la comitiva, dovremmo metterne
+un po' da una parte e un po' dall'altra, in hotel della stessa zona.
+
+
 ******************************
 **   Domande obbligatorie   **
 ******************************
