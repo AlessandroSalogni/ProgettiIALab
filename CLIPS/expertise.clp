@@ -62,10 +62,6 @@
   (expertise (user-attribute age-class) (value old) (type profile) (inference 
     turism [ cultural 0.5 religious 0.5 sport -0.5 termal 0.5 ]))
 
-  ;parking pool air-conditioning pet wifi tv gym room-service  
-  ;low <-49
-  ;middle 50 -> 149
-  ;high 150 -> 300
   (expertise (user-attribute budget-per-day-class) (value low) (type mandatory) (inference
     stars [ 1 0.8 2 0.2 3 -0.5 4 -0.8 ] 
     comfort [ pool -0.8 room-service -0.8 gym -0.8 ]
@@ -166,9 +162,3 @@
   =>
   (assert (new-attributes (attribute ?attribute) (values $?values) (deviation 0.6)))
 )
-
-; (defrule EXPERTISE::expertise-from-budget-class
-;   (user-attribute (name budget-per-day-class) (value ?class))
-; =>
-
-; )

@@ -38,19 +38,16 @@
   (assert (user-attribute (name turism) (values $?turisms) (type profile)))
 )
 
-(defrule USER-PROFILE::create-age-class
-  (age-class ?class ?min ?max)
-  (user-attribute (name age) (values ?age&:(and (<= ?min ?age) (<= ?age ?max))))
-  =>
-  (assert (user-attribute (name age-class) (values ?class) (type profile)))
-)
-
 (deffacts USER-PROFILE::profile-definition
-  (age-class young 14 29)
-  (age-class middle-young 30 49)
-  (age-class middle-old 50 69)
-  (age-class old 70 99)
+  (class-attribute (user-attribute age) (attribute-name age-class) (class-name young) (min 14) (max 29))
+  (class-attribute (user-attribute age) (attribute-name age-class) (class-name middle-young) (min 30) (max 49))
+  (class-attribute (user-attribute age) (attribute-name age-class) (class-name middle-old) (min 50) (max 69))
+  (class-attribute (user-attribute age) (attribute-name age-class) (class-name old) (min 70) (max 99))
   
+  (class-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name low) (min 0) (max 49))
+  (class-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name middle) (min 50) (max 149))
+  (class-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name high) (min 150) (max 300))
+
   ; (local-time (local-time))
   
   (profile
