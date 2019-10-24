@@ -21,6 +21,14 @@
   (multislot range (cardinality 2 2) (type INTEGER))
 )
 
+(deftemplate MAIN::class-attribute
+  (slot user-attribute)
+  (slot attribute-name)
+  (slot class-name)
+  (slot min (type INTEGER))
+  (slot max (type INTEGER))
+)
+
 (deffacts MAIN::parameter
   (parameter (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
   (parameter (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
@@ -37,17 +45,6 @@
 	(set-fact-duplication TRUE)
 	(focus MANDATORY-QUESTIONS USER-PROFILE SET-PARAMETER EXPERTISE DESTINATIONS PRINT-RESULTS)
 )
-
-; (defrule MAIN::from-user-to-system-attribute
-;   (declare (salience 100) (auto-focus TRUE))
-;   (user-attribute
-;     (name ?name)
-;     (values $? ?value $?)
-;     (type optional)
-;   )
-;   =>
-;   (assert (attribute (name ?name) (value ?value)))
-; )
 
 (defrule MAIN::combine-user-attribute-value ; TODO controllare quando i val hanno alcuni valori in comune? magari 2 regole per l'inserimento dell'utente
   (declare (salience 100) (auto-focus TRUE))
@@ -89,12 +86,15 @@
   (modify ?attr2 (certainty (/ (+ ?c1 ?c2) (- 1 (min (abs ?c1) (abs ?c2))))))
 )
 
-;Non viene mai 1 in teoria
-; (defrule MAIN::combine-certainties-max-opposite
-;   (declare (salience 100) (auto-focus TRUE))
-;   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(eq ?c1 1.0)) (type system))
-;   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(eq ?c2 -1.0)) (type system))
-;   =>
-;   (retract ?attr1)
-;   (modify ?attr2 (certainty 1.0) (inferred FALSE)) ; perchè con -0.9 e 1 viene 1 l'altra regola
-; )
+(defrule MAIN::create-attribute-class
+  (class-attribute 
+    (user-attribute ?user-attribute) 
+    (attribute-name ?attribute-name)
+    (class-name ?class-name) 
+    (min ?min) 
+    (max ?max)
+  )
+  (user-attribute (name ?user-attribute) (values ?value&:(and (<= ?min ?value) (<= ?value ?max))))
+  =>
+  (assert (user-attribute (name ?attribute-name) (values ?class-name) (type profile)))
+)
