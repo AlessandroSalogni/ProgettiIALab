@@ -3,13 +3,14 @@
 (deftemplate MANDATORY-QUESTIONS::mandatory-question
   (slot name)
   (slot question (type STRING))
-  (slot next (default end))
-  (slot already-asked (default FALSE))
-  (slot type (allowed-symbols free range limit) (default free))
+  (slot start (allowed-symbols TRUE FALSE) (default TRUE))
+  (slot next (default none))
+  (slot already-asked (allowed-symbols TRUE FALSE) (default FALSE))
+  (slot type (allowed-symbols free range enumeration) (default free))
 )
 
 (defrule MANDATORY-QUESTIONS::ask-next-order-mandatory-free-questions
-  ?current <- (current-order-question ?name&~end)
+  ?current <- (current-order-question ?name&~none)
   ?q <- (mandatory-question
     (name ?name)
     (question ?question)
@@ -31,7 +32,7 @@
 )
 
 (defrule MANDATORY-QUESTIONS::ask-next-order-mandatory-range-questions
-  ?current <- (current-order-question ?name&~end)
+  ?current <- (current-order-question ?name&~none)
   ?q <- (mandatory-question
     (name ?name)
     (question ?question)
@@ -58,10 +59,11 @@
 )
 
 (defrule MANDATORY-QUESTIONS::ask-mandatory-free-question
-  ?current <- (current-order-question end)
+  ?current <- (current-order-question none)
   ?q <- (mandatory-question
     (name ?name)
     (question ?question)
+    (start TRUE)
     (next ?next)
     (already-asked FALSE)
     (type free)
@@ -80,10 +82,11 @@
 )
 
 (defrule MANDATORY-QUESTIONS::ask-mandatory-range-question
-  ?current <- (current-order-question end)
+  ?current <- (current-order-question none)
   ?q <- (mandatory-question
     (name ?name)
     (question ?question)
+    (start TRUE)
     (next ?next)
     (already-asked FALSE)
     (type range)
@@ -110,6 +113,6 @@
   (current-order-question name-surname)
   (mandatory-question (name name-surname) (question "Name and surname? "))
   (mandatory-question (name number-people) (question "How many people? ") (type range))
-  (mandatory-question (name number-days) (next budget) (question "How many consecutive days? ") (type range))
-  (mandatory-question (name budget-per-day) (question "How much is your budget per day? ") (type range))
+  (mandatory-question (name number-days) (next budget-per-day) (question "How many consecutive days? ") (type range))
+  (mandatory-question (name budget-per-day) (start FALSE) (question "How much is your budget per day? ") (type range))
 )

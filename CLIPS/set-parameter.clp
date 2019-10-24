@@ -99,7 +99,7 @@
   (retract ?history)
   (assert (search-parameter-history $?history-parameter ?parameter))
   (assert 
-    (limit-attribute-question
+    (enumeration-attribute-question
       (name ?parameter)
       (question ?request)
       (type-user-interaction optional)

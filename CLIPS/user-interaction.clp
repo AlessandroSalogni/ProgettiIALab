@@ -22,7 +22,7 @@
   (slot type-user-interaction (allowed-symbols mandatory optional) (default mandatory))
 )
 
-(deftemplate USER-INTERACTION::limit-attribute-question
+(deftemplate USER-INTERACTION::enumeration-attribute-question
   (slot name)
   (slot question (type STRING))
   (slot type-user-interaction (allowed-symbols mandatory optional) (default mandatory))
@@ -65,8 +65,8 @@
   )
 )
 
-(defrule USER-INTERACTION::limit-attribute-user-interaction
-  ?user-question <- (limit-attribute-question
+(defrule USER-INTERACTION::enumeration-attribute-user-interaction
+  ?user-question <- (enumeration-attribute-question
     (name ?name)
     (question ?question)
     (type-user-interaction ?type-interaction)
