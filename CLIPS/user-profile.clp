@@ -39,15 +39,6 @@
 )
 
 (deffacts USER-PROFILE::profile-definition
-  (class-attribute (user-attribute age) (attribute-name age-class) (class-name young) (min 14) (max 29))
-  (class-attribute (user-attribute age) (attribute-name age-class) (class-name middle-young) (min 30) (max 49))
-  (class-attribute (user-attribute age) (attribute-name age-class) (class-name middle-old) (min 50) (max 69))
-  (class-attribute (user-attribute age) (attribute-name age-class) (class-name old) (min 70) (max 99))
-  
-  (class-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name low) (min 0) (max 49))
-  (class-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name middle) (min 50) (max 149))
-  (class-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name high) (min 150) (max 300))
-
   ; (local-time (local-time))
   
   (profile

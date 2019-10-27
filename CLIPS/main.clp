@@ -12,7 +12,7 @@
 (deftemplate MAIN::user-attribute
   (slot name)
   (multislot values)
-  (slot type (allowed-symbols mandatory optional profile) (default optional))
+  (slot type (allowed-symbols mandatory optional profile inferred) (default optional))
 )
 
 (deftemplate MAIN::parameter
@@ -21,39 +21,11 @@
   (multislot range (cardinality 2 2) (type INTEGER))
 )
 
-(deftemplate MAIN::class-attribute
-  (slot user-attribute)
-  (slot attribute-name)
-  (slot class-name)
-  (slot min (type INTEGER))
-  (slot max (type INTEGER))
-)
-
-(deffacts MAIN::parameter
-  (parameter (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
-  (parameter (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
-  (parameter (name stars) (range 1 4))
-  (parameter (name service) (values parking pool air-conditioning pet wifi tv gym room-service))
-  (parameter (name number-people) (range 1 10))
-  (parameter (name number-days) (range 1 30))
-  (parameter (name budget-per-day) (range 10 300))
-)
-
 (defrule MAIN::start
 	(declare (salience 10000))
 	=>
 	(set-fact-duplication TRUE)
-	(focus MANDATORY-QUESTIONS USER-PROFILE SET-PARAMETER EXPERTISE DESTINATIONS PRINT-RESULTS)
-)
-
-(defrule MAIN::combine-user-attribute-value ; TODO controllare quando i val hanno alcuni valori in comune? magari 2 regole per l'inserimento dell'utente
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values $?val1) (type ?type))
-  ?attr2 <- (user-attribute (name ?name) (values $?val2) (type ?type))
-  (test (neq ?attr1 ?attr2))
-  =>
-  (retract ?attr1)
-  (modify ?attr2 (values $?val1 $?val2))
+	(focus SET-USER-ATTRIBUTE EXPERTISE DESTINATIONS PRINT-RESULTS)
 )
 
 (defrule MAIN::combine-certainties-both-positive
@@ -86,15 +58,12 @@
   (modify ?attr2 (certainty (/ (+ ?c1 ?c2) (- 1 (min (abs ?c1) (abs ?c2))))))
 )
 
-(defrule MAIN::create-attribute-class
-  (class-attribute 
-    (user-attribute ?user-attribute) 
-    (attribute-name ?attribute-name)
-    (class-name ?class-name) 
-    (min ?min) 
-    (max ?max)
-  )
-  (user-attribute (name ?user-attribute) (values ?value&:(and (<= ?min ?value) (<= ?value ?max))))
-  =>
-  (assert (user-attribute (name ?attribute-name) (values ?class-name) (type profile)))
+(deffacts MAIN::define-parameter
+  (parameter (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
+  (parameter (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
+  (parameter (name stars) (range 1 4))
+  (parameter (name service) (values parking pool air-conditioning pet wifi tv spa room-service))
+  (parameter (name number-people) (range 1 10))
+  (parameter (name number-days) (range 1 30))
+  (parameter (name budget-per-day) (range 10 300))
 )

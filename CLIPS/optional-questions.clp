@@ -1,25 +1,22 @@
-;;*****************
-;;* SET-PARAMETER *
-;;*****************
-(defmodule SET-PARAMETER (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (export ?ALL))
+(defmodule OPTIONAL-QUESTIONS (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (export ?ALL))
 
-(deftemplate SET-PARAMETER::menu-request
+(deftemplate OPTIONAL-QUESTIONS::menu-request
   (slot search-parameter)
   (slot request (type STRING))
   (multislot valid-answers)
 )
 
-(deftemplate SET-PARAMETER::preference-request
+(deftemplate OPTIONAL-QUESTIONS::preference-request
   (slot search-parameter)
   (slot request (type STRING))
 )
 
-; (deftemplate SET-PARAMETER::answer
+; (deftemplate OPTIONAL-QUESTIONS::answer
 ;   (multislot user-answer)
 ;   (multislot valid-answers)
 ; )
 
-(defrule SET-PARAMETER::leave-focus
+(defrule OPTIONAL-QUESTIONS::leave-focus
   ?search-parameter <- (search-parameter end)
   ?history <- (search-parameter-history start)
   =>
@@ -30,7 +27,7 @@
   (return)
 )
 
-(defrule SET-PARAMETER::leave-request
+(defrule OPTIONAL-QUESTIONS::leave-request
   ?search-parameter <- (search-parameter end)
   ?history <- (search-parameter-history $?history-parameter ?prev-parameter ?current-parameter)
   =>
@@ -40,7 +37,7 @@
   (assert (search-parameter-history $?history-parameter))
 )
 
-(defrule SET-PARAMETER::start-menu-request
+(defrule OPTIONAL-QUESTIONS::start-menu-request
   ?search-parameter <- (search-parameter start)
   ?history <- (search-parameter-history)
   (menu-request
@@ -61,7 +58,7 @@
   (focus USER-INTERACTION)
 )
 
-(defrule SET-PARAMETER::menu-request
+(defrule OPTIONAL-QUESTIONS::menu-request
   ?search-parameter <- (search-parameter ?parameter&~start&~end)
   ?history <- (search-parameter-history $?history-parameter)
   (menu-request
@@ -82,7 +79,7 @@
   (focus USER-INTERACTION)
 )
 
-(defrule SET-PARAMETER::preference-request
+(defrule OPTIONAL-QUESTIONS::preference-request
   ?search-parameter <- (search-parameter ?parameter&~start&~end)
   ?history <- (search-parameter-history $?history-parameter)
   (preference-request
@@ -109,7 +106,7 @@
   (focus USER-INTERACTION)
 )
 
-(deffacts SET-PARAMETER::define-requests
+(deffacts OPTIONAL-QUESTIONS::define-requests
   (search-parameter start)
   (search-parameter-history)
   (menu-request (search-parameter start) (request "Which search parameter would you like to set? ") (valid-answers destination budget facility end))
