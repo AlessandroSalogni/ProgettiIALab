@@ -52,7 +52,7 @@
   (declare (salience 100) (auto-focus TRUE))
   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)))
   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)))
-  (test (not (and (eq ?c1 1.0) (eq ?c2 -1.0))))
+  ; (test (not (and (eq ?c1 1.0) (eq ?c2 -1.0))))
   =>
   (retract ?attr1)
   (modify ?attr2 (certainty (/ (+ ?c1 ?c2) (- 1 (min (abs ?c1) (abs ?c2))))))
