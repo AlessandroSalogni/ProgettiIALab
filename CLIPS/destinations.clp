@@ -4,25 +4,19 @@
 (defmodule DESTINATIONS (import MAIN ?ALL))
 
 (deftemplate DESTINATIONS::place
-  (slot name (type STRING)) ;;stringa ???
-  (slot region) ;;stringa ??? elencare regioni ??
+  (slot name (type STRING))
+  (slot region)
   (multislot coordinates (type FLOAT) (cardinality 2 2))
   (multislot turism)
 )
 
 (deftemplate DESTINATIONS::facility
   (slot name (type STRING))
-  (slot place (type STRING)) ;; Type place
+  (slot place (type STRING))
   (slot price (type INTEGER))
   (slot stars (type INTEGER) (range 1 4))
-  (slot parking (default FALSE))
-  (slot air-conditioning (default FALSE))
-  (slot pet-allowed (default FALSE))
-  (slot pool (default FALSE))
-  (slot gym (default FALSE))
-  (slot tv (default FALSE))
-  (slot wifi (default FALSE))
   (multislot rooms (type INTEGER) (cardinality 2 2) (range 0 ?VARIABLE)) ;available - busy
+  (multislot service (cardinality 0 ?VARIABLE))
 )
 
 (deffacts DESTINATIONS::sites
@@ -56,38 +50,17 @@
   (place (name "Aosta") (region valle-d'aosta) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 1 sport 4 lake 1 termal 3 enogastronomic 2 naturalistic 4 religious 0))
   (place (name "Saint Vincent") (region valle-d'aosta) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 0 sport 1 lake 0 termal 5 enogastronomic 1 naturalistic 4 religious 0))
 
-  (facility
-    (name "Vista Mare") (price 100) (place "Massa") (stars 4) (rooms 12 43)
-    (parking TRUE) (pool TRUE) (tv TRUE))
-  (facility
-    (name "Resort Miramare") (price 75) (place "Massa") (stars 3) (rooms 2 23)
-    (parking TRUE) (pet-allowed TRUE) (gym TRUE))
-  (facility
-    (name "Ostello di Massa") (price 55) (place "Massa") (stars 2) (rooms 10 21))
-  (facility
-    (name "Hotel Cavour") (price 70) (place "Torino") (stars 3) (rooms 10 21)
-    (parking TRUE) (air-conditioning TRUE) (wifi TRUE))
-  (facility
-    (name "Hotel Mazzini") (price 50) (place "Torino") (stars 2) (rooms 10 15)
-    (parking TRUE) (pool TRUE) (tv TRUE))
-  (facility
-    (name "Garda resort") (price 130) (place "Verona") (stars 4) (rooms 22 21)
-    (parking TRUE) (air-conditioning TRUE) (tv TRUE))
-  (facility
-    (name "Ostello della gioventu") (price 30) (place "Verona") (stars 1) (rooms 0 20)
-    (pet-allowed TRUE) (air-conditioning TRUE))
-  (facility
-    (name "Bella vista") (price 80) (place "Genova") (stars 3) (rooms 20 0)
-    (wifi TRUE) (pool TRUE) (tv TRUE))
-  (facility
-    (name "Al fresco") (price 30) (place "Imperia") (stars 1) (rooms 10 34)
-    (air-conditioning TRUE) (gym TRUE))
-  (facility
-    (name "Al sole") (price 45) (place "Savona") (stars 2) (rooms 10 0)
-    (parking TRUE) (pet-allowed TRUE) (tv TRUE))
-  (facility
-    (name "Vento caldo") (price 110) (place "Savona") (stars 4) (rooms 10 21)
-    (parking TRUE) (pool TRUE) (gym TRUE))
+  (facility (name "Vista Mare") (price 100) (place "Massa") (stars 4) (rooms 12 43) (service parking wifi pool tv spa room-service)
+  (facility (name "Resort Miramare") (price 75) (place "Massa") (stars 3) (rooms 2 23) (service parking pet tv wifi)
+  (facility (name "Ostello di Massa") (price 55) (place "Massa") (stars 2) (rooms 10 21) (service wifi tv))
+  (facility (name "Hotel Cavour") (price 70) (place "Torino") (stars 3) (rooms 10 21) (service air-conditioning wifi pool tv room-service))
+  (facility (name "Hotel Mazzini") (price 50) (place "Torino") (stars 2) (rooms 10 15) (service parking pool tv))
+  (facility (name "Garda resort") (price 130) (place "Verona") (stars 4) (rooms 22 21) (service parking wifi air-conditioning tv spa room-service pet)
+  (facility (name "Ostello della gioventu") (price 30) (place "Verona") (stars 1) (rooms 0 20) (service pet)
+  (facility (name "Bella vista") (price 80) (place "Genova") (stars 3) (rooms 20 0) (service parking wifi tv pool pet))
+  (facility (name "Al fresco") (price 30) (place "Imperia") (stars 1) (rooms 10 34) (service tv wifi)
+  (facility (name "Al sole") (price 45) (place "Savona") (stars 2) (rooms 10 0) (service parking pet tv))
+  (facility (name "Vento caldo") (price 110) (place "Savona") (stars 4) (rooms 10 21) (service wifi tv room-service pool air-conditioning))
 )
 
 ; (defrule DESTINATIONS:generate-city2
@@ -99,14 +72,6 @@
 ;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
 ; )
 
-; (deftemplate DESTINATIONS::pre-attribute
-;   (slot name)
-;   (slot value)
-;   (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
-;   (slot conjunction (allowed-values and or not))
-;   (slot id)
-; )
-;
 ; (defrule DESTINATIONS::generate-city
 ;   (attribute (name turism) (value ?type) (certainty ?cf-turism) (type system))
 ;   (attribute (name region) (value ?region) (certainty ?cf-region) (type system))
@@ -126,21 +91,4 @@
 ;   (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
 ;   (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
 ;   (assert (pre-attribute (name city) (value ?city) (certainty ?cf-place) (conjunction ?conj) (id ?id)))
-; )
-
-; (defrule DESTINATIONS::combine-pre-or-attribute
-;   ?attr1 <- (pre-attribute (name ?name) (value ?value) (certainty ?c1) (conjunction or))
-;   ?attr2 <- (pre-attribute (name ?name) (value ?value) (certainty ?c2) (conjunction or))
-;   (test (neq ?attr1 ?attr2))
-;   =>
-;   (retract ?attr1)
-;   (modify ?attr2 (certainty (max ?c1 ?c2)))
-; )
-
-; (defrule DESTINATIONS::complex-pattern
-;   (declare (salience -10))
-;   ?attr <- (pre-attribute (id ?old-id))
-;   (attribute-pattern (values $? ?old-id $?) (conjunction ?conj) (id ?new-id))
-;   =>
-;   (modify ?attr (id ?new-id) (conjunction ?conj))
 ; )
