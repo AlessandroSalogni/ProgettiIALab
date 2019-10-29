@@ -16,12 +16,6 @@
   (multislot valid-answers)
 )
 
-(deftemplate USER-INTERACTION::contradictory-resolution-question
-  (slot name)
-  (slot value)
-  (slot question (type STRING))
-)
-
 (deftemplate USER-INTERACTION::free-attribute-question
   (slot name)
   (slot question (type STRING))
@@ -50,17 +44,6 @@
   =>
   (retract ?user-question)
   (assert (search-parameter (ask-question ?question ?valid-answers)))
-)
-
-(defrule USER-INTERACTION::contradictory-resolution-user-interaction
-  ?user-question <- (contradictory-resolution-question
-    (name ?name)
-    (value ?value)
-    (question ?question)
-  )
-  =>
-  (retract ?user-question)
-  (assert (user-value (ask-question ?question y n))
 )
 
 (defrule USER-INTERACTION::free-attribute-user-interaction
