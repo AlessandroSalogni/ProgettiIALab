@@ -50,15 +50,15 @@
   (place (name "Aosta") (region valle-d'aosta) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 1 sport 4 lake 1 termal 3 enogastronomic 2 naturalistic 4 religious 0))
   (place (name "Saint Vincent") (region valle-d'aosta) (coordinates 2.0 3.0) (turism sea 0 mountain 5 cultural 0 sport 1 lake 0 termal 5 enogastronomic 1 naturalistic 4 religious 0))
 
-  (facility (name "Vista Mare") (price 100) (place "Massa") (stars 4) (rooms 12 43) (service parking wifi pool tv spa room-service)
-  (facility (name "Resort Miramare") (price 75) (place "Massa") (stars 3) (rooms 2 23) (service parking pet tv wifi)
+  (facility (name "Vista Mare") (price 100) (place "Massa") (stars 4) (rooms 12 43) (service parking wifi pool tv spa room-service))
+  (facility (name "Resort Miramare") (price 75) (place "Massa") (stars 3) (rooms 2 23) (service parking pet tv wifi))
   (facility (name "Ostello di Massa") (price 55) (place "Massa") (stars 2) (rooms 10 21) (service wifi tv))
   (facility (name "Hotel Cavour") (price 70) (place "Torino") (stars 3) (rooms 10 21) (service air-conditioning wifi pool tv room-service))
   (facility (name "Hotel Mazzini") (price 50) (place "Torino") (stars 2) (rooms 10 15) (service parking pool tv))
-  (facility (name "Garda resort") (price 130) (place "Verona") (stars 4) (rooms 22 21) (service parking wifi air-conditioning tv spa room-service pet)
-  (facility (name "Ostello della gioventu") (price 30) (place "Verona") (stars 1) (rooms 0 20) (service pet)
+  (facility (name "Garda resort") (price 130) (place "Verona") (stars 4) (rooms 22 21) (service parking wifi air-conditioning tv spa room-service pet))
+  (facility (name "Ostello della gioventu") (price 30) (place "Verona") (stars 1) (rooms 0 20) (service pet))
   (facility (name "Bella vista") (price 80) (place "Genova") (stars 3) (rooms 20 0) (service parking wifi tv pool pet))
-  (facility (name "Al fresco") (price 30) (place "Imperia") (stars 1) (rooms 10 34) (service tv wifi)
+  (facility (name "Al fresco") (price 30) (place "Imperia") (stars 1) (rooms 10 34) (service tv wifi))
   (facility (name "Al sole") (price 45) (place "Savona") (stars 2) (rooms 10 0) (service parking pet tv))
   (facility (name "Vento caldo") (price 110) (place "Savona") (stars 4) (rooms 10 21) (service wifi tv room-service pool air-conditioning))
 )
@@ -72,15 +72,39 @@
 ;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
 ; )
 
-; (defrule DESTINATIONS::generate-city
-;   (attribute (name turism) (value ?type) (certainty ?cf-turism) (type system))
-;   (attribute (name region) (value ?region) (certainty ?cf-region) (type system))
-;   (place (name ?city) (region ?region) (turism $? ?type ?score $?))
+(defrule DESTINATIONS::generate-city
+  (attribute (name turism) (value ?type) (certainty ?cf-turism))
+  (attribute (name region) (value ?region) (certainty ?cf-region))
+  (place (name ?city) (region ?region) (turism $? ?type ?score $?))
+  =>
+  (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
+  (bind ?cf-city (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
+  (assert (attribute (name city) (value ?city) (certainty ?cf-city)))
+)
+
+(defrule DESTINATIONS::generate-hotel-from-stars
+  (attribute (name city) (value ?city) (certainty ?cf-city))
+  (attribute (name stars) (value ?stars) (certainty ?cf-stars))
+  (facility (name ?name) (place ?city) (stars ?stars))
+  =>
+  (assert (attribute (name hotel) (value ?name) (certainty (min ?cf-city ?cf-stars))))
+)
+
+; (defrule DESTINATIONS::generate-hotel-from-budget
+;   (user-attribute (name budget-per-day) (value ?budget-per-day))
+;   (attribute (name city) (value ?city) (certainty ?cf-city))
+;   (facility (name ?name) (place ?city) (stars ?stars) (service $? ?service $?))
 ;   =>
-;   (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
-;   (bind ?cf-place (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
-;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
+
 ; )
+
+(defrule DESTINATIONS::generate-hotel-from-service
+  (attribute (name city) (value ?city) (certainty ?cf-city))
+  (attribute (name service) (value ?service) (certainty ?cf-service))
+  (facility (name ?name) (place ?city) (service $? ?service $?))
+  =>
+  (assert (attribute (name hotel) (value ?name) (certainty (min ?cf-city ?cf-service))))
+)
 
 ; (defrule DESTINATIONS::generate-city3
 ;   (attribute-pattern (name turism) (values $? ?turism&:(not (eq (type ?turism) INTEGER)) $?) (conjunction ?conj) (id ?id))
