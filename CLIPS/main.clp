@@ -53,19 +53,19 @@
   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)))
   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)))
   ; (test (not (and (eq ?c1 1.0) (eq ?c2 -1.0))))
-  (test (or (< ?c1 0.5) (> ?c2 -0.5)))
+  ; (test (or (< ?c1 0.5) (> ?c2 -0.5)))
   =>
   (retract ?attr1)
   (modify ?attr2 (certainty (/ (+ ?c1 ?c2) (- 1 (min (abs ?c1) (abs ?c2))))))
 )
 
-(defrule MAIN::combine-certainties-opposite-contradictory
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.5)))
-  ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(<= ?c2 -0.5)))
-  =>
-  (focus SET-USER-ATTRIBUTE)
-)
+; (defrule MAIN::combine-certainties-opposite-contradictory
+;   (declare (salience 100) (auto-focus TRUE))
+;   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.5)))
+;   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(<= ?c2 -0.5)))
+;   =>
+;   (focus SET-USER-ATTRIBUTE)
+; )
 
 (deffacts MAIN::define-parameter
   (parameter (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))

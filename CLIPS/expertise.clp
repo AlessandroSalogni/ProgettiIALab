@@ -6,7 +6,7 @@
 (deftemplate EXPERTISE::expertise
   (slot user-attribute)
   (slot value)
-  (slot type (allowed-symbols mandatory optional profile) (default optional))
+  (slot type (allowed-symbols mandatory optional profile inferred) (default optional))
   (multislot inference)
 )
 
@@ -62,17 +62,17 @@
   (expertise (user-attribute age-class) (value old) (type profile) (inference 
     turism [ cultural 0.5 religious 0.5 sport -0.5 termal 0.5 ]))
 
-  (expertise (user-attribute budget-per-day-class) (value low) (type mandatory) (inference
+  (expertise (user-attribute budget-per-day-class) (value low) (type inferred) (inference
     stars [ 1 0.8 2 0.2 3 -0.5 4 -0.8 ] 
     service [ pool -0.8 room-service -0.8 spa -0.8 ]
     region [ emilia-romagna 0.2 ] ))
-  (expertise (user-attribute budget-per-day-class) (value middle-low) (type mandatory) (inference
+  (expertise (user-attribute budget-per-day-class) (value middle-low) (type inferred) (inference
     stars [ 1 0.2 2 0.8 4 -0.5 ] 
     service [ pool -0.2 room-service -0.5 spa -0.5 parking 0.2 wifi 0.2 tv 0.5 ] ))
-  (expertise (user-attribute budget-per-day-class) (value middle-high) (type mandatory) (inference
+  (expertise (user-attribute budget-per-day-class) (value middle-high) (type inferred) (inference
     stars [ 1 -0.5 3 0.8 4 0.2 ] 
     service [ pool 0.5 room-service 0.5 spa 0.2 parking 0.5 wifi 0.5 tv 0.8 ] ))
-  (expertise (user-attribute budget-per-day-class) (value high) (type mandatory) (inference
+  (expertise (user-attribute budget-per-day-class) (value high) (type inferred) (inference
     stars [ 1 -0.8 2 -0.5 3 0.2 4 0.8 ] 
     service [ pool 0.8 room-service 0.8 spa 0.8 parking 0.8 wifi 0.8 tv 0.8 ] 
     region [ liguria 0.2 valle-d'aosta 0.2 ] ))
