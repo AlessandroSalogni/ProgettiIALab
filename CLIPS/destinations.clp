@@ -88,14 +88,19 @@
   ; (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
 )
 
-(defrule DESTINATIONS::generate-city
-  (attribute (name turism) (value ?type) (certainty ?cf-turism))
+(defrule DESTINATIONS::generate-city-from-region
   (attribute (name region) (value ?region) (certainty ?cf-region))
-  (place (name ?city) (region ?region) (turism $? ?type ?score $?))
+  (place (name ?city) (region ?region))
   =>
-  (bind ?cf-score (- (/ (* ?score 1.9) 5) 0.95))
-  (bind ?cf-city (min (- 1 (abs (- ?cf-score ?cf-turism))) ?cf-region))
-  (assert (attribute (name city) (value ?city) (certainty ?cf-city)))
+  (assert (attribute (name city) (value ?city) (certainty ?cf-region)))
+)
+
+(defrule DESTINATIONS::generate-city-from-turism
+  (attribute (name turism) (value ?type) (certainty ?cf-turism))
+  (place (name ?city) (turism $? ?type ?score $?))
+  =>
+  (bind ?cf-score (- (/ (* ?score 1.98) 5) 0.99))
+  (assert (attribute (name city) (value ?city) (certainty (- 1 (abs (- ?cf-turism ?cf-score))))))
 )
 
 (defrule DESTINATIONS::generate-hotel-from-stars

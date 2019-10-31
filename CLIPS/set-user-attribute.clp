@@ -50,7 +50,7 @@
     (type profile)
   )
   =>
-  (assert (attribute (name ?name) (value ?value) (certainty 0.5)))
+  (assert (attribute (name ?name) (value ?value) (certainty 0.4)))
 )
 
 (deffacts SET-USER-ATTRIBUTE::define-class-user-attribute
@@ -59,6 +59,7 @@
   (class-user-attribute (user-attribute age) (attribute-name age-class) (class-name middle-old) (min 50) (max 69))
   (class-user-attribute (user-attribute age) (attribute-name age-class) (class-name old) (min 70) (max 99))
   (class-user-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name low) (min 0) (max 49))
-  (class-user-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name middle) (min 50) (max 149))
+  (class-user-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name middle-low) (min 50) (max 99))
+  (class-user-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name middle-high) (min 100) (max 149))
   (class-user-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name high) (min 150) (max 300))
 )
