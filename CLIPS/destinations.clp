@@ -63,14 +63,30 @@
   (facility (name "Vento caldo") (price 110) (place "Savona") (stars 4) (rooms 10 21) (service wifi tv room-service pool air-conditioning))
 )
 
-; (defrule DESTINATIONS:generate-city2
-;   (attribute (name turism) (value ?type) (certainty ?cf-turism))
-;   (attribute (name region) (value ?region) (certainty ?cf-region))
-;   (place (name ?city) (region ?region) (turism $?type-turism&:(not (member ?type ?type-turism))))
-;   =>
-;   (bind ?cf-place (min (- 1 (abs (- -0.9 ?cf-turism))) ?cf-region))
-;   (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
-; )
+(defrule DESTINATIONS:generate-city-from-unspecified-turism
+  (parameter (name turism) (values $? ?turism $?))
+  (or
+    (
+      (not (attribute (name turism) (value ?turism)))
+      (place (name ?city) (turism $? ?turism ?score $?))
+      (bind ?cf-turism 0) 
+    )
+    (
+      (attribute (name turism) (value ?turism) (certainty ?cf-turism))
+      (not (place (name ?city) (turism $? ?turism $?)))
+      (bind ?score 0) 
+    )
+    (
+      (not (attribute (name turism) (value ?turism)))
+      (not (place (name ?city) (turism $? ?turism $?)))
+      (bind ?cf-turism 0) 
+      (bind ?score 0) 
+    )
+  )
+  =>
+  ; (bind ?cf-place (min (- 1 (abs (- -0.9 ?cf-turism))) ?cf-region))
+  ; (assert (attribute (name city) (value ?city) (certainty ?cf-place)))
+)
 
 (defrule DESTINATIONS::generate-city
   (attribute (name turism) (value ?type) (certainty ?cf-turism))
