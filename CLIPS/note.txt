@@ -37,6 +37,16 @@ La profilazione è valida per un periodo di tempo limitato
 Se non ci sono abbastanza camere in un hotel che possono ospitare tutta la comitiva, dovremmo metterne
 un po' da una parte e un po' dall'altra, in hotel della stessa zona.
 
+------------------------------------
+Nel calcolo dello scostamento del turismo, nel caso in cui un place abbia un certo
+turismo punteggiato, mentre l'utente abbia quel turismo a 0, il sistema consiglia
+il place un po', ragionando sul fatto che siccome non so cosa lutente pensi di quel
+turismo, nel caso lo voglia, glielo consiglio un po'.
+Quindi produciamo tutti i turismi a 0.
+
+
+------------------------------------
+
 
 ******************************
 **   Domande obbligatorie   **
