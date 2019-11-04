@@ -114,5 +114,5 @@
   (mandatory-question (name name-surname) (question "Name and surname? "))
   (mandatory-question (name number-people) (question "How many people? ") (type range))
   (mandatory-question (name number-days) (next budget-per-day) (question "How many consecutive days? ") (type range))
-  (mandatory-question (name budget-per-day) (start FALSE) (question "How much is your budget per day? ") (type range))
+  (mandatory-question (name budget-per-day) (start FALSE) (question "How much is your budget per day ideally? ") (type range))
 )

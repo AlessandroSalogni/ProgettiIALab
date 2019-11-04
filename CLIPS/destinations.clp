@@ -106,29 +106,73 @@
   (assert (attribute (name hotel) (value ?name) (certainty ?cf-stars)))
 )
 
-//TODO trovare un modo per non mettere una salience. Scatta prima della fine del calcolo dell'attributo city
-(defrule DESTINATIONS::generate-hotel-from-city (declare (salience -10)) 
-  (attribute (name city) (value ?city) (certainty ?cf-city))
-  (facility (name ?name) (place ?city))
-  =>
-  (assert (attribute (name hotel) (value ?name) (certainty ?cf-city)))
+;TODO trovare un modo per non mettere una salience. Scatta prima della fine del calcolo dell'attributo city
+; (defrule DESTINATIONS::generate-hotel-from-city (declare (salience -10)) 
+;   (attribute (name city) (value ?city) (certainty ?cf-city))
+;   (facility (name ?name) (place ?city))
+;   =>
+;   (assert (attribute (name hotel) (value ?name) (certainty ?cf-city)))
+; )
+
+; TODO calcolare certezza hotel in base ai servizi e al budget
+; (defrule DESTINATIONS::generate-hotel-from-service
+;   (facility (name ?name) (service $? ?service $?))
+;   (or
+;     (and
+;       (attribute (name service) (value ?service) (certainty ?cf-service))
+;       (bind ?cf-hotel 0.1)
+;     )
+;     (and 
+;       (not (attribute (name service) (value ?service)))
+;       (bind ?cf-hotel -0.1)
+;     )
+;   )
+;   =>
+;   (assert (attribute (name hotel) (value ?name) (certainty ?cf-hotel)))
+; (attribute (name service) (value ?service) (certainty ?cf-service))
+  ; (facility (name ?name) (service $? ?service $?))
+  ; =>
+  ; (assert (attribute (name hotel) (value ?name) (certainty ?cf-service)))
 )
 
-//TODO calcolare certezza hotel in base ai servizi e al budget
-; (defrule DESTINATIONS::generate-hotel-from-service
-;   (attribute (name service) (value ?service) (certainty ?cf-service))
-;   (facility (name ?name) (service $? ?service $?))
-;   =>
-;   (assert (attribute (name hotel) (value ?name) (certainty ?cf-service)))
-; )
+(defrule DESTINATIONS::generate-hotel-from-min-to-budget
+  (parameter (name budget-per-day) (range ?budget-min ?budget-max))
+  (user-attribute (name budget-per-day) (values ?budget-per-day))
+  (facility (name ?name) (price ?price&:(< ?price ?budget-per-day)))
+  =>
+  (bind ?lower-bound (max (- ?budget-per-day 60) ?budget-min))
+  (bind ?result (max (+ -0.99 (* (/ (- ?price ?lower-bound) (- ?budget-per-day ?lower-bound)) 1.98)) -0.99))
 
-; (defrule DESTINATIONS::generate-hotel-from-budget
-;   (user-attribute (name budget-per-day) (value ?budget-per-day))
-;   (attribute (name city) (value ?city) (certainty ?cf-city))
-;   (facility (name ?name) (place ?city) (stars ?stars) (service $? ?service $?))
-;   =>
+  (assert 
+    (attribute 
+      (name hotel) 
+      (value ?name) 
+      (certainty ?result)
+    )
+  )
+)
 
-; )
+(defrule DESTINATIONS::generate-hotel-from-budget-to-max
+  (parameter (name budget-per-day) (range ?budget-min ?budget-max))
+  (user-attribute (name budget-per-day) (values ?budget-per-day))
+  (facility (name ?name) (price ?price&:(>= ?price ?budget-per-day)))
+  =>
+  (bind ?upper-bound (min (+ ?budget-per-day 40) ?budget-max))
+  (bind ?result (max (+ -0.99 (* (/ (- ?price ?upper-bound) (- ?budget-per-day ?upper-bound)) 1.98)) -0.99))
+
+  (assert 
+    (attribute 
+      (name hotel) 
+      (value ?name) 
+      (certainty ?result)
+    )
+  )
+)
+; (certainty (- 0.99 (* 1.98 (/ (abs (- ?price ?budget-per-day)) 300))))
+;(bind ?upper-bound (min (+ (?budget-per-day 40)) ?budget-max))
+; Budget prefissato: 70. - 30 + 80
+; -0.99 ... 0.99  ... -0.99 ... -0.99
+; 0     ... 40    ... 150   ...
 
 ; (defrule DESTINATIONS::generate-city3
 ;   (attribute-pattern (name turism) (values $? ?turism&:(not (eq (type ?turism) INTEGER)) $?) (conjunction ?conj) (id ?id))
