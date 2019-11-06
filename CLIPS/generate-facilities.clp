@@ -30,7 +30,6 @@
   (assert (attribute (name facility) (value ?name) (certainty ?cf-stars)))
 )
 
-; TODO trovare un modo per non mettere una salience. Scatta prima della fine del calcolo dell'attributo city
 (defrule GENERATE-FACILITIES::generate-facility-from-city 
   (attribute (name city) (value ?city) (certainty ?cf-city))
   (facility (name ?name) (city ?city))
@@ -72,36 +71,28 @@
   )
 )
 
-;GENERIC INTERVAL TRANSFORMATION FORMULA (MAGIC)
-; A 		B 			a 	b
-; [-0.99, +0.99] --> [-0.4, +0.4] QUADRA SE UN HOTEL HA TUTTI I TURISMI E L'UTENTE LI VUOLE TUTTI AL MAX
-; (val - A)*(b-a)/(B-A) + a
-
-;Voglio o no il service, e l'hotel ce l'ha
-(defrule GENERATE-FACILITIES::generate-facility-from-services-1
-  (facility (name ?name) (services $? ?service $?))
-  (attribute (name service) (value ?service) (certainty ?cf))
+(defrule GENERATE-FACILITIES::generate-facility-from-services
+  (or
+    (and ;Voglio o no il service, e l'hotel ce l'ha
+      (attribute (name service) (value ?service) (certainty ?cf-service))
+      (facility (name ?name) (services $? ?service $?))
+      (bind ?sign 1)
+    )
+    (and ;Voglio o no il service, e l'hotel NON ce l'ha
+      (attribute (name service) (value ?service) (certainty ?cf-service))
+      (facility (name ?name) (services $?services&:(not (member ?service ?services))))
+      (bind ?sign -1)
+    )
+  )
   =>
-  (bind ?cf-service-hotel (- (/ (* (+ ?cf 0.99) 0.8) 1.98) 0.4))
-  (assert (attribute (name facility) (value ?name) (certainty ?cf-service-hotel)))
-)
-
-;Voglio o no il service, e l'hotel NON ce l'ha
-;Se lo voglio e non ce l'ha penalizzo
-;Se non lo voglio e non ce l'ha favorisco
-(defrule GENERATE-FACILITIES::generate-facility-from-services-2
-  (attribute (name service) (value ?user-service) (certainty ?cf))
-  (facility (name ?name) (services $?services&:(not (member ?user-service ?services))))
-  =>
-  (bind ?cf-service-hotel (* (- (/ (* (+ ?cf 0.99) 0.8) 1.98) 0.4) -1))
-  (assert (attribute (name facility) (value ?name) (certainty ?cf-service-hotel)))
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.4 ?sign))))
 )
 
 ;l'utente non ha detto niente sul service
-//TODO il service è presente nell'hotel (è un di piu, lo apprezzo con 0.1?)
-(defrule GENERATE-FACILITIES::generate-facility-from-services-3
-  (facility (name ?name) (services $? $?service $?))
-  (not (attribute (name service)))
-  =>
-  (assert (attribute (name facility) (value ?name) (certainty 0.1)))
-)
+;TODO il service è presente nell'hotel (è un di piu, lo apprezzo con 0.1?)
+; (defrule GENERATE-FACILITIES::generate-facility-from-services-3
+;   (facility (name ?name) (services $? $?service $?))
+;   (not (attribute (name service)))
+;   =>
+;   (assert (attribute (name facility) (value ?name) (certainty 0.1)))
+; )
