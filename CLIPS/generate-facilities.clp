@@ -42,7 +42,7 @@
   (user-attribute (name budget-per-day) (values ?budget-per-day))
   (facility (name ?name) (price ?price&:(< ?price ?budget-per-day)))
   =>
-  (bind ?lower-bound (max (- ?budget-per-day 60) ?budget-min))
+  (bind ?lower-bound (- ?budget-per-day 60))
   (bind ?result (max (+ -0.99 (* (/ (- ?price ?lower-bound) (- ?budget-per-day ?lower-bound)) 1.98)) -0.99))
 
   (assert 
@@ -59,7 +59,7 @@
   (user-attribute (name budget-per-day) (values ?budget-per-day))
   (facility (name ?name) (price ?price&:(>= ?price ?budget-per-day)))
   =>
-  (bind ?upper-bound (min (+ ?budget-per-day 40) ?budget-max))
+  (bind ?upper-bound (+ ?budget-per-day 40))
   (bind ?result (max (+ -0.99 (* (/ (- ?price ?upper-bound) (- ?budget-per-day ?upper-bound)) 1.98)) -0.99))
 
   (assert 
@@ -92,7 +92,7 @@
 ;TODO il service è presente nell'hotel (è un di piu, lo apprezzo con 0.1?)
 ; (defrule GENERATE-FACILITIES::generate-facility-from-services-3
 ;   (facility (name ?name) (services $? $?service $?))
-;   (not (attribute (name service)))
+;   (not (attribute (name service) (value $?service)))
 ;   =>
 ;   (assert (attribute (name facility) (value ?name) (certainty 0.1)))
 ; )
