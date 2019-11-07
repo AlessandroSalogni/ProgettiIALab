@@ -25,7 +25,7 @@
 	(declare (salience 10000))
 	=>
 	(set-fact-duplication TRUE)
-	(focus SET-USER-ATTRIBUTE EXPERTISE DESTINATIONS PRINT-RESULTS)
+	(focus SET-USER-ATTRIBUTE EXPERTISE GENERATE-SOLUTIONS PRINT-RESULTS)
 )
 
 (defrule MAIN::combine-certainties-both-positive
