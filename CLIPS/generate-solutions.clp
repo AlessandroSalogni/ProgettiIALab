@@ -1,4 +1,4 @@
-(defmodule GENERATE-SOLUTIONS (import MAIN ?ALL) (import GENERATE-FACILITIES ?ALL))
+(defmodule GENERATE-SOLUTIONS (import MAIN ?ALL) (import GENERATE-FACILITIES ?ALL) (export ?ALL))
 
 (deftemplate GENERATE-SOLUTIONS::solution
   (slot facility)
@@ -15,15 +15,6 @@
   (assert (counter 5))
   (focus GENERATE-CITIES GENERATE-FACILITIES)
 )
-
-; (defrule GENERATE-SOLUTIONS::generate-single-solution
-;   (attribute (name facility) (value ?name) (certainty ?cf&:(> ?cf 0)))
-;   (facility (name ?name) (city ?city) (price ?price) (stars ?stars) (service $?services))
-;   =>
-;   (assert 
-;     (solution (facility ?name) (city ?city) (price ?price) (stars ?stars) (service ?services) (certainty ?cf))
-;   )
-; )
 
 (defrule GENERATE-SOLUTIONS:find-5-solutions 
   ?counter <- (counter ?counter-value&:(> ?counter-value 0))
