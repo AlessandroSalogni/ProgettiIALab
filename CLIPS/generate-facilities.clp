@@ -1,4 +1,4 @@
-(defmodule GENERATE-FACILITIES (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (export ?ALL)) 
+(defmodule GENERATE-FACILITIES (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL)) 
 
 (deftemplate GENERATE-FACILITIES::facility
   (slot name (type STRING))
@@ -24,20 +24,23 @@
 )
 
 (defrule GENERATE-FACILITIES::generate-facility-from-stars
-  (attribute (name stars) (value ?stars) (certainty ?cf-stars))
+  (iteration ?i)
+  (attribute (name stars) (value ?stars) (certainty ?cf-stars) (iteration ?i))
   (facility (name ?name) (stars ?stars))
   =>
-  (assert (attribute (name facility) (value ?name) (certainty ?cf-stars)))
+  (assert (attribute (name facility) (value ?name) (certainty ?cf-stars) (iteration ?i)))
 )
 
 (defrule GENERATE-FACILITIES::generate-facility-from-city 
-  (attribute (name city) (value ?city) (certainty ?cf-city))
+  (iteration ?i)
+  (attribute (name city) (value ?city) (certainty ?cf-city) (iteration ?i))
   (facility (name ?name) (city ?city))
   =>
-  (assert (attribute (name facility) (value ?name) (certainty ?cf-city)))
+  (assert (attribute (name facility) (value ?name) (certainty ?cf-city) (iteration ?i)))
 )
 
 (defrule GENERATE-FACILITIES::generate-facility-from-budget-upper-then-price
+  (iteration ?i)
   (parameter (name budget-per-day) (range ?budget-min ?budget-max))
   (user-attribute (name budget-per-day) (values ?budget-per-day))
   (facility (name ?name) (price ?price&:(< ?price ?budget-per-day)))
@@ -50,11 +53,13 @@
       (name facility) 
       (value ?name) 
       (certainty ?result)
+      (iteration ?i)
     )
   )
 )
 
 (defrule GENERATE-FACILITIES::generate-facility-from-budget-lower-then-price
+  (iteration ?i)
   (parameter (name budget-per-day) (range ?budget-min ?budget-max))
   (user-attribute (name budget-per-day) (values ?budget-per-day))
   (facility (name ?name) (price ?price&:(>= ?price ?budget-per-day)))
@@ -67,25 +72,27 @@
       (name facility) 
       (value ?name) 
       (certainty ?result)
+      (iteration ?i)
     )
   )
 )
 
 (defrule GENERATE-FACILITIES::generate-facility-from-services
+  (iteration ?i)
   (or
     (and ;Voglio o no il service, e l'hotel ce l'ha
-      (attribute (name service) (value ?service) (certainty ?cf-service))
+      (attribute (name service) (value ?service) (certainty ?cf-service) (iteration ?i))
       (facility (name ?name) (services $? ?service $?))
       (bind ?sign 1)
     )
     (and ;Voglio o no il service, e l'hotel NON ce l'ha
-      (attribute (name service) (value ?service) (certainty ?cf-service))
+      (attribute (name service) (value ?service) (certainty ?cf-service) (iteration ?i))
       (facility (name ?name) (services $?services&:(not (member ?service ?services))))
       (bind ?sign -1)
     )
   )
   =>
-  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.4 ?sign))))
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.4 ?sign)) (iteration ?i)))
 )
 
 ;l'utente non ha detto niente sul service

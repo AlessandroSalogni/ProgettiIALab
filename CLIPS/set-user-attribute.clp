@@ -8,10 +8,16 @@
   (slot max (type INTEGER))
 )
 
-(defrule SET-USER-ATTRIBUTE::start (declare (salience 10000))
-  (iteration ?i)
+(defrule SET-USER-ATTRIBUTE::start-first-iteration (declare (salience 10000))
+  (iteration ?i&:(eq ?i 1))
 	=>
 	(focus MANDATORY-QUESTIONS USER-PROFILE OPTIONAL-QUESTIONS)
+)
+
+(defrule SET-USER-ATTRIBUTE::start-other-iteration (declare (salience 10000))
+  (iteration ?i&:(neq ?i 1))
+	=>
+	(focus OPTIONAL-QUESTIONS)
 )
 
 (defrule SET-USER-ATTRIBUTE::combine-user-attribute
@@ -41,27 +47,29 @@
     (min ?min) 
     (max ?max)
   )
-  (user-attribute (name ?user-attribute) (values ?value&:(and (<= ?min ?value) (<= ?value ?max))))
+  (user-attribute (name ?user-attribute) (values ?value&:(and (<= ?min ?value) (<= ?value ?max)))) ; TODO non scatta se viene fatta prima la combine
   =>
   (assert (user-attribute (name ?attribute-name) (values ?class-name) (type inferred)))
 )
 
 (defrule SET-USER-ATTRIBUTE::convert-optional-user-attribute
   (declare (salience 100) (auto-focus TRUE))
+  (iteration ?i)
   (user-attribute (name ?name) (values $? ?value $?) (type optional))
   =>
-  (assert (attribute (name ?name) (value ?value)))
+  (assert (attribute (name ?name) (value ?value) (iteration ?i)))
 )
 
 (defrule SET-USER-ATTRIBUTE::convert-profile-user-attribute
   (declare (salience 100) (auto-focus TRUE))
+  (iteration ?i)
   (user-attribute 
     (name ?name&:(or (eq ?name turism) (eq ?name service))) 
     (values $? ?value $?) 
     (type profile)
   )
   =>
-  (assert (attribute (name ?name) (value ?value) (certainty 0.4)))
+  (assert (attribute (name ?name) (value ?value) (certainty 0.4) (iteration ?i)))
 )
 
 (deffacts SET-USER-ATTRIBUTE::define-class-user-attribute

@@ -1,4 +1,4 @@
-(defmodule GENERATE-CITIES (import MAIN ?ALL))
+(defmodule GENERATE-CITIES (import MAIN ?ALL) (import ITERATION-MANAGER ?ALL))
 
 (deftemplate GENERATE-CITIES::city
   (slot name (type STRING))
@@ -40,24 +40,25 @@
 )
 
 (defrule GENERATE-CITIES:generate-city-from-turism
+  (iteration ?i)
   (parameter (name turism) (values $? ?turism $?))
   (or
     (and
-      (attribute (name turism) (value ?turism) (certainty ?cf-turism))
+      (attribute (name turism) (value ?turism) (certainty ?cf-turism) (iteration ?i))
       (city (name ?city) (turism $? ?turism ?score $?))
     )
     (and
-      (not (attribute (name turism) (value ?turism)))
+      (not (attribute (name turism) (value ?turism) (iteration ?i)))
       (city (name ?city) (turism $? ?turism ?score $?))
       (bind ?cf-turism 0) 
     )
     (and
-      (attribute (name turism) (value ?turism) (certainty ?cf-turism))
+      (attribute (name turism) (value ?turism) (certainty ?cf-turism) (iteration ?i))
       (city (name ?city) (turism $?turisms&:(not (member ?turism ?turisms))))
       (bind ?score 0) 
     )
     (and
-      (not (attribute (name turism) (value ?turism)))
+      (not (attribute (name turism) (value ?turism) (iteration ?i)))
       (city (name ?city) (turism $?turisms&:(not (member ?turism ?turisms))))
       (bind ?cf-turism 0) 
       (bind ?score 0) 
@@ -65,12 +66,13 @@
   )
   =>
   (bind ?cf-score (- (/ (* ?score 1.98) 5) 0.99))
-  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score))))
+  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score)) (iteration ?i)))
 )
 
 (defrule GENERATE-CITIES::generate-city-from-region
-  (attribute (name region) (value ?region) (certainty ?cf-region))
+  (iteration ?i)
+  (attribute (name region) (value ?region) (certainty ?cf-region) (iteration ?i))
   (city (name ?city) (region ?region))
   =>
-  (assert (attribute (name city) (value ?city) (certainty ?cf-region)))
+  (assert (attribute (name city) (value ?city) (certainty ?cf-region) (iteration ?i)))
 )

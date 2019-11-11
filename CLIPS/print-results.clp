@@ -1,7 +1,7 @@
-(defmodule PRINT-RESULTS (import GENERATE-SOLUTIONS ?ALL))
+(defmodule PRINT-RESULTS (import GENERATE-SOLUTIONS ?ALL) (import ITERATION-MANAGER ?ALL))
 
-(defrule PRINT-RESULTS::header
-  (declare (salience 10))
+(defrule PRINT-RESULTS::header (declare (salience 10))
+  (iteration ?i)
   =>
   (printout t t)
   (printout t "        SELECTED DESTINATIONS" t t)
@@ -16,9 +16,8 @@
   (format t " %-35s %-20s% %d*%-10s %d€%-10s %f%n" ?name ?city ?stars "" ?price "" ?cf-max)
 )
 
-(defrule PRINT-RESULTS::end-iteration
-  (declare (salience -10))
+(defrule PRINT-RESULTS::end-iteration (declare (salience -10))
+  (iteration ?i)
   =>
   (printout t t)
-  (focus ITERATION-MANAGER)
 )

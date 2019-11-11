@@ -1,4 +1,4 @@
-(defmodule EXPERTISE (import MAIN ?ALL) (import USER-INTERACTION ?ALL))
+(defmodule EXPERTISE (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (import ITERATION-MANAGER ?ALL))
 
 (deftemplate EXPERTISE::expertise
   (slot user-attribute)
@@ -76,6 +76,7 @@
 )
 
 (defrule EXPERTISE::expertise-general-rule
+  (iteration ?i)
   (user-attribute (name ?user-attribute) (values $? ?value $?) (type ?type))
   (expertise (user-attribute ?user-attribute) (value ?value) (type ?type) 
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
@@ -84,6 +85,7 @@
 )
 
 (defrule EXPERTISE::create-positive-expertise-attribute
+  (iteration ?i)
   (new-attributes 
     (attribute ?attribute) 
     (values $?prev ?value ?cf&:(eq (type ?cf) FLOAT)&:(> ?cf 0.0) $?next)
@@ -95,11 +97,13 @@
       (name ?attribute) 
       (value ?value) 
       (certainty (max (- ?cf ?deviation) 0))
+      (iteration ?i)
     )
   )
 )
 
 (defrule EXPERTISE::create-negative-expertise-attribute
+  (iteration ?i)
   (new-attributes 
     (attribute ?attribute) 
     (values $?prev ?value ?cf&:(eq (type ?cf) FLOAT)&:(< ?cf 0.0) $?next)
@@ -111,31 +115,36 @@
       (name ?attribute) 
       (value ?value) 
       (certainty (min (+ ?cf ?deviation) 0))
+      (iteration ?i)
     )
   )
 )
 
 (defrule EXPERTISE::expertise-from-live-region
+  (iteration ?i)
   (user-attribute (name live-region) (values ?region))
   =>
-  (assert (attribute (name region) (value ?region) (certainty -0.8)))
+  (assert (attribute (name region) (value ?region) (certainty -0.8) (iteration ?i)))
 )
 
 (defrule EXPERTISE::expertise-from-last-region-visited-old-people
+  (iteration ?i)
   (user-attribute (name last-region-visited) (values ?region))
   (user-attribute (name age-class) (values old))
   =>
-  (assert (attribute (name region) (value ?region) (certainty 0.4)))
+  (assert (attribute (name region) (value ?region) (certainty 0.4) (iteration ?i)))
 )
 
 (defrule EXPERTISE::expertise-from-last-region-visited-young-people
+  (iteration ?i)
   (user-attribute (name last-region-visited) (values ?region))
   (user-attribute (name age-class) (values young))
   =>
-  (assert (attribute (name region) (value ?region) (certainty -0.4)))
+  (assert (attribute (name region) (value ?region) (certainty -0.4) (iteration ?i)))
 )
 
 (defrule EXPERTISE::expertise-from-favourite-turism
+  (iteration ?i)
   (user-attribute (name turism) (values $? ?turism $?) (type profile))
   (expertise (user-attribute turism) (value ?turism)
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
