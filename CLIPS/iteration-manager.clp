@@ -1,11 +1,7 @@
 (defmodule ITERATION-MANAGER (import USER-INTERACTION ?ALL) (export ?ALL))
 
-(deftemplate ITERATION-MANAGER::iteration
-  (slot number)
-)
-
 (defrule ITERATION-MANAGER::ask-if-refine-search
-  (iteration)
+  (iteration ?i)
   =>
   (assert 
     (menu-question
@@ -24,13 +20,13 @@
 
 (defrule ITERATION-MANAGER::refine-search
   ?parameter <- (search-parameter y)
-  ?iteration <- (iteration (number ?i))
+  ?iteration <- (iteration ?i)
   =>
-  (modify ?iteration (number (+ ?i 1)))
   (retract ?parameter ?iteration)
+  (assert (iteration (+ ?i 1)))
   (return)
 )
 
 (deffacts ITERATION-MANAGER::define-iteration
-  (iteration (number 1))
+  (iteration 1)
 )

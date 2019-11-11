@@ -1,4 +1,4 @@
-(defmodule SET-USER-ATTRIBUTE (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (export ?ALL))
+(defmodule SET-USER-ATTRIBUTE (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL))
 
 (deftemplate SET-USER-ATTRIBUTE::class-user-attribute
   (slot user-attribute)
@@ -8,20 +8,29 @@
   (slot max (type INTEGER))
 )
 
-(defrule SET-USER-ATTRIBUTE::start
-	(declare (salience 10000))
+(defrule SET-USER-ATTRIBUTE::start (declare (salience 10000))
+  (iteration ?i)
 	=>
 	(focus MANDATORY-QUESTIONS USER-PROFILE OPTIONAL-QUESTIONS)
 )
 
-(defrule SET-USER-ATTRIBUTE::combine-user-attribute-value ; TODO controllare quando i val hanno alcuni valori in comune? magari 2 regole per l'inserimento dell'utente
+(defrule SET-USER-ATTRIBUTE::combine-user-attribute
   (declare (salience 100) (auto-focus TRUE))
   ?attr1 <- (user-attribute (name ?name) (values $?val1) (type ?type))
-  ?attr2 <- (user-attribute (name ?name) (values $?val2) (type ?type))
+  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(not (member ?val2 $?val1))) (type ?type))
   (test (neq ?attr1 ?attr2))
   =>
-  (retract ?attr1)
-  (modify ?attr2 (values $?val1 $?val2))
+  (retract ?attr2)
+  (modify ?attr1 (values $?val1 ?val2))
+)
+
+(defrule SET-USER-ATTRIBUTE::retract-duplicate-user-attribute
+  (declare (salience 100) (auto-focus TRUE))
+  ?attr1 <- (user-attribute (name ?name) (values $?val1) (type ?type))
+  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(member ?val2 $?val1)) (type ?type))
+  (test (neq ?attr1 ?attr2))
+  =>
+  (retract ?attr2)
 )
 
 (defrule SET-USER-ATTRIBUTE::create-user-attribute-class

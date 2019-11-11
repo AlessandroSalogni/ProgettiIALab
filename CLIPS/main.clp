@@ -16,7 +16,7 @@
 )
 
 (defrule MAIN::start (declare (salience 10000))
-  (iteration (number ?i))
+  (iteration ?i)
 	=>
 	(set-fact-duplication TRUE)
 	(focus SET-USER-ATTRIBUTE EXPERTISE GENERATE-SOLUTIONS PRINT-RESULTS)

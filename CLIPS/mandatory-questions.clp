@@ -1,4 +1,4 @@
-(defmodule MANDATORY-QUESTIONS (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (export ?ALL))
+(defmodule MANDATORY-QUESTIONS (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL))
 
 (deftemplate MANDATORY-QUESTIONS::mandatory-question
   (slot name)
