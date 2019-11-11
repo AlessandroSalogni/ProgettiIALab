@@ -1,7 +1,4 @@
-;;****************
-;;* USER-PROFILE *
-;;****************
-(defmodule USER-PROFILE (import MAIN ?ALL) (export ?ALL))
+(defmodule USER-PROFILE (import USER-INTERACTION ?ALL) (export ?ALL))
 
 (deftemplate profile
   (slot name-surname (type STRING))

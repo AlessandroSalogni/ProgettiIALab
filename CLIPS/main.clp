@@ -1,4 +1,4 @@
-(defmodule MAIN (export ?ALL))
+(defmodule MAIN (import ITERATION-MANAGER ?ALL) (export ?ALL))
 
 ;;*****************
 ;;* INITIAL STATE *
@@ -7,16 +7,6 @@
   (slot name)
   (slot value)
   (slot certainty (type FLOAT) (default 0.99) (range -0.99 0.99))
-)
-
-(deftemplate MAIN::iteration
-  (slot number)
-)
-
-(deftemplate MAIN::user-attribute
-  (slot name)
-  (multislot values)
-  (slot type (allowed-symbols mandatory optional profile inferred) (default optional))
 )
 
 (deftemplate MAIN::parameter
@@ -62,7 +52,6 @@
 )
 
 (deffacts MAIN::define-parameter
-  (iteration (number 1))
   (parameter (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
   (parameter (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
   (parameter (name stars) (range 1 4))

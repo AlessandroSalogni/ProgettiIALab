@@ -1,4 +1,4 @@
-(defmodule USER-INTERACTION (import MAIN ?ALL) (export ?ALL))
+(defmodule USER-INTERACTION (export ?ALL))
 
 (deffunction USER-INTERACTION::ask-question (?question ?allowed-values)
    (printout t ?question)
@@ -9,6 +9,12 @@
       (bind ?answer (read))
       (if (lexemep ?answer) then (bind ?answer (lowcase ?answer))))
    ?answer
+)
+
+(deftemplate USER-INTERACTION::user-attribute
+  (slot name)
+  (multislot values)
+  (slot type (allowed-symbols mandatory optional profile inferred) (default optional))
 )
 
 (deftemplate USER-INTERACTION::menu-question

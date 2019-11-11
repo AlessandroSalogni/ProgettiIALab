@@ -1,4 +1,4 @@
-(defmodule GENERATE-FACILITIES (import MAIN ?ALL)(export ?ALL))
+(defmodule GENERATE-FACILITIES (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (export ?ALL)) 
 
 (deftemplate GENERATE-FACILITIES::facility
   (slot name (type STRING))

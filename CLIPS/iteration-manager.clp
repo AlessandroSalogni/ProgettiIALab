@@ -1,4 +1,8 @@
-(defmodule ITERATION-MANAGER (import USER-INTERACTION ?ALL))
+(defmodule ITERATION-MANAGER (import USER-INTERACTION ?ALL) (export ?ALL))
+
+(deftemplate ITERATION-MANAGER::iteration
+  (slot number)
+)
 
 (defrule ITERATION-MANAGER::ask-if-refine-search
   (iteration)
@@ -25,4 +29,8 @@
   (modify ?iteration (number (+ ?i 1)))
   (retract ?parameter ?iteration)
   (return)
+)
+
+(deffacts ITERATION-MANAGER::define-iteration
+  (iteration (number 1))
 )

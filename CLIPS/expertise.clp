@@ -1,7 +1,4 @@
-;;****************
-;;*  EXPERTISE   *
-;;****************
-(defmodule EXPERTISE (import MAIN ?ALL))
+(defmodule EXPERTISE (import MAIN ?ALL) (import USER-INTERACTION ?ALL))
 
 (deftemplate EXPERTISE::expertise
   (slot user-attribute)

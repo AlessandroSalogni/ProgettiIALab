@@ -1,4 +1,4 @@
-(defmodule SET-USER-ATTRIBUTE (import MAIN ?ALL) (export ?ALL))
+(defmodule SET-USER-ATTRIBUTE (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (export ?ALL))
 
 (deftemplate SET-USER-ATTRIBUTE::class-user-attribute
   (slot user-attribute)
@@ -38,12 +38,14 @@
 )
 
 (defrule SET-USER-ATTRIBUTE::convert-optional-user-attribute
+  (declare (salience 100) (auto-focus TRUE))
   (user-attribute (name ?name) (values $? ?value $?) (type optional))
   =>
   (assert (attribute (name ?name) (value ?value)))
 )
 
 (defrule SET-USER-ATTRIBUTE::convert-profile-user-attribute
+  (declare (salience 100) (auto-focus TRUE))
   (user-attribute 
     (name ?name&:(or (eq ?name turism) (eq ?name service))) 
     (values $? ?value $?) 
