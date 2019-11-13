@@ -47,6 +47,13 @@ Quindi produciamo tutti i turismi a 0.
 
 ------------------------------------
 
+Controllare valori
+Mettere esempi di localita e hotel da rappresentare scenari
+
+modellare distanza tramite slot di 30 km
+
+gestire numero di persone nelle camere
+
 
 ******************************
 **   Domande obbligatorie   **

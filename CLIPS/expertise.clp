@@ -16,10 +16,10 @@
 (deffacts EXPERTISE::expertise-knowledge
   (expertise (user-attribute region) (value liguria) (inference
     turism [ sea 0.6 mountain 0.2 enogastronomic 0.4 lake -0.6 termal -0.4 sport 0.4 naturalistic 0.4 ]
-    region [ piemonte 0.2 toscana 0.4 valle-d'aosta -0.4 trentino-alto-adige -0.6 veneto 0.2 emilia-romagna 0.2 umbria -0.6 marche 0.2 ] ))
+    region [ piemonte 0.2 toscana 0.6 lombardia -0.2 valle-d'aosta -0.6 trentino-alto-adige -0.8 emilia-romagna 0.2 umbria -0.6 ] ))
   (expertise (user-attribute region) (value piemonte) (inference
     turism [ sea -0.6 mountain 0.6 enogastronomic 0.6 lake 0.4 termal 0.2 religious 0.4 cultural 0.4 ]
-    region [ liguria 0.2 toscana -0.4 lombardia 0.4 valle-d'aosta 0.6 trentino-alto-adige 0.4 umbria -0.2 marche -0.6 ] ))
+    region [ liguria 0.2 toscana -0.4 lombardia 0.6 valle-d'aosta 0.6 veneto -0.2 umbria -0.2 marche -0.8 friuli-venezia-giulia -0.6 ] ))
   ; ----- Turism -----
   (expertise (user-attribute turism) (value sea) (inference
     region [ piemonte -0.6 liguria 0.6 toscana 0.6 lombardia -0.6 valle-d'aosta -0.6 trentino-alto-adige -0.6 veneto 0.4 emilia-romagna 0.6 umbria -0.4 marche 0.4 friuli-venezia-giulia 0.2 ]
@@ -49,14 +49,14 @@
     region [ piemonte 0.4 liguria -0.2 toscana 0.4 lombardia 0.2 trentino-alto-adige -0.4 umbria 0.6 marche 0.4 ]
     turism [ cultural 0.4 ] ))
 
-  (expertise (user-attribute age-class) (value young) (type inferred) (inference 
-    turism [ sport 0.6 sea 0.6 religious -0.6 ]))  
-  (expertise (user-attribute age-class) (value middle-young) (type inferred) (inference 
-    turism [ cultural 0.4 enogastronomic 0.4 ]))  
-  (expertise (user-attribute age-class) (value middle-old) (type inferred) (inference 
-    turism [ cultural 0.6 enogastronomic 0.6 mountain 0.4 ]))  
-  (expertise (user-attribute age-class) (value old) (type inferred) (inference 
-    turism [ cultural 0.6 religious 0.6 sport -0.6 termal 0.4 ]))
+  ; (expertise (user-attribute age-class) (value young) (type inferred) (inference 
+  ;   turism [ sport 0.4 sea 0.4 religious -0.2 ]))  
+  ; (expertise (user-attribute age-class) (value middle-young) (type inferred) (inference 
+  ;   turism [ cultural 0.2 enogastronomic 0.2 ]))  
+  ; (expertise (user-attribute age-class) (value middle-old) (type inferred) (inference 
+  ;   turism [ cultural 0.2 enogastronomic 0.2 mountain 0.2 ]))  
+  ; (expertise (user-attribute age-class) (value old) (type inferred) (inference 
+  ;   turism [ cultural 0.2 religious 0.2 sport -0.2 termal 0.2 ]))
 
   (expertise (user-attribute budget-per-day-class) (value low) (type inferred) (inference
     stars [ 1 0.8 2 0.2 3 -0.4 4 -0.8 ] 

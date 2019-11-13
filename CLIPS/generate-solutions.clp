@@ -22,6 +22,7 @@
   ?attribute-facility <- (attribute (name facility) (value ?name) (certainty ?cf-max) (iteration ?i))
   (not (attribute (name facility) (certainty ?cf&:(> ?cf ?cf-max)) (iteration ?i)))
   (facility (name ?name) (city ?city) (price ?price) (stars ?stars) (services $?services))
+  (attribute (name city) (value ?city) (certainty ?cf-city&:(> ?cf-city -0.4)))
   =>
   (assert 
     (solution (facility ?name) (city ?city) (price ?price) (stars ?stars) (service ?services) (certainty ?cf-max))
