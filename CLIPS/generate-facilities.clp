@@ -49,22 +49,25 @@
   (facility (name "Baita tedesca (TR)") (price 80) (city "Trento") (stars 3) (rooms 4) (services tv spa wifi air-conditioning pet))
 )
 
+;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base alle stelle
 (defrule GENERATE-FACILITIES::generate-facility-from-stars
   (iteration ?i)
   (attribute (name stars) (value ?stars) (certainty ?cf-stars) (iteration ?i))
   (facility (name ?name) (stars ?stars))
   =>
-  (assert (attribute (name facility) (value ?name) (certainty ?cf-stars) (iteration ?i)))
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-stars 0.4)) (iteration ?i)))
 )
 
+;Ho una confidenza in più sull'hotel da -0.6 a 0.6 in base alla città
 (defrule GENERATE-FACILITIES::generate-facility-from-city 
   (iteration ?i)
   (attribute (name city) (value ?city) (certainty ?cf-city) (iteration ?i))
   (facility (name ?name) (city ?city))
   =>
-  (assert (attribute (name facility) (value ?name) (certainty ?cf-city) (iteration ?i)))
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-city 0.6)) (iteration ?i)))
 )
 
+;Ho una confidenza in più sull'hotel da -0.6 a 0.6 in base al budget
 (defrule GENERATE-FACILITIES::generate-facility-from-budget-upper-then-price
   (iteration ?i)
   (parameter (name budget-per-day) (range ?budget-min ?budget-max))
@@ -72,7 +75,7 @@
   (facility (name ?name) (price ?price&:(< ?price ?budget-per-day)))
   =>
   (bind ?lower-bound (- ?budget-per-day 60))
-  (bind ?result (max (+ -0.99 (* (/ (- ?price ?lower-bound) (- ?budget-per-day ?lower-bound)) 1.98)) -0.99))
+  (bind ?result (max (+ -0.6 (* (/ (- ?price ?lower-bound) (- ?budget-per-day ?lower-bound)) 1.2)) -0.6))
 
   (assert 
     (attribute 
@@ -84,6 +87,7 @@
   )
 )
 
+;Ho una confidenza in più sull'hotel da -0.6 a 0.6 in base al budget
 (defrule GENERATE-FACILITIES::generate-facility-from-budget-lower-then-price
   (iteration ?i)
   (parameter (name budget-per-day) (range ?budget-min ?budget-max))
@@ -91,7 +95,7 @@
   (facility (name ?name) (price ?price&:(>= ?price ?budget-per-day)))
   =>
   (bind ?upper-bound (+ ?budget-per-day 40))
-  (bind ?result (max (+ -0.99 (* (/ (- ?price ?upper-bound) (- ?budget-per-day ?upper-bound)) 1.98)) -0.99))
+  (bind ?result (max (+ -0.6 (* (/ (- ?price ?upper-bound) (- ?budget-per-day ?upper-bound)) 1.2)) -0.6))
 
   (assert 
     (attribute 
@@ -103,6 +107,7 @@
   )
 )
 
+;Ho una confidenza in più sull'hotel da -0.2 a 0.2 in base ai servizi (più servizi ho in un hotel e più confidenza ho)
 (defrule GENERATE-FACILITIES::generate-facility-from-services
   (iteration ?i)
   (or
@@ -117,8 +122,8 @@
       (bind ?sign -1)
     )
   )
-  =>
-  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.4 ?sign)) (iteration ?i)))
+  =>  
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.2 ?sign)) (iteration ?i)))
 )
 
 ;l'utente non ha detto niente sul service

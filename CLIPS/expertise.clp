@@ -96,7 +96,7 @@
     (attribute 
       (name ?attribute) 
       (value ?value) 
-      (certainty (max (- ?cf ?deviation) 0))
+      (certainty (max (- ?cf ?deviation) 0.0))
       (iteration ?i)
     )
   )
@@ -114,7 +114,7 @@
     (attribute 
       (name ?attribute) 
       (value ?value) 
-      (certainty (min (+ ?cf ?deviation) 0))
+      (certainty (min (+ ?cf ?deviation) 0.0))
       (iteration ?i)
     )
   )
