@@ -164,33 +164,21 @@
 )
 
 ;Ho una confidenza in più sulla città da -0.2 a 0.2 in base ai turismi (più turismi ci sono in una città e più la confidenza sale)
-(defrule GENERATE-CITIES:generate-city-from-turism
+(defrule GENERATE-CITIES::generate-city-from-turism-present-in-city
   (iteration ?i)
-  (parameter (name turism) (values $? ?turism $?))
-  (or
-    (and
-      (attribute (name turism) (value ?turism) (certainty ?cf-turism) (iteration ?i))
-      (city (name ?city) (turism $? ?turism ?score $?))
-    )
-    (and
-      (not (attribute (name turism) (value ?turism) (iteration ?i)))
-      (city (name ?city) (turism $? ?turism ?score $?))
-      (bind ?cf-turism 0.0) 
-    )
-    (and
-      (attribute (name turism) (value ?turism) (certainty ?cf-turism) (iteration ?i))
-      (city (name ?city) (turism $?turisms&:(not (member ?turism ?turisms))))
-      (bind ?score 0.0) 
-    )
-    (and
-      (not (attribute (name turism) (value ?turism) (iteration ?i)))
-      (city (name ?city) (turism $?turisms&:(not (member ?turism ?turisms))))
-      (bind ?cf-turism 0.0) 
-      (bind ?score 0.0) 
-    )
-  )
+  (attribute (name turism) (value ?turism) (certainty ?cf-turism) (iteration ?i))
+  (city (name ?city) (turism $? ?turism ?score $?))       
   =>
   (bind ?cf-score (- (/ (* ?score 1.98) 5) 0.99))
+  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.2)) (iteration ?i)))
+)
+
+(defrule GENERATE-CITIES::generate-city-from-turism-not-present-in-city
+  (iteration ?i)
+  (attribute (name turism) (value ?turism) (certainty ?cf-turism) (iteration ?i))
+  (city (name ?city) (turism $?turisms&:(not (member ?turism ?turisms))))
+  =>
+  (bind ?cf-score -0.99)
   (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.2)) (iteration ?i)))
 )
 

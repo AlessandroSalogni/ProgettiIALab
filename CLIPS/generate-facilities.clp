@@ -108,22 +108,20 @@
 )
 
 ;Ho una confidenza in più sull'hotel da -0.2 a 0.2 in base ai servizi (più servizi ho in un hotel e più confidenza ho)
-(defrule GENERATE-FACILITIES::generate-facility-from-services
+(defrule GENERATE-FACILITIES::generate-facility-from-services-present-in-facility ;Voglio o no il service, e l'hotel ce l'ha
   (iteration ?i)
-  (or
-    (and ;Voglio o no il service, e l'hotel ce l'ha
-      (attribute (name service) (value ?service) (certainty ?cf-service) (iteration ?i))
-      (facility (name ?name) (services $? ?service $?))
-      (bind ?sign 1)
-    )
-    (and ;Voglio o no il service, e l'hotel NON ce l'ha
-      (attribute (name service) (value ?service) (certainty ?cf-service) (iteration ?i))
-      (facility (name ?name) (services $?services&:(not (member ?service ?services))))
-      (bind ?sign -1)
-    )
-  )
+  (attribute (name service) (value ?service) (certainty ?cf-service) (iteration ?i))
+  (facility (name ?name) (services $? ?service $?))
   =>  
-  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.2 ?sign)) (iteration ?i)))
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.2)) (iteration ?i)))
+)
+
+(defrule GENERATE-FACILITIES::generate-facility-from-services-not-present-in-facility ;Voglio o no il service, e l'hotel NON ce l'ha
+  (iteration ?i)
+  (attribute (name service) (value ?service) (certainty ?cf-service) (iteration ?i))
+  (facility (name ?name) (services $?services&:(not (member ?service ?services))))
+  => 
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.2 -1)) (iteration ?i)))
 )
 
 ;l'utente non ha detto niente sul service
