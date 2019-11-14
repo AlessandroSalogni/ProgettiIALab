@@ -11,6 +11,7 @@
   (slot attribute)
   (multislot values)
   (slot deviation (type FLOAT) (range 0.0 1.0) (default 0.0))
+  (slot iteration)
 )
 
 (deffacts EXPERTISE::expertise-knowledge
@@ -109,15 +110,15 @@
   (expertise (user-attribute ?user-attribute) (value ?value) (type ?type) 
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
   =>
-  (assert (new-attributes (attribute ?attribute) (values $?values)))
+  (assert (new-attributes (attribute ?attribute) (values $?values) (iteration ?i)))
 )
 
 (defrule EXPERTISE::create-positive-expertise-attribute
-  (iteration ?i)
   (new-attributes 
     (attribute ?attribute) 
     (values $?prev ?value ?cf&:(eq (type ?cf) FLOAT)&:(> ?cf 0.0) $?next)
     (deviation ?deviation)
+    (iteration ?i)
   )
   =>
   (assert 
@@ -131,11 +132,11 @@
 )
 
 (defrule EXPERTISE::create-negative-expertise-attribute
-  (iteration ?i)
   (new-attributes 
     (attribute ?attribute) 
     (values $?prev ?value ?cf&:(eq (type ?cf) FLOAT)&:(< ?cf 0.0) $?next)
-    (deviation ?deviation)
+    (deviation ?deviation)  
+    (iteration ?i)
   )
   =>
   (assert 
@@ -177,5 +178,5 @@
   (expertise (user-attribute turism) (value ?turism)
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
   =>
-  (assert (new-attributes (attribute ?attribute) (values $?values) (deviation 0.4)))
+  (assert (new-attributes (attribute ?attribute) (values $?values) (deviation 0.4) (iteration ?i)))
 )
