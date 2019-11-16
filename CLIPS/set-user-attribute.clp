@@ -53,7 +53,6 @@
 )
 
 (defrule SET-USER-ATTRIBUTE::convert-optional-user-attribute
-  (declare (salience 100) (auto-focus TRUE))
   (iteration ?i)
   (user-attribute (name ?name) (values $? ?value $?) (type optional))
   =>
@@ -61,7 +60,6 @@
 )
 
 (defrule SET-USER-ATTRIBUTE::convert-profile-user-attribute
-  (declare (salience 100) (auto-focus TRUE))
   (iteration ?i)
   (user-attribute 
     (name ?name&:(or (eq ?name turism) (eq ?name service))) 
