@@ -1,6 +1,6 @@
 (defmodule USER-PROFILE (import USER-INTERACTION ?ALL) (export ?ALL))
 
-(deftemplate profile
+(deftemplate profile ;TODO trattare anche cose che non piacciono ??
   (slot name-surname (type STRING))
   (slot birth-year (type INTEGER))
   (slot number-holiday-days (type INTEGER))
