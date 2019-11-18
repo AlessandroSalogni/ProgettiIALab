@@ -14,6 +14,7 @@
 (deftemplate USER-INTERACTION::user-attribute
   (slot name)
   (multislot values)
+  (slot desire (default TRUE) (allowed-symbols TRUE FALSE))
   (slot type (allowed-symbols mandatory optional profile inferred) (default optional))
 )
 
@@ -73,20 +74,67 @@
 
 (defrule USER-INTERACTION::enumeration-attribute-user-interaction
   ?user-question <- (enumeration-attribute-question
+    (question ?question)
+    (valid-answers $?valid-answers)
+  )
+  =>
+  (printout t ?question)
+  (assert (enumeration-user-answer (explode$ (readline))))
+)
+
+(defrule USER-INTERACTION::desire-enumeration-attribute-user-interaction
+  ?user-question <- (enumeration-attribute-question
     (name ?name)
     (question ?question)
     (type-user-interaction ?type-interaction)
     (valid-answers $?valid-answers)
   )
+  ?user-answer <- (enumeration-user-answer ?answer&:(member ?answer ?valid-answers))
   =>
-  (retract ?user-question)
+  (retract ?user-answer ?user-question)
   (assert
     (user-attribute
       (name ?name)
-      (values (ask-question ?question ?valid-answers))
+      (values ?answer)
       (type ?type-interaction)
     )
   )
+)
+
+(defrule USER-INTERACTION::not-desire-enumeration-attribute-user-interaction
+  ?user-question <- (enumeration-attribute-question
+    (name ?name)
+    (question ?question)
+    (type-user-interaction ?type-interaction)
+    (valid-answers $?valid-answers)
+  )
+  ?user-answer <- (enumeration-user-answer not ?answer&:(member ?answer ?valid-answers))
+  =>
+  (retract ?user-answer ?user-question)
+  (assert
+    (user-attribute
+      (name ?name)
+      (values ?answer)
+      (desire FALSE)
+      (type ?type-interaction)
+    )
+  )
+)
+
+(defrule USER-INTERACTION::wrong-answer-enumeration-attribute-user-interaction
+  ?user-question <- (enumeration-attribute-question
+    (valid-answers $?valid-answers)
+  )
+  (or
+    ?user-answer <- (enumeration-user-answer)
+    ?user-answer <- (enumeration-user-answer ?answer&:(not (member ?answer ?valid-answers)))
+    ?user-answer <- (enumeration-user-answer not ?answer&:(not (member ?answer ?valid-answers)))
+    ?user-answer <- (enumeration-user-answer ?first&~not ?second)
+    ?user-answer <- (enumeration-user-answer ?first ?second ?third $?others)
+  )
+  =>
+  (duplicate ?user-question)
+  (retract ?user-answer ?user-question)
 )
 
 (defrule USER-INTERACTION::range-attribute-user-interaction
@@ -97,11 +145,11 @@
   =>
   (printout t ?question)
   (bind ?answer (read))
-  (assert (user-value ?answer))
+  (assert (range-user-answer ?answer))
 )
 
 (defrule USER-INTERACTION::correct-range-attribute-user-interaction
-  ?user-value <- (user-value ?answer)
+  ?user-answer <- (range-user-answer ?answer)
   ?user-question <- (range-attribute-question
     (name ?name)
     (question ?question)
@@ -109,8 +157,7 @@
     (range ?min&:(<= ?min ?answer) ?max&:(<= ?answer ?max))
   )
   =>
-  (retract ?user-value)
-  (retract ?user-question)
+  (retract ?user-answer ?user-question)
   (assert
     (user-attribute
       (name ?name)
@@ -121,13 +168,12 @@
 )
 
 (defrule USER-INTERACTION::wrong-range-attribute-user-interaction
-  ?user-value <- (user-value ?answer)
+  ?user-answer <- (range-user-answer ?answer)
   ?user-question <- (range-attribute-question
     (range ?min ?max)
   )
   (test (or (< ?answer ?min) (< ?max ?answer)))
   =>
-  (retract ?user-value)
   (duplicate ?user-question)
-  (retract ?user-question)
+  (retract ?user-answer ?user-question)
 )

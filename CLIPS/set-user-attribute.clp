@@ -22,8 +22,8 @@
 
 (defrule SET-USER-ATTRIBUTE::combine-user-attribute
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values $?val1) (type ?type))
-  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(not (member ?val2 $?val1))) (type ?type))
+  ?attr1 <- (user-attribute (name ?name) (values $?val1) (desire ?desire) (type ?type))
+  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(not (member ?val2 $?val1))) (desire ?desire) (type ?type))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr2)
@@ -52,11 +52,18 @@
   (assert (user-attribute (name ?attribute-name) (values ?class-name) (type inferred)))
 )
 
-(defrule SET-USER-ATTRIBUTE::convert-optional-user-attribute
+(defrule SET-USER-ATTRIBUTE::convert-desire-optional-user-attribute
   (iteration ?i)
-  (user-attribute (name ?name) (values $? ?value $?) (type optional))
+  (user-attribute (name ?name) (values $? ?value $?) (desire TRUE) (type optional))
   =>
   (assert (attribute (name ?name) (value ?value) (iteration ?i)))
+)
+
+(defrule SET-USER-ATTRIBUTE::convert-not-desire-optional-user-attribute
+  (iteration ?i)
+  (user-attribute (name ?name) (values $? ?value $?) (desire FALSE) (type optional))
+  =>
+  (assert (attribute (name ?name) (value ?value) (certainty -0.99) (iteration ?i)))
 )
 
 (defrule SET-USER-ATTRIBUTE::convert-profile-user-attribute
