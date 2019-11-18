@@ -11,11 +11,6 @@
   (slot request (type STRING))
 )
 
-; (deftemplate OPTIONAL-QUESTIONS::answer
-;   (multislot user-answer)
-;   (multislot valid-answers)
-; )
-
 (defrule OPTIONAL-QUESTIONS::leave-focus
   ?search-parameter <- (search-parameter end)
   ?history <- (search-parameter-history start)
