@@ -5,48 +5,49 @@
   (slot city (type STRING))
   (slot price (type INTEGER))
   (slot stars (type INTEGER) (range 1 4))
-  (multislot rooms (type INTEGER) (range 0 ?VARIABLE)) ;available
+  (multislot rooms-available (type INTEGER) (range 0 ?VARIABLE)) 
+  (multislot rooms-booked (type INTEGER) (range 0 ?VARIABLE)) 
   (multislot services (cardinality 0 ?VARIABLE))
 )
 
 (deffacts GENERATE-FACILITIES::facility-definition
-  (facility (name "Vista Mare (MS)") (price 100) (city "Massa") (stars 4) (rooms 12) (services parking wifi pool tv spa room-service))
-  (facility (name "Resort Miramare (MS)") (price 75) (city "Massa") (stars 3) (rooms 2) (services parking pet tv wifi))
-  (facility (name "Ostello di Massa (MS)") (price 50) (city "Massa") (stars 2) (rooms 10) (services wifi tv))
+  (facility (name "Vista Mare (MS)") (price 100) (city "Massa") (stars 4) (rooms-available 12) (rooms-booked 4) (services parking wifi pool tv spa room-service))
+  (facility (name "Resort Miramare (MS)") (price 75) (city "Massa") (stars 3) (rooms-available 2) (rooms-booked 16) (services parking pet tv wifi))
+  (facility (name "Ostello di Massa (MS)") (price 50) (city "Massa") (stars 2) (rooms-available 10) (rooms-booked 22) (services wifi tv))
 
-  (facility (name "Hotel Cavour (TO)") (price 70) (city "Torino") (stars 3) (rooms 10) (services air-conditioning wifi pool tv room-service))
-  (facility (name "Hotel Mazzini (TO)") (price 50) (city "Torino") (stars 2) (rooms 5) (services parking pool tv))
-  (facility (name "Hotel Mucrone (TO)") (price 55) (city "Torino") (stars 2) (rooms 12) (services wifi tv))
-  (facility (name "Avogadro Hostel (TO)") (price 15) (city "Torino") (stars 1) (rooms 3) (services parking))
+  (facility (name "Hotel Cavour (TO)") (price 70) (city "Torino") (stars 3) (rooms-available 10) (rooms-booked 1) (services air-conditioning wifi pool tv room-service))
+  (facility (name "Hotel Mazzini (TO)") (price 50) (city "Torino") (stars 2) (rooms-available 5) (rooms-booked 3) (services parking pool tv))
+  (facility (name "Hotel Mucrone (TO)") (price 55) (city "Torino") (stars 2) (rooms-available 12) (rooms-booked 0) (services wifi tv))
+  (facility (name "Avogadro Hostel (TO)") (price 15) (city "Torino") (stars 1) (rooms-available 3) (rooms-booked 2) (services parking))
 
-  (facility (name "Garda resort (VR)") (price 130) (city "Verona") (stars 4) (rooms 22) (services parking wifi air-conditioning tv spa room-service pet))
-  (facility (name "Ostello della gioventu (VR)") (price 30) (city "Verona") (stars 1) (rooms 0) (services pet))
+  (facility (name "Garda resort (VR)") (price 130) (city "Verona") (stars 4) (rooms-available 22) (rooms-booked 0) (services parking wifi air-conditioning tv spa room-service pet))
+  (facility (name "Ostello della gioventu (VR)") (price 30) (city "Verona") (stars 1) (rooms-available 0) (rooms-booked 10) (services pet))
 
-  (facility (name "Bella vista (GE)") (price 80) (city "Genova") (stars 3) (rooms 20) (services parking wifi tv pool pet))
+  (facility (name "Bella vista (GE)") (price 80) (city "Genova") (stars 3) (rooms-available 20) (rooms-booked 4) (services parking wifi tv pool pet))
 
-  (facility (name "Al fresco (IM)") (price 30) (city "Imperia") (stars 1) (rooms 10) (services tv wifi))
+  (facility (name "Al fresco (IM)") (price 30) (city "Imperia") (stars 1) (rooms-available 10) (rooms-booked 5) (services tv wifi))
 
-  (facility (name "Al sole (SV)") (price 45) (city "Savona") (stars 2) (rooms 10) (services parking pet tv))
+  (facility (name "Al sole (SV)") (price 45) (city "Savona") (stars 2) (rooms-available 10) (rooms-booked 1) (services parking pet tv))
 
-  (facility (name "La rocca (BO)") (price 80) (city "Bologna") (stars 3) (rooms 21) (services wifi tv room-service air-conditioning))
+  (facility (name "La rocca (BO)") (price 80) (city "Bologna") (stars 3) (rooms-available 21) (rooms-booked 0) (services wifi tv room-service air-conditioning))
 
-  (facility (name "Movida (RM)") (price 35) (city "Rimini") (stars 2) (rooms 10) (services pool air-conditioning))
+  (facility (name "Movida (RM)") (price 35) (city "Rimini") (stars 2) (rooms-available 10) (rooms-booked 10) (services pool air-conditioning))
 
-  (facility (name "Il gelsomino (RA)") (price 140) (city "Ravenna") (stars 4) (rooms 12) (services wifi tv room-service air-conditioning spa))
-  (facility (name "Baraonda (RA)") (price 20) (city "Ravenna") (stars 1) (rooms 11) (services air-conditioning))
+  (facility (name "Il gelsomino (RA)") (price 140) (city "Ravenna") (stars 4) (rooms-available 12) (rooms-booked 15) (services wifi tv room-service air-conditioning spa))
+  (facility (name "Baraonda (RA)") (price 20) (city "Ravenna") (stars 1) (rooms-available 11) (rooms-booked 16) (services air-conditioning))
 
-  (facility (name "Bora (TS)") (price 85) (city "Trieste") (stars 3) (rooms 4) (services wifi tv room-service pool air-conditioning))
+  (facility (name "Bora (TS)") (price 85) (city "Trieste") (stars 3) (rooms-available 4) (rooms-booked 10) (services wifi tv room-service pool air-conditioning))
 
-  (facility (name "Falco (AO)") (price 120) (city "Saint Vincent") (stars 4) (rooms 3) (services parking wifi tv spa room-service pool air-conditioning))
-  (facility (name "L'azzardo (AO)") (price 100) (city "Saint Vincent") (stars 3) (rooms 5) (services parking wifi tv spa air-conditioning))
-  (facility (name "Arietta (AO)") (price 90) (city "Saint Vincent") (stars 3) (rooms 4) (services parking wifi tv))
-  (facility (name "Il giocatore (AO)") (price 130) (city "Saint Vincent") (stars 4) (rooms 6) (services parking wifi tv room-service pool air-conditioning))
+  (facility (name "Falco (AO)") (price 120) (city "Saint Vincent") (stars 4) (rooms-available 3) (rooms-booked 4) (services parking wifi tv spa room-service pool air-conditioning))
+  (facility (name "L'azzardo (AO)") (price 100) (city "Saint Vincent") (stars 3) (rooms-available 5) (rooms-booked 7) (services parking wifi tv spa air-conditioning))
+  (facility (name "Arietta (AO)") (price 90) (city "Saint Vincent") (stars 3) (rooms-available 4) (rooms-booked 5) (services parking wifi tv))
+  (facility (name "Il giocatore (AO)") (price 130) (city "Saint Vincent") (stars 4) (rooms-available 6) (rooms-booked 10) (services parking wifi tv room-service pool air-conditioning))
 
-  (facility (name "Con permesso (FE)") (price 60) (city "Ferrara") (stars 2) (rooms 2) (services parking wifi tv))
+  (facility (name "Con permesso (FE)") (price 60) (city "Ferrara") (stars 2) (rooms-available 2) (rooms-booked 1) (services parking wifi tv))
 
-  (facility (name "Trentuno (TR)") (price 10) (city "Trento") (stars 1) (rooms 1) (services tv pet))
-  (facility (name "Vento (TR)") (price 65) (city "Trento") (stars 3) (rooms 3) (services tv wifi parking pool))
-  (facility (name "Baita tedesca (TR)") (price 80) (city "Trento") (stars 3) (rooms 4) (services tv spa wifi air-conditioning pet))
+  (facility (name "Trentuno (TR)") (price 10) (city "Trento") (stars 1) (rooms-available 1) (rooms-booked 4) (services tv pet))
+  (facility (name "Vento (TR)") (price 65) (city "Trento") (stars 3) (rooms-available 3) (rooms-booked 9) (services tv wifi parking pool))
+  (facility (name "Baita tedesca (TR)") (price 80) (city "Trento") (stars 3) (rooms-available 4) (rooms-booked 2) (services tv spa wifi air-conditioning pet))
 )
 
 ;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base alle stelle
