@@ -180,3 +180,9 @@
   =>
   (assert (new-attributes (attribute ?attribute) (values $?values) (deviation 0.4) (iteration ?i)))
 )
+
+(defrule EXPERTISE::expertise-for-number-of-places-not-defined
+  (not (attribute (name number-places) (value ?number-places)))
+  =>
+  (assert (user-attribute (name number-places) (values 1)))
+)
