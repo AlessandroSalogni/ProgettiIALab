@@ -13,6 +13,7 @@
   (iteration ?i)
   =>
   (assert (counter 5))
+  (assert (considered-hotels))
   (focus GENERATE-CITIES GENERATE-FACILITIES RETRACT-FACILITIES)
 )
 
@@ -30,17 +31,15 @@
   (assert (counter (- ?counter-value 1)))
 )
 
-; A 		B 			a 	b
-; [0, 1] --> [-0.2, +0.2]
-; (val - A)*(b-a)/(B-A) + a
-; (occupation)*(0.4) -0.2
-
 (defrule GENERATE-SOLUTIONS::cf-contribution-from-availability (declare (salience 1000))
   (iteration ?i)
   ?attribute-facility <- (attribute (name facility) (value ?name) (iteration ?i)) 
   (facility (name ?name) (rooms-available ?rooms-available) (rooms-booked ?rooms-booked))  
+  ?considered <- (considered-hotels $?considered-hotels&:(not (member ?name $?considered-hotels)))
   =>
   (bind ?cf-contribution (+ (* (/ ?rooms-booked (+ ?rooms-booked ?rooms-available)) 0.4) -0.2))
+  (retract ?considered)
+  (assert (considered-hotels $?considered-hotels ?name))
   (assert (attribute (name facility) (value ?name) (certainty ?cf-contribution) (iteration ?i)))
 )
 
