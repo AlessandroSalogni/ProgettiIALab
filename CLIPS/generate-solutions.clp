@@ -1,20 +1,21 @@
 (defmodule GENERATE-SOLUTIONS (import MAIN ?ALL) (import GENERATE-FACILITIES ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL))
 
 (deftemplate GENERATE-SOLUTIONS::solution
-  (slot facility)
-  (slot city)
-  (slot price)
-  (slot stars)
+  (slot facility (type STRING))
+  (slot city (type STRING))
+  (slot price (type INTEGER))
+  (slot stars (type INTEGER) (range 1 4))
+  (slot rooms-available (type INTEGER))
+  (slot rooms-booked (type INTEGER))
   (multislot service)
-  (slot certainty)
+  (slot certainty (type FLOAT))
 )
 
 (defrule GENERATE-SOLUTIONS::start (declare (salience 10000))
   (iteration ?i)
   =>
   (assert (counter 5))
-  (assert (considered-hotels))
-  (focus GENERATE-CITIES GENERATE-FACILITIES RETRACT-FACILITIES)
+  (focus GENERATE-CITIES GENERATE-FACILITIES RETRACT-FACILITIES OPERATIONS-ON-FACILITIES)
 )
 
 (defrule GENERATE-SOLUTIONS::find-solutions 
@@ -25,22 +26,10 @@
   (facility (name ?name) (city ?city) (price ?price) (stars ?stars) (services $?services) (rooms-available ?rooms-available) (rooms-booked ?rooms-booked))  
   =>
   (assert 
-    (solution (facility ?name) (city ?city) (price ?price) (stars ?stars) (service ?services) (certainty ?cf-max))
+    (solution (facility ?name) (city ?city) (price ?price) (stars ?stars) (service ?services) (rooms-available ?rooms-available) (rooms-booked (+ ?rooms-available ?rooms-booked)) (certainty ?cf-max))
   )  
   (retract ?counter ?attribute-facility)
   (assert (counter (- ?counter-value 1)))
-)
-
-(defrule GENERATE-SOLUTIONS::cf-contribution-from-availability (declare (salience 1000))
-  (iteration ?i)
-  ?attribute-facility <- (attribute (name facility) (value ?name) (iteration ?i)) 
-  (facility (name ?name) (rooms-available ?rooms-available) (rooms-booked ?rooms-booked))  
-  ?considered <- (considered-hotels $?considered-hotels&:(not (member ?name $?considered-hotels)))
-  =>
-  (bind ?cf-contribution (+ (* (/ ?rooms-booked (+ ?rooms-booked ?rooms-available)) 0.4) -0.2))
-  (retract ?considered)
-  (assert (considered-hotels $?considered-hotels ?name))
-  (assert (attribute (name facility) (value ?name) (certainty ?cf-contribution) (iteration ?i)))
 )
 
 (defrule GENERATE-SOLUTIONS::end (declare (salience -10000))
