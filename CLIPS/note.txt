@@ -54,6 +54,11 @@ modellare distanza tramite slot di 30 km
 
 gestire numero di persone nelle camere
 
+controllare citta1 e 2 diverse nella regola generate-two-places-solutions in genereate solutions
+A parita di citta, si deve scartare la soluzione con cf minore. es:
+Genova - Massa - Firenze cf 0.4
+Genova - Massa - Firenze cf 0.2 ->Va scartata, non do in soluzione due alternative con stesse citta
+------------------------------------
 
 ******************************
 **   Domande obbligatorie   **
@@ -79,21 +84,10 @@ profilazione (vedere se continuare lo stesso con il sistema oppure no)
  - Tipi di turismo preferiti e non
  - (Dove sei stato l'altr'anno?)
 
-
-
-
-
-
-
-
-
-
 ;GENERIC INTERVAL TRANSFORMATION FORMULA (MAGIC)
 ; A 		B 			a 	b
 ; [-0.99, +0.99] --> [-0.4, +0.4] QUADRA SE UN HOTEL HA TUTTI I TURISMI E L'UTENTE LI VUOLE TUTTI AL MAX
 ; (val - A)*(b-a)/(B-A) + a
-
-
 
 
 ; CFtu  -1 -0.6 -0.2 0.2 0.6  1
