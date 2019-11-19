@@ -1,4 +1,4 @@
-(defmodule GENERATE-CITIES (import MAIN ?ALL) (import ITERATION-MANAGER ?ALL))
+(defmodule GENERATE-CITIES (import MAIN ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL))
 
 (deftemplate GENERATE-CITIES::city
   (slot name (type STRING))
@@ -161,6 +161,12 @@
     (cities-from-30-to-59 )
     (cities-from-60-to-89 "Biella")
     (cities-from-90-to-120 "Torino"))
+
+
+  (cf-cities-from-0-to-29 0.8)
+  (cf-cities-from-30-to-59 0.6)
+  (cf-cities-from-60-to-89 0.4)
+  (cf-cities-from-90-to-120 0.2)
 )
 
 ;Ho una confidenza in più sulla città da -0.2 a 0.2 in base ai turismi (più turismi ci sono in una città e più la confidenza sale)
