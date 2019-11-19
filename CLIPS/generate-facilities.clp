@@ -24,8 +24,10 @@
   (facility (name "Ostello della gioventu (VR)") (price 30) (city "Verona") (stars 1) (rooms-available 0) (rooms-booked 10) (services pet))
 
   (facility (name "Bella vista (GE)") (price 80) (city "Genova") (stars 3) (rooms-available 20) (rooms-booked 4) (services parking wifi tv pool pet))
+  (facility (name "Il porticciolo (GE)") (price 50) (city "Genova") (stars 2) (rooms-available 20) (rooms-booked 4) (services tv wifi))
 
   (facility (name "Al fresco (IM)") (price 30) (city "Imperia") (stars 1) (rooms-available 10) (rooms-booked 5) (services tv wifi))
+  (facility (name "Al caldo (IM)") (price 30) (city "Imperia") (stars 2) (rooms-available 10) (rooms-booked 5) (services tv wifi))
 
   (facility (name "Al sole (SV)") (price 45) (city "Savona") (stars 2) (rooms-available 10) (rooms-booked 1) (services parking pet tv))
 
