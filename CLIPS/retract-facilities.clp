@@ -11,7 +11,7 @@
 
 (defrule RETRACT-FACILITIES::retract-facilities-base-on-cf
   (iteration ?i)
-  ?attr <- (attribute (name facility) (value ?name) (certainty ?cf&:(< ?cf 0.4)) (iteration ?i)) ;TODO 0,4 o 0,6 ??
+  ?attr <- (attribute (name facility) (value ?name) (certainty ?cf&:(< ?cf 0.0)) (iteration ?i))
   =>
   (retract ?attr)
 )

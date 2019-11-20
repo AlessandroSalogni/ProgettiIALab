@@ -137,8 +137,8 @@
     (under-60 )
     (under-100 "Torino" "Biella"))
 
-  (cf-distance under-30 0.8)
-  (cf-distance under-60 0.4)
+  (cf-distance under-30 0.4)
+  (cf-distance under-60 0.2)
   (cf-distance under-90 0.0)
 )
 
