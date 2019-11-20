@@ -54,39 +54,18 @@
   (assert (solution (facilities ?facility) (cities ?city) (certainty ?cf) (number-places 1)))
 )
 
-(defrule GENERATE-SOLUTIONS::generate-two-places-solutions-under-30
+(defrule GENERATE-SOLUTIONS::generate-two-places-solutions
   (iteration ?i)
-  (near-cities (city1 ?city1) (city2 ?city2) (distance-range under-30))
+  (near-cities (city1 ?city1) (city2 ?city2) (distance-range ?distance-range))
+  (cf-distance ?distance-range ?cf-distance)
 
   (solution (facilities ?facility1) (cities ?city1) (certainty ?cf1) (number-places 1)) 
   (solution (facilities ?facility2) (cities ?city2) (certainty ?cf2) (number-places 1)) 
   =>
   (bind ?min-cf (min ?cf1 ?cf2))
-  (bind ?cf (- (+ ?min-cf 0.4) (* ?min-cf 0.4)))
-  (assert (solution (facilities ?facility1 ?facility2) (cities ?city1 ?city2) (certainty ?cf) (number-places 2))))
-
-(defrule GENERATE-SOLUTIONS::generate-two-places-solutions-under-60
-  (iteration ?i)
-  (near-cities (city1 ?city1) (city2 ?city2) (distance-range under-60))
-
-  (solution (facilities ?facility1) (cities ?city1) (certainty ?cf1) (number-places 1)) 
-  (solution (facilities ?facility2) (cities ?city2) (certainty ?cf2) (number-places 1)) 
-  =>
-  (bind ?min-cf (min ?cf1 ?cf2))
-  (bind ?cf (- (+ ?min-cf 0.4) (* ?min-cf 0.4)))
+  (bind ?cf (- (+ ?min-cf ?cf-distance) (* ?min-cf ?cf-distance)))
   (assert (solution (facilities ?facility1 ?facility2) (cities ?city1 ?city2) (certainty ?cf) (number-places 2)))
 )
-
-(defrule GENERATE-SOLUTIONS::generate-two-places-solutions-under-100
-  (iteration ?i)
-  (near-cities (city1 ?city1) (city2 ?city2) (distance-range under-100))
-
-  (solution (facilities ?facility1) (cities ?city1) (certainty ?cf1) (number-places 1)) 
-  (solution (facilities ?facility2) (cities ?city2) (certainty ?cf2) (number-places 1)) 
-  =>
-  (bind ?min-cf (min ?cf1 ?cf2))
-  (bind ?cf (- (+ ?min-cf 0.4) (* ?min-cf 0.4)))
-  (assert (solution (facilities ?facility1 ?facility2) (cities ?city1 ?city2) (certainty ?cf) (number-places 2))))
 
 (defrule GENERATE-SOLUTIONS::generate-three-places-solutions
   (iteration ?i)

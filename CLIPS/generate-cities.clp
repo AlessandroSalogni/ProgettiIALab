@@ -143,10 +143,9 @@
   (near-cities (city1 "Saint Vincent") (city2 "Aosta") (distance-range under-30))
   (near-cities (city1 "Saint Vincent") (city2 "Biella") (distance-range under-100))
 
-  (cf-cities-from-0-to-29 0.8)
-  (cf-cities-from-30-to-59 0.6)
-  (cf-cities-from-60-to-89 0.4)
-  (cf-cities-from-90-to-120 0.2)
+  (cf-distance under-30 0.8)
+  (cf-distance under-60 0.4)
+  (cf-distance under-90 0.0)
 )
 
 ;Ho una confidenza in più sulla città da -0.2 a 0.2 in base ai turismi (più turismi ci sono in una città e più la confidenza sale)
