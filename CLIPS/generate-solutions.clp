@@ -69,17 +69,15 @@
 
 (defrule GENERATE-SOLUTIONS::generate-three-places-solutions
   (iteration ?i)
-  (near-cities (city1 ?city1) (city2 ?city2) (distance-range under-100))
+  (near-cities (city1 ?city) (city2 ?city-near) (distance-range ?distance-range))
+  (cf-distance ?distance-range ?cf-distance)
 
-  (solution (facilities ?facility1) (cities ?city1) (certainty ?cf1) (number-places 1)) 
-
-  ?first-solution <- (two-places-solution $?prev-facility1 ?facility $?next-facility1 $?prev-city1 ?city $?next-city1 ?cf1)
-  ?second-solution <- (two-places-solution $?prev-facility2 ?facility $?next-facility2 $?prev-city2 ?city $?next-city2 ?cf2)
-  (test (neq ?first-solution ?second-solution))
+  (solution (facilities ?facility1) (cities ?city1&:(or (eq ?city1 ?city) (eq ?city1 ?city-near))) (certainty ?cf1) (number-places 1)) 
+  (solution (facilities $?facilities2) (cities $?prev&:(not (member ?city1 ?prev)) ?city2&~?city1&:(or (eq ?city2 ?city) (eq ?city2 ?city-near)) $?next&:(not (member ?city1 ?next))) (certainty ?cf2) (number-places 2)) 
   =>
   (bind ?min-cf (min ?cf1 ?cf2))
-  (assert (three-places-solution $?prev-facility1 $?next-facility1 ?facility $?prev-facility2 $?next-facility2 
-    $?prev-city1 $?next-city1 ?city $?prev-city2 $?next-city2 ?min-cf)) 
+  (bind ?cf (- (+ ?min-cf ?cf-distance) (* ?min-cf ?cf-distance)))
+  (assert (solution (facilities ?facilities2 ?facility1) (cities $?prev ?city2 $?next ?city1) (certainty ?cf) (number-places 3))) 
 )
 
 
