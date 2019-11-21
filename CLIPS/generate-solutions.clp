@@ -75,6 +75,13 @@
   (assert (solution (facilities ?facilities2 ?facility1) (cities $?prev ?city2 $?next ?city1) (certainty ?cf) (number-places 3))) 
 )
 
+(defrule GENERATE-SOLUTIONS::delete-solutions-with-same-cities-and-different-hotels-taking-the-maximun
+  (solution (facilities $?facilities1) (cities $?cities) (certainty ?cf1) (number-places 3))
+  ?solution-to-delete <- (solution (facilities $?facilities2&:(neq $?facilities2 $?facilities1)) (cities $?cities) (certainty ?cf2&:(<= ?cf2 ?cf1)) (number-places 3))
+  =>
+  (retract ?solution-to-delete)
+)
+
 ; (defrule GENERATE-SOLUTIONS::decrease-number-places (declare (salience -1000))
 ;   (counter ?value&:(> ?value 0))
 ;   ?fact-number-places <- (user-attribute (name number-places) (values ?number-places&:(> ?number-places 1)))
