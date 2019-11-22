@@ -19,17 +19,11 @@
   (printout t " Services: " $?services t t)
 )
 
-(defrule PRINT-RESULTS::delete-empty-fact
+(defrule PRINT-RESULTS::retract-empty-solution
   (iteration ?i)
-  ?sol <- (solution (facilities) (certainty ?cf-max))
+  ?sol <- (solution (facilities) (certainty ?cf))
   =>
   (retract ?sol)
-  (format t " CERTAINTY FACTOR: %f%n%n%n" ?cf-max)
+  (format t " CERTAINTY FACTOR: %f%n%n%n" ?cf)
   (printout t " ----------------------------------------------------------------------------------------------------------" t t)
-)
-
-(defrule PRINT-RESULTS::end-iteration (declare (salience -10))
-  (iteration ?i)
-  =>
-  (printout t t)
 )
