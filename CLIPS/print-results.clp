@@ -24,6 +24,6 @@
   ?sol <- (solution (facilities) (certainty ?cf))
   =>
   (retract ?sol)
-  (format t " CERTAINTY FACTOR: %f%n%n%n" ?cf)
+  (format t " CERTAINTY FACTOR: %f%n%n" ?cf)
   (printout t " ----------------------------------------------------------------------------------------------------------" t t)
 )
