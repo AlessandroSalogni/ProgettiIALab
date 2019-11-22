@@ -28,8 +28,10 @@
 )
 
 (defrule EXTRACT-SOLUTIONS::end (declare (salience -10000))
-  (iteration ?i)
-  ?counter <- (counter ?x)
+  (or
+    ?fact <- (possible-solution)
+    ?fact <- (counter ?x)
+  )
   =>
-  (retract ?counter)
+  (retract ?fact)
 )

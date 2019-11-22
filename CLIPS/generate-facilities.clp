@@ -134,7 +134,7 @@
   (iteration ?i)
   ?attribute-facility <- (attribute (name facility) (value ?name) (iteration ?i)) 
   (facility (name ?name) (rooms-available ?rooms-available) (rooms-booked ?rooms-booked))  
-  ?considered <- (considered-hotels $?considered-hotels&:(not (member ?name $?considered-hotels)))
+  ?considered <- (considered-hotels $?considered-hotels&:(not (member ?name $?considered-hotels))) ; TODO eliminare alla fine ???
   =>
   (bind ?cf-contribution (+ (* (/ ?rooms-available (+ ?rooms-booked ?rooms-available)) 0.8) -0.4))
   (retract ?considered)
