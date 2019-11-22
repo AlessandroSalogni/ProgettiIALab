@@ -139,7 +139,7 @@
 
   (cf-distance under-30 0.4)
   (cf-distance under-60 0.2)
-  (cf-distance under-90 0.0)
+  (cf-distance under-100 0.0)
 )
 
 (defrule GENERATE-CITIES::generate-near-cities-under-30
