@@ -27,20 +27,27 @@
   (focus GENERATE-CITIES GENERATE-FACILITIES RETRACT-FACILITIES OPERATIONS-ON-FACILITIES)
 )
 
-; (defrule GENERATE-SOLUTIONS::find-one-place-solutions 
-;   (iteration ?i)
-;   ;(user-attribute (name number-places) (values 1))
-;   ?counter <- (counter ?counter-value&:(> ?counter-value 0))
-;   ?attribute-facility <- (attribute (name facility) (value ?name) (certainty ?cf-max) (iteration ?i)) 
-;   (not (attribute (name facility) (certainty ?cf&:(> ?cf ?cf-max)) (iteration ?i)))
-;   (facility (name ?name) (city ?city) (price ?price) (stars ?stars) (services $?services) (rooms-available ?rooms-available) (rooms-booked ?rooms-booked))  
-;   =>
-;   (assert 
-;     (solution (facility ?name) (city ?city) (price ?price) (stars ?stars) (service ?services) (rooms-available ?rooms-available) (rooms-booked (+ ?rooms-available ?rooms-booked)) (certainty ?cf-max))
-;   )  
-;   (retract ?counter ?attribute-facility)
-;   (assert (counter (- ?counter-value 1)))
-; )
+(defrule GENERATE-SOLUTIONS::find-5-solutions (declare (salience -100))
+  (iteration ?i)
+  ?counter <- (counter ?counter-value&:(> ?counter-value 0))
+  (user-attribute (name number-places) (values ?user-number-places))
+  ?selected-solution <- 
+  (solution 
+    (facilities $?selected-facilities) (cities $?selected-cities) (certainty ?cf-max)
+    (number-places ?selected-number-places&:(or(eq ?user-number-places ?selected-number-places) (eq ?selected-number-places (- ?user-number-places 1))))
+  )
+  (not 
+    (solution (facilities $?facilities) (cities $?cities) (certainty ?cf&:(> ?cf ?cf-max)) 
+      (number-places ?number-places&:(or(eq ?user-number-places ?number-places) (eq ?number-places (- ?user-number-places 1))))
+    )
+  )
+  =>
+  (assert 
+    (final-solution $?selected-facilities ?cf-max)
+  )  
+  (retract ?counter ?selected-solution)
+  (assert (counter (- ?counter-value 1)))
+)
 
 (defrule GENERATE-SOLUTIONS::generate-one-places-solutions
   (iteration ?i)
@@ -53,7 +60,7 @@
 
 (defrule GENERATE-SOLUTIONS::generate-n-places-solutions
   (iteration ?i)
-  (user-attribute (name number-places) (value ?n-max))
+  (user-attribute (name number-places) (values ?n-max))
 
   (near-cities (city1 ?city) (city2 ?city-near) (distance-range ?distance-range))
   (cf-distance ?distance-range ?cf-distance)
@@ -82,13 +89,6 @@
   =>
   (retract ?sol2)
 )
-
-; (defrule GENERATE-SOLUTIONS::decrease-number-places (declare (salience -1000))
-;   (counter ?value&:(> ?value 0))
-;   ?fact-number-places <- (user-attribute (name number-places) (values ?number-places&:(> ?number-places 1)))
-;   =>
-;   (modify ?fact-number-places (values (- ?number-places 1)))
-; )
 
 (defrule GENERATE-SOLUTIONS::end (declare (salience -10000))
   (iteration ?i)
