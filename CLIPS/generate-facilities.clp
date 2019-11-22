@@ -1,7 +1,6 @@
 (defmodule GENERATE-FACILITIES (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL)) 
 
 (deftemplate GENERATE-FACILITIES::facility
-  (slot id (default-dynamic (gensym*)))
   (slot name (type STRING))
   (slot city (type STRING))
   (slot price (type INTEGER))
