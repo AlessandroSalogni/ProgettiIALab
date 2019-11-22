@@ -14,8 +14,11 @@
 (deftemplate GENERATE-SOLUTIONS::solution
   (multislot facilities)
   (multislot cities)
-  (slot certainty)
+  (slot certainty (type FLOAT))
+  (slot min-cf-incremental-solution (type FLOAT))
+  (multislot sum-cf-distance-incremental-solution (type FLOAT) (default 0.0))
   (slot number-places (type INTEGER))
+  (slot order (default FALSE) (allowed-symbols TRUE FALSE))
 )
 
 (defrule GENERATE-SOLUTIONS::start (declare (salience 10000))
@@ -46,40 +49,74 @@
   (attribute (name facility) (value ?facility) (certainty ?cf) (iteration ?i))
   (facility (name ?facility) (city ?city))
   =>
-  (assert (solution (facilities ?facility) (cities ?city) (certainty ?cf) (number-places 1)))
+  (assert (solution (facilities ?facility) (cities ?city) (certainty ?cf) (min-cf-incremental-solution ?cf) (number-places 1) (order TRUE)))
 )
 
-(defrule GENERATE-SOLUTIONS::generate-two-places-solutions
-  (iteration ?i)
-  (near-cities (city1 ?city1) (city2 ?city2) (distance-range ?distance-range))
-  (cf-distance ?distance-range ?cf-distance)
+; (defrule GENERATE-SOLUTIONS::generate-two-places-solutions
+;   (iteration ?i)
+;   (near-cities (city1 ?city1) (city2 ?city2) (distance-range ?distance-range))
+;   (cf-distance ?distance-range ?cf-distance)
 
-  (solution (facilities ?facility1) (cities ?city1) (certainty ?cf1) (number-places 1)) 
-  (solution (facilities ?facility2) (cities ?city2) (certainty ?cf2) (number-places 1)) 
-  =>
-  (bind ?min-cf (min ?cf1 ?cf2))
-  (bind ?cf (- (+ ?min-cf ?cf-distance) (* ?min-cf ?cf-distance)))
-  (assert (solution (facilities ?facility1 ?facility2) (cities ?city1 ?city2) (certainty ?cf) (number-places 2)))
-)
+;   (solution (facilities ?facility1) (cities ?city1) (certainty ?cf1) (number-places 1)) 
+;   (solution (facilities ?facility2) (cities ?city2) (certainty ?cf2) (number-places 1)) 
+;   =>
+;   (bind ?min-cf (min ?cf1 ?cf2))
+;   (bind ?cf (- (+ ?min-cf ?cf-distance) (* ?min-cf ?cf-distance)))
+;   (assert (solution (facilities ?facility1 ?facility2) (cities ?city1 ?city2) (certainty ?cf) (certainty-without-add ?min-cf) (number-places 2)))
+; )
 
-(defrule GENERATE-SOLUTIONS::generate-three-places-solutions
+(defrule GENERATE-SOLUTIONS::generate-n-places-solutions
   (iteration ?i)
   (near-cities (city1 ?city) (city2 ?city-near) (distance-range ?distance-range))
   (cf-distance ?distance-range ?cf-distance)
 
-  (solution (facilities ?facility1) (cities ?city1&:(or (eq ?city1 ?city) (eq ?city1 ?city-near))) (certainty ?cf1) (number-places 1)) 
-  (solution (facilities $?facilities2) (cities $?prev&:(not (member ?city1 ?prev)) ?city2&~?city1&:(or (eq ?city2 ?city) (eq ?city2 ?city-near)) $?next&:(not (member ?city1 ?next))) (certainty ?cf2) (number-places 2)) 
+  (solution (facilities ?facility1) (cities ?city1&:(or (eq ?city1 ?city) (eq ?city1 ?city-near))) (certainty ?cf1) (number-places 1))   
+  (solution (facilities $?facilities2) (cities $?cities2&:(not (member ?city1 ?cities2))&:(or (member ?city ?cities2) (member ?city-near ?cities2)))
+    (min-cf-incremental-solution ?cf-min2) (sum-cf-distance-incremental-solution ?cf-sum-distance2) (number-places ?n2)) 
+
+  (not (solution (facilities ?facility1 $?facilities2) (number-places ?n&:(eq ?n (+ 1 ?n2)))))
   =>
-  (bind ?min-cf (min ?cf1 ?cf2))
-  (bind ?cf (- (+ ?min-cf ?cf-distance) (* ?min-cf ?cf-distance)))
-  (assert (solution (facilities ?facilities2 ?facility1) (cities $?prev ?city2 $?next ?city1) (certainty ?cf) (number-places 3))) 
+  (bind ?min-cf (min ?cf1 ?cf-min2))
+  (bind ?mean-cf-distance (/ (+ ?cf-distance ?cf-sum-distance2) ?n2))
+  (bind ?cf (- (+ ?min-cf ?mean-cf-distance) (* ?min-cf ?mean-cf-distance)))
+  (assert (solution (facilities ?facilities2 ?facility1) (cities ?cities2) (certainty ?cf) (min-cf-incremental-solution ?min-cf)
+    (sum-cf-distance-incremental-solution (+ ?cf-distance ?cf-sum-distance2)) (number-places (+ 1 ?n2)))) 
+  (assert (insert-city ?city1))
+)
+
+(defrule GENERATE-SOLUTIONS::order-last-city-left (declare (salience 100))
+  ?insert-city <- (insert-city ?city)
+  ?sol <- (solution (cities ?city1&:(> (str-compare ?city1 ?city) 0) $?next-cities) (order FALSE))
+  =>
+  (bind ?cities ?city ?city1 ?next-cities)
+  (modify ?sol (cities ?cities) (order TRUE))
+  (retract ?insert-city)
+)
+
+(defrule GENERATE-SOLUTIONS::order-last-city-middle (declare (salience 100))
+  ?insert-city <- (insert-city ?city)
+  ?sol <- (solution (cities $?prev-cities ?city1&:(< (str-compare ?city1 ?city) 0) ?city2&:(< (str-compare ?city2 ?city) 0) $?next-cities) (order FALSE))
+  =>
+  (bind ?cities ?prev-cities ?city1 ?city ?city2 ?next-cities)
+  (modify ?sol (cities ?cities) (order TRUE))
+  (retract ?insert-city)
+)
+
+(defrule GENERATE-SOLUTIONS::order-last-city-left (declare (salience 100))
+  ?insert-city <- (insert-city ?city)
+  ?sol <- (solution (cities $?prev-cities ?city1&:(< (str-compare ?city1 ?city) 0)) (order FALSE))
+  =>
+  (bind ?cities ?prev-cities ?city1 ?city)
+  (modify ?sol (cities ?cities) (order TRUE))
+  (retract ?insert-city)
 )
 
 (defrule GENERATE-SOLUTIONS::delete-solutions-with-same-cities-and-different-hotels-taking-the-maximun
-  (solution (facilities $?facilities1) (cities $?cities) (certainty ?cf1) (number-places 3))
-  ?solution-to-delete <- (solution (facilities $?facilities2&:(neq $?facilities2 $?facilities1)) (cities $?cities) (certainty ?cf2&:(<= ?cf2 ?cf1)) (number-places 3))
+  ?sol1 <- (solution (cities $?cities) (certainty ?cf1) (number-places 3))
+  ?sol2 <- (solution (cities $?cities) (certainty ?cf2&:(<= ?cf2 ?cf1)) (number-places 3))
+  (test (neq ?sol1 ?sol2))
   =>
-  (retract ?solution-to-delete)
+  (retract ?sol2)
 )
 
 ; (defrule GENERATE-SOLUTIONS::decrease-number-places (declare (salience -1000))
