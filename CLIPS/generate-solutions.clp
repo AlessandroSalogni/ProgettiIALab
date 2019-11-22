@@ -18,7 +18,6 @@
   (slot min-cf-incremental-solution (type FLOAT))
   (multislot sum-cf-distance-incremental-solution (type FLOAT) (default 0.0))
   (slot number-places (type INTEGER))
-  (slot order (default FALSE) (allowed-symbols TRUE FALSE))
 )
 
 (defrule GENERATE-SOLUTIONS::start (declare (salience 10000))
@@ -49,21 +48,8 @@
   (attribute (name facility) (value ?facility) (certainty ?cf) (iteration ?i))
   (facility (name ?facility) (city ?city))
   =>
-  (assert (solution (facilities ?facility) (cities ?city) (certainty ?cf) (min-cf-incremental-solution ?cf) (number-places 1) (order TRUE)))
+  (assert (solution (facilities ?facility) (cities ?city) (certainty ?cf) (min-cf-incremental-solution ?cf) (number-places 1)))
 )
-
-; (defrule GENERATE-SOLUTIONS::generate-two-places-solutions
-;   (iteration ?i)
-;   (near-cities (city1 ?city1) (city2 ?city2) (distance-range ?distance-range))
-;   (cf-distance ?distance-range ?cf-distance)
-
-;   (solution (facilities ?facility1) (cities ?city1) (certainty ?cf1) (number-places 1)) 
-;   (solution (facilities ?facility2) (cities ?city2) (certainty ?cf2) (number-places 1)) 
-;   =>
-;   (bind ?min-cf (min ?cf1 ?cf2))
-;   (bind ?cf (- (+ ?min-cf ?cf-distance) (* ?min-cf ?cf-distance)))
-;   (assert (solution (facilities ?facility1 ?facility2) (cities ?city1 ?city2) (certainty ?cf) (certainty-without-add ?min-cf) (number-places 2)))
-; )
 
 (defrule GENERATE-SOLUTIONS::generate-n-places-solutions
   (iteration ?i)
@@ -79,45 +65,23 @@
   (bind ?min-cf (min ?cf1 ?cf-min2))
   (bind ?mean-cf-distance (/ (+ ?cf-distance ?cf-sum-distance2) ?n2))
   (bind ?cf (- (+ ?min-cf ?mean-cf-distance) (* ?min-cf ?mean-cf-distance)))
-  (assert (solution (facilities ?facilities2 ?facility1) (cities ?cities2) (certainty ?cf) (min-cf-incremental-solution ?min-cf)
+  (assert (solution (facilities ?facilities2 ?facility1) (cities ?cities2 ?city1) (certainty ?cf) (min-cf-incremental-solution ?min-cf)
     (sum-cf-distance-incremental-solution (+ ?cf-distance ?cf-sum-distance2)) (number-places (+ 1 ?n2)))) 
-  (assert (insert-city ?city1))
 )
 
-(defrule GENERATE-SOLUTIONS::order-last-city-left (declare (salience 100))
-  ?insert-city <- (insert-city ?city)
-  ?sol <- (solution (cities ?city1&:(> (str-compare ?city1 ?city) 0) $?next-cities) (order FALSE))
+(defrule GENERATE-SOLUTIONS::sort-cities-in-solution (declare (salience 100)) ;Posso ordinare ogni volta
+  ?sol <- (solution (cities $?head ?city-next $?tail ?city&:(< (str-compare ?city ?city-next) 0)))
   =>
-  (bind ?cities ?city ?city1 ?next-cities)
-  (modify ?sol (cities ?cities) (order TRUE))
-  (retract ?insert-city)
+  (modify ?sol (cities ?head ?city ?city-next ?tail))
 )
 
-(defrule GENERATE-SOLUTIONS::order-last-city-middle (declare (salience 100))
-  ?insert-city <- (insert-city ?city)
-  ?sol <- (solution (cities $?prev-cities ?city1&:(< (str-compare ?city1 ?city) 0) ?city2&:(< (str-compare ?city2 ?city) 0) $?next-cities) (order FALSE))
-  =>
-  (bind ?cities ?prev-cities ?city1 ?city ?city2 ?next-cities)
-  (modify ?sol (cities ?cities) (order TRUE))
-  (retract ?insert-city)
-)
-
-(defrule GENERATE-SOLUTIONS::order-last-city-left (declare (salience 100))
-  ?insert-city <- (insert-city ?city)
-  ?sol <- (solution (cities $?prev-cities ?city1&:(< (str-compare ?city1 ?city) 0)) (order FALSE))
-  =>
-  (bind ?cities ?prev-cities ?city1 ?city)
-  (modify ?sol (cities ?cities) (order TRUE))
-  (retract ?insert-city)
-)
-
-(defrule GENERATE-SOLUTIONS::delete-solutions-with-same-cities-and-different-hotels-taking-the-maximun
-  ?sol1 <- (solution (cities $?cities) (certainty ?cf1) (number-places 3))
-  ?sol2 <- (solution (cities $?cities) (certainty ?cf2&:(<= ?cf2 ?cf1)) (number-places 3))
-  (test (neq ?sol1 ?sol2))
-  =>
-  (retract ?sol2)
-)
+; (defrule GENERATE-SOLUTIONS::delete-solutions-with-same-cities-and-different-hotels-taking-the-maximun
+;   ?sol1 <- (solution (cities $?cities) (certainty ?cf1) (number-places ?n))
+;   ?sol2 <- (solution (cities $?cities) (certainty ?cf2&:(<= ?cf2 ?cf1)) (number-places ?n))
+;   (test (neq ?sol1 ?sol2))
+;   =>
+;   (retract ?sol2)
+; )
 
 ; (defrule GENERATE-SOLUTIONS::decrease-number-places (declare (salience -1000))
 ;   (counter ?value&:(> ?value 0))
