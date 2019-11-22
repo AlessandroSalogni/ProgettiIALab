@@ -1,6 +1,7 @@
 (defmodule GENERATE-FACILITIES (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL)) 
 
 (deftemplate GENERATE-FACILITIES::facility
+  (slot id (default-dynamic (gensym*)))
   (slot name (type STRING))
   (slot city (type STRING))
   (slot price (type INTEGER))
@@ -50,6 +51,8 @@
   (facility (name "Trentuno (TR)") (price 10) (city "Trento") (stars 1) (rooms-available 1) (rooms-booked 4) (services tv pet))
   (facility (name "Vento (TR)") (price 65) (city "Trento") (stars 3) (rooms-available 3) (rooms-booked 9) (services tv wifi parking pool))
   (facility (name "Baita tedesca (TR)") (price 80) (city "Trento") (stars 3) (rooms-available 4) (rooms-booked 2) (services tv spa wifi air-conditioning pet))
+
+  (considered-hotels)
 )
 
 ;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base alle stelle
@@ -127,11 +130,15 @@
   (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.2 -1)) (iteration ?i)))
 )
 
-;l'utente non ha detto niente sul service
-;TODO il service è presente nell'hotel (è un di piu, lo apprezzo con 0.1?)
-; (defrule GENERATE-FACILITIES::generate-facility-from-services-3
-;   (facility (name ?name) (services $? $?service $?))
-;   (not (attribute (name service) (value $?service)))
-;   =>
-;   (assert (attribute (name facility) (value ?name) (certainty 0.1)))
-; )
+;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base all'ocupazione della struttura
+(defrule GENERATE-FACILITIES::generate-facility-from-availability ; TODO tenere qua o spostare di nuovo in un altro modulo ???
+  (iteration ?i)
+  ?attribute-facility <- (attribute (name facility) (value ?name) (iteration ?i)) 
+  (facility (name ?name) (rooms-available ?rooms-available) (rooms-booked ?rooms-booked))  
+  ?considered <- (considered-hotels $?considered-hotels&:(not (member ?name $?considered-hotels)))
+  =>
+  (bind ?cf-contribution (+ (* (/ ?rooms-available (+ ?rooms-booked ?rooms-available)) 0.8) -0.4))
+  (retract ?considered)
+  (assert (considered-hotels $?considered-hotels ?name))
+  (assert (attribute (name facility) (value ?name) (certainty ?cf-contribution) (iteration ?i)))
+)

@@ -11,7 +11,7 @@
 
 (defrule RETRACT-FACILITIES::retract-facilities-base-on-cf
   (iteration ?i)
-  ?attr <- (attribute (name facility) (value ?name) (certainty ?cf&:(< ?cf 0.1)) (iteration ?i))
+  ?attr <- (attribute (name facility) (value ?name) (certainty ?cf&:(< ?cf 0.4)) (iteration ?i)) ; TODO l'ho alzato perchè c'è anche la disponibilità calcolata prima
   =>
   (retract ?attr)
 )
