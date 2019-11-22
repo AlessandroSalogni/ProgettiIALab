@@ -53,14 +53,14 @@
 
 (defrule GENERATE-SOLUTIONS::generate-n-places-solutions
   (iteration ?i)
+  (user-attribute (name number-places) (value ?n-max))
+
   (near-cities (city1 ?city) (city2 ?city-near) (distance-range ?distance-range))
   (cf-distance ?distance-range ?cf-distance)
 
   (solution (facilities ?facility1) (cities ?city1&:(or (eq ?city1 ?city) (eq ?city1 ?city-near))) (certainty ?cf1) (number-places 1))   
   (solution (facilities $?facilities2) (cities $?cities2&:(not (member ?city1 ?cities2))&:(or (member ?city ?cities2) (member ?city-near ?cities2)))
-    (min-cf-incremental-solution ?cf-min2) (sum-cf-distance-incremental-solution ?cf-sum-distance2) (number-places ?n2)) 
-
-  (not (solution (facilities ?facility1 $?facilities2) (number-places ?n&:(eq ?n (+ 1 ?n2)))))
+    (min-cf-incremental-solution ?cf-min2) (sum-cf-distance-incremental-solution ?cf-sum-distance2) (number-places ?n2&:(< ?n2 ?n-max))) 
   =>
   (bind ?min-cf (min ?cf1 ?cf-min2))
   (bind ?mean-cf-distance (/ (+ ?cf-distance ?cf-sum-distance2) ?n2))
@@ -69,19 +69,19 @@
     (sum-cf-distance-incremental-solution (+ ?cf-distance ?cf-sum-distance2)) (number-places (+ 1 ?n2)))) 
 )
 
-(defrule GENERATE-SOLUTIONS::sort-cities-in-solution (declare (salience 100)) ;Posso ordinare ogni volta
-  ?sol <- (solution (cities $?head ?city-next $?tail ?city&:(< (str-compare ?city ?city-next) 0)))
+(defrule GENERATE-SOLUTIONS::sort-cities-in-solution
+  ?sol <- (solution (cities $?head ?city-next ?city&:(< (str-compare ?city ?city-next) 0) $?tail))
   =>
   (modify ?sol (cities ?head ?city ?city-next ?tail))
 )
 
-; (defrule GENERATE-SOLUTIONS::delete-solutions-with-same-cities-and-different-hotels-taking-the-maximun
-;   ?sol1 <- (solution (cities $?cities) (certainty ?cf1) (number-places ?n))
-;   ?sol2 <- (solution (cities $?cities) (certainty ?cf2&:(<= ?cf2 ?cf1)) (number-places ?n))
-;   (test (neq ?sol1 ?sol2))
-;   =>
-;   (retract ?sol2)
-; )
+(defrule GENERATE-SOLUTIONS::retract-solutions-with-same-cities
+  ?sol1 <- (solution (cities $?cities) (certainty ?cf1) (number-places ?n))
+  ?sol2 <- (solution (cities $?cities) (certainty ?cf2&:(<= ?cf2 ?cf1)) (number-places ?n))
+  (test (neq ?sol1 ?sol2))
+  =>
+  (retract ?sol2)
+)
 
 ; (defrule GENERATE-SOLUTIONS::decrease-number-places (declare (salience -1000))
 ;   (counter ?value&:(> ?value 0))
