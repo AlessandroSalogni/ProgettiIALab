@@ -106,7 +106,7 @@
 
 (defrule EXPERTISE::expertise-general-rule
   (iteration ?i)
-  (user-attribute (name ?user-attribute) (values $? ?value $?) (type ?type))
+  (user-attribute (name ?user-attribute) (values $? ?value $?) (type ?type) (desire TRUE)) ;TODO vedere se negare expertise
   (expertise (user-attribute ?user-attribute) (value ?value) (type ?type) 
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
   =>
