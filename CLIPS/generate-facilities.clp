@@ -144,9 +144,7 @@
 
 (defrule GENERATE-FACILITIES::reset-considered-hotels  (declare (salience -10))
   ?considered <- (considered-hotels $?)
-  
   =>
-  (halt)
   (retract ?considered)
   (assert (considered-hotels))
   (return)
