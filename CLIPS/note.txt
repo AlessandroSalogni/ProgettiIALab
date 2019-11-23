@@ -75,7 +75,6 @@ Genova - Massa - Firenze cf 0.2 ->Va scartata, non do in soluzione due alternati
 Il sistema parte con la supposizione di avere una profilazione completa per l'utente. Se non esiste la
 profilazione (vedere se continuare lo stesso con il sistema oppure no)
 
-
  - Nome Cognome
  - Età
  - Giorni di ferie
@@ -88,7 +87,6 @@ profilazione (vedere se continuare lo stesso con il sistema oppure no)
 ; A 		B 			a 	b
 ; [-0.99, +0.99] --> [-0.4, +0.4] QUADRA SE UN HOTEL HA TUTTI I TURISMI E L'UTENTE LI VUOLE TUTTI AL MAX
 ; (val - A)*(b-a)/(B-A) + a
-
 
 ; CFtu  -1 -0.6 -0.2 0.2 0.6  1
 ; score  0   1    2    3   4   5
@@ -118,3 +116,15 @@ profilazione (vedere se continuare lo stesso con il sistema oppure no)
 ; int 0.6 -> 0.4
 ; int 1.2 -> -0.2
 ; int 1.6 -> -0.6
+
+----------------------------------------------
+;COSE DA CHIEDERE A MICALIZIO
+;Chiedere se meglio tagliare soluzioni con cf inferiori a parita di citta, oppure tenerle
+
+;TODO LIST
+;Chiedere budget anche in optional magari ritrattando mandatory
+;budget massimo e divido per numero di giorni	
+;Controllare n soluzioni in base a k giorni
+;Aggiungere varia expertise, inventarci qualcosa
+;Creare scenari
+;Fare domanda number places
