@@ -60,4 +60,5 @@
   (parameter (name number-people) (range 1 10))
   (parameter (name number-days) (range 1 30))
   (parameter (name budget-per-day) (range 10 300))
+  (parameter (name number-places) (range 1 3))
 )
