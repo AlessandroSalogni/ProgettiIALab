@@ -17,8 +17,6 @@
   ?counter <- (counter ?counter-value&:(> ?counter-value 0))
   (user-attribute (name number-places) (values ?n-max))
 
-  ;?sol <- (possible-solution (facilities $?facilities) (certainty ?cf-max) (number-places ?n1&:(or(eq ?n-max ?n1) (eq ?n1 (- ?n-max 1)))))
-  ;(not (possible-solution (certainty ?cf&:(> ?cf ?cf-max)) (number-places ?n2&:(or(eq ?n-max ?n2) (eq ?n2 (- ?n-max 1))))))
   ?sol <- (possible-solution (facilities $?facilities) (certainty ?cf-max) (number-places ?n-max))
   (not (possible-solution (certainty ?cf&:(> ?cf ?cf-max)) (number-places ?n-max)))
   =>

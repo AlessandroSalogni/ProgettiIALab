@@ -130,11 +130,11 @@
 )
 
 ;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base all'ocupazione della struttura
-(defrule GENERATE-FACILITIES::generate-facility-from-availability ; TODO tenere qua o spostare di nuovo in un altro modulo ???
+(defrule GENERATE-FACILITIES::generate-facility-from-availability
   (iteration ?i)
   ?attribute-facility <- (attribute (name facility) (value ?name) (iteration ?i)) 
   (facility (name ?name) (rooms-available ?rooms-available) (rooms-booked ?rooms-booked))  
-  ?considered <- (considered-hotels $?considered-hotels&:(not (member ?name $?considered-hotels))) ; TODO eliminare alla fine ???
+  ?considered <- (considered-hotels $?considered-hotels&:(not (member ?name $?considered-hotels)))
   =>
   (bind ?cf-contribution (+ (* (/ ?rooms-available (+ ?rooms-booked ?rooms-available)) 0.8) -0.4))
   (retract ?considered)
