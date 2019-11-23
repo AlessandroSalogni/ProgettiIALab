@@ -58,11 +58,12 @@
   (assert (attribute (name ?name) (value ?value) (certainty 0.4) (iteration ?i)))
 )
 
-(defrule SET-USER-ATTRIBUTE::change-range-of-number-places-bse-on-numer-days (auto-focus TRUE)
+(defrule SET-USER-ATTRIBUTE::change-range-of-number-places-base-on-numer-days (declare (auto-focus TRUE))
   (user-attribute (name number-days) (values ?n-days))
-  ?par <- (parameter (name number-places) (range ?min ?max))
+  ?par <- (parameter (name number-places) (range ?min ?max));Forse scatta due volte
   =>
-  (modify ?par (range ?min (min ?max ?n-days)))
+  (modify ?par (range ?min (min 3 ?n-days)))
+  (return)
 )
 
 (deffacts SET-USER-ATTRIBUTE::define-class-user-attribute
