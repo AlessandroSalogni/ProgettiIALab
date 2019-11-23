@@ -16,6 +16,34 @@
   (multislot values)
   (slot desire (default TRUE) (allowed-symbols TRUE FALSE))
   (slot type (allowed-symbols mandatory optional profile inferred) (default optional))
+  (slot id (default-dynamic (gensym*)))
+)
+
+(defrule USER-INTERACTION::combine-user-attribute
+  (declare (salience 100) (auto-focus TRUE))
+  ?attr1 <- (user-attribute (name ?name) (values $?val1) (desire ?desire) (type ?type))
+  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(not (member ?val2 $?val1))) (desire ?desire) (type ?type))
+  (test (neq ?attr1 ?attr2))
+  =>
+  (retract ?attr1)
+  (modify ?attr2 (values $?val1 ?val2))
+)
+
+(defrule USER-INTERACTION::retract-duplicate-user-attribute
+  (declare (salience 100) (auto-focus TRUE))
+  ?attr1 <- (user-attribute (name ?name) (values ?val) (desire ?desire) (type ?type))
+  ?attr2 <- (user-attribute (name ?name) (values $?prev ?val $?next) (desire ?desire) (type ?type))
+  (test (neq ?attr1 ?attr2))
+  =>
+  (retract ?attr1)
+)
+
+(defrule USER-INTERACTION::retract-contraddictory-user-attribute
+  (declare (salience 100) (auto-focus TRUE))
+  ?attr1 <- (user-attribute (name ?name) (values $?prev1 ?val $?next1) (desire ?des1) (type ?type) (id ?id1))
+  ?attr2 <- (user-attribute (name ?name) (values $?prev2 ?val $?next2) (desire ?des2&~?des1) (type ?type) (id ?id2&:(> (str-compare ?id1 ?id2) 0)))
+  =>
+  (modify ?attr2 (values $?prev2 $?next2)) 
 )
 
 (deftemplate USER-INTERACTION::menu-question

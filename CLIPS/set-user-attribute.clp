@@ -20,25 +20,6 @@
 	(focus OPTIONAL-QUESTIONS)
 )
 
-(defrule SET-USER-ATTRIBUTE::combine-user-attribute
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values $?val1) (desire ?desire) (type ?type))
-  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(not (member ?val2 $?val1))) (desire ?desire) (type ?type))
-  (test (neq ?attr1 ?attr2))
-  =>
-  (retract ?attr2)
-  (modify ?attr1 (values $?val1 ?val2))
-)
-
-(defrule SET-USER-ATTRIBUTE::retract-duplicate-user-attribute
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values $?val1) (type ?type))
-  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(member ?val2 $?val1)) (type ?type))
-  (test (neq ?attr1 ?attr2))
-  =>
-  (retract ?attr2)
-)
-
 (defrule SET-USER-ATTRIBUTE::create-user-attribute-class
   (class-user-attribute 
     (user-attribute ?user-attribute) 
