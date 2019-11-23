@@ -141,3 +141,13 @@
   (assert (considered-hotels $?considered-hotels ?name))
   (assert (attribute (name facility) (value ?name) (certainty ?cf-contribution) (iteration ?i)))
 )
+
+(defrule GENERATE-FACILITIES::reset-considered-hotels  (declare (salience -10))
+  ?considered <- (considered-hotels $?)
+  
+  =>
+  (halt)
+  (retract ?considered)
+  (assert (considered-hotels))
+  (return)
+)
