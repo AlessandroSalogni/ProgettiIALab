@@ -124,7 +124,5 @@ profilazione (vedere se continuare lo stesso con il sistema oppure no)
 ;TODO LIST
 ;Chiedere budget anche in optional magari ritrattando mandatory
 ;budget massimo e divido per numero di giorni	
-;Controllare n soluzioni in base a k giorni
 ;Aggiungere varia expertise, inventarci qualcosa
 ;Creare scenari
-;Fare domanda number places
