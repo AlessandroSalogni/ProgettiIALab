@@ -29,14 +29,15 @@
   (modify ?attr2 (values $?val1 ?val2))
 )
 
-;TODO : Rsolvere Problema. Flusso:
-; Rispondo al budget mandatory, asserito user attribute
-; User attribute viene convertito in classe
-; Rispondo a budget optional, convertito con la regola sotto in mandatory e ritratto
-; Rscatta nuovamente la regola che converte in classe il nuovo budget
-; Scatta la tua regola sopra, che concatena la vecchia classe con la nuova (invece di sostiturla)
-; in expertise la regola che usa il budget class scatta per ognuno dei suoi valori, quindi classe vecchia e classe nuova
-; Non ho idee per il momento
+(defrule USER-INTERACTION::retract-duplicate-user-attribute
+  (declare (salience 100) (auto-focus TRUE))
+  ?attr1 <- (user-attribute (name ?name) (values ?val) (desire ?desire) (type ?type))
+  ?attr2 <- (user-attribute (name ?name) (values $?prev ?val $?next) (desire ?desire) (type ?type))
+  (test (neq ?attr1 ?attr2))
+  =>
+  (retract ?attr1)
+)
+
 (defrule USER-INTERACTION::override-mandatory-answers
   ?optional-user-attribute <- (user-attribute (name ?name) (values ?value) (type optional))
   ?user-attribute <- (user-attribute (name ?name) (type mandatory))
@@ -45,13 +46,13 @@
   (retract ?optional-user-attribute)
 )
 
-(defrule USER-INTERACTION::retract-duplicate-user-attribute
+(defrule USER-INTERACTION::retract-override-user-attribute-class
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values ?val) (desire ?desire) (type ?type))
-  ?attr2 <- (user-attribute (name ?name) (values $?prev ?val $?next) (desire ?desire) (type ?type))
+  ?attr1 <- (user-attribute (name ?name) (values ?val1) (type inferred) (id ?id1))
+  ?attr2 <- (user-attribute (name ?name) (values ?val2) (type inferred) (id ?id2&:(> (str-compare ?id1 ?id2) 0))))
   (test (neq ?attr1 ?attr2))
   =>
-  (retract ?attr1)
+  (retract ?attr2)
 )
 
 (defrule USER-INTERACTION::retract-contraddictory-user-attribute

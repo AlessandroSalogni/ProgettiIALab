@@ -28,7 +28,7 @@
     (min ?min) 
     (max ?max)
   )
-  (user-attribute (name ?user-attribute) (values ?value&:(and (<= ?min ?value) (<= ?value ?max)))) ; TODO non scatta se viene fatta prima la combine
+  (user-attribute (name ?user-attribute) (values ?value&:(and (<= ?min ?value) (<= ?value ?max))))
   =>
   (assert (user-attribute (name ?attribute-name) (values ?class-name) (type inferred)))
 )
@@ -60,7 +60,9 @@
 
 (defrule SET-USER-ATTRIBUTE::change-range-of-number-places-base-on-numer-days (declare (auto-focus TRUE))
   (user-attribute (name number-days) (values ?n-days))
-  ?par <- (parameter-range (name number-places) (range ?min ?max));Forse scatta due volte
+  (exists
+    (?par <- (parameter-range (name number-places) (range ?min ?max)));Forse scatta due volte
+  )
   =>
   (modify ?par (range ?min (min 3 ?n-days)))
   (return)
