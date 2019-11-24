@@ -75,7 +75,7 @@
 ;Ho una confidenza in più sull'hotel da -0.6 a 0.6 in base al budget
 (defrule GENERATE-FACILITIES::generate-facility-from-budget-upper-then-price
   (iteration ?i)
-  (parameter (name budget-per-day) (range ?budget-min ?budget-max))
+  (parameter-range (name budget-per-day) (range ?budget-min ?budget-max))
   (user-attribute (name budget-per-day) (values ?budget-per-day))
   (facility (name ?name) (price ?price&:(< ?price ?budget-per-day)))
   =>
@@ -95,7 +95,7 @@
 ;Ho una confidenza in più sull'hotel da -0.6 a 0.6 in base al budget
 (defrule GENERATE-FACILITIES::generate-facility-from-budget-lower-then-price
   (iteration ?i)
-  (parameter (name budget-per-day) (range ?budget-min ?budget-max))
+  (parameter-range (name budget-per-day) (range ?budget-min ?budget-max))
   (user-attribute (name budget-per-day) (values ?budget-per-day))
   (facility (name ?name) (price ?price&:(>= ?price ?budget-per-day)))
   =>

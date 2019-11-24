@@ -10,9 +10,13 @@
   (slot iteration)
 )
 
-(deftemplate MAIN::parameter
+(deftemplate MAIN::parameter-enumeration
   (slot name)
   (multislot values)
+)
+
+(deftemplate MAIN::parameter-range
+  (slot name)
   (multislot range (cardinality 2 2) (type INTEGER))
 )
 
@@ -53,12 +57,12 @@
 )
 
 (deffacts MAIN::define-parameter
-  (parameter (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
-  (parameter (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
-  (parameter (name stars) (range 1 4))
-  (parameter (name service) (values parking pool air-conditioning pet wifi tv spa room-service))
-  (parameter (name number-people) (range 1 10))
-  (parameter (name number-days) (range 1 30))
-  (parameter (name budget-per-day) (range 10 300))
-  (parameter (name number-places) (range 1 3))
+  (parameter-enumeration (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
+  (parameter-enumeration (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
+  (parameter-range (name stars) (range 1 4))
+  (parameter-enumeration (name service) (values parking pool air-conditioning pet wifi tv spa room-service))
+  (parameter-range (name number-people) (range 1 10))
+  (parameter-range (name number-days) (range 1 30))
+  (parameter-range (name budget-per-day) (range 10 300))
+  (parameter-range (name number-places) (range 1 3))
 )

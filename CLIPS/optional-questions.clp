@@ -81,7 +81,7 @@
     (search-parameter ?parameter)
     (request ?request)
   )
-  (parameter
+  (parameter-enumeration
     (name ?parameter)
     (values $?valid-answers)
   )
@@ -108,7 +108,7 @@
     (search-parameter ?parameter)
     (request ?request)
   )
-  (parameter
+  (parameter-range
     (name ?parameter)
     (range $?range)
   )
@@ -131,7 +131,7 @@
 (deffacts OPTIONAL-QUESTIONS::define-requests
   (search-parameter start)
   (search-parameter-history)
-  (menu-request (search-parameter start) (request "Which search parameter would you like to set? ") (valid-answers destination budget facility end))
+  (menu-request (search-parameter start) (request "Which search parameter would you like to set? ") (valid-answers destination facility end))
   (menu-request (search-parameter destination) (request "Which search parameter of destination would you like to set? ") (valid-answers region turism number-places end))
   (preference-request (search-parameter turism) (request "Which turism do you prefer? "))
   (preference-request (search-parameter region) (request "Which region would you like to visit? "))

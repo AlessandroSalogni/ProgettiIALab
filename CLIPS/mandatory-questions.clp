@@ -40,7 +40,7 @@
     (already-asked FALSE)
     (type range)
   )
-  (parameter 
+  (parameter-range
     (name ?name)
     (range $?values)
   )
@@ -91,7 +91,7 @@
     (already-asked FALSE)
     (type range)
   )
-  (parameter 
+  (parameter-range 
     (name ?name)
     (range $?values)
   )

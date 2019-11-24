@@ -60,7 +60,7 @@
 
 (defrule SET-USER-ATTRIBUTE::change-range-of-number-places-base-on-numer-days (declare (auto-focus TRUE))
   (user-attribute (name number-days) (values ?n-days))
-  ?par <- (parameter (name number-places) (range ?min ?max));Forse scatta due volte
+  ?par <- (parameter-range (name number-places) (range ?min ?max));Forse scatta due volte
   =>
   (modify ?par (range ?min (min 3 ?n-days)))
   (return)
