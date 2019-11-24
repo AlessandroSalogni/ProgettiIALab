@@ -29,6 +29,22 @@
   (modify ?attr2 (values $?val1 ?val2))
 )
 
+;TODO : Rsolvere Problema. Flusso:
+; Rispondo al budget mandatory, asserito user attribute
+; User attribute viene convertito in classe
+; Rispondo a budget optional, convertito con la regola sotto in mandatory e ritratto
+; Rscatta nuovamente la regola che converte in classe il nuovo budget
+; Scatta la tua regola sopra, che concatena la vecchia classe con la nuova (invece di sostiturla)
+; in expertise la regola che usa il budget class scatta per ognuno dei suoi valori, quindi classe vecchia e classe nuova
+; Non ho idee per il momento
+(defrule USER-INTERACTION::override-mandatory-answers
+  ?optional-user-attribute <- (user-attribute (name ?name) (values ?value) (type optional))
+  ?user-attribute <- (user-attribute (name ?name) (type mandatory))
+  =>
+  (modify ?user-attribute (values ?value))
+  (retract ?optional-user-attribute)
+)
+
 (defrule USER-INTERACTION::retract-duplicate-user-attribute
   (declare (salience 100) (auto-focus TRUE))
   ?attr1 <- (user-attribute (name ?name) (values ?val) (desire ?desire) (type ?type))
