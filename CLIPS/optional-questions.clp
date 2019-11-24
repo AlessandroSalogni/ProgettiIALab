@@ -74,7 +74,7 @@
   (focus USER-INTERACTION)
 )
 
-(defrule OPTIONAL-QUESTIONS::preference-request
+(defrule OPTIONAL-QUESTIONS::enumeration-preference-request
   ?search-parameter <- (search-parameter ?parameter&~start&~end)
   ?history <- (search-parameter-history $?history-parameter)
   (preference-request
@@ -101,7 +101,7 @@
   (focus USER-INTERACTION)
 )
 
-(defrule OPTIONAL-QUESTIONS::preference-request
+(defrule OPTIONAL-QUESTIONS::range-preference-request
   ?search-parameter <- (search-parameter ?parameter&~start&~end)
   ?history <- (search-parameter-history $?history-parameter)
   (preference-request
