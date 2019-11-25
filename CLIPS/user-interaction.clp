@@ -21,8 +21,8 @@
 
 (defrule USER-INTERACTION::combine-user-attribute
   (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values $?val1) (desire ?desire) (type ?type))
-  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(not (member ?val2 $?val1))) (desire ?desire) (type ?type))
+  ?attr1 <- (user-attribute (name ?name) (values $?val1) (desire ?desire) (type ?type|~inferred))
+  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(not (member ?val2 $?val1))) (desire ?desire) (type ?type|~inferred))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr1)
