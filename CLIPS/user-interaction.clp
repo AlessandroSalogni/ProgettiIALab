@@ -49,7 +49,7 @@
 (defrule USER-INTERACTION::retract-override-user-attribute-class
   (declare (salience 100) (auto-focus TRUE))
   ?attr1 <- (user-attribute (name ?name) (values ?val1) (type inferred) (id ?id1))
-  ?attr2 <- (user-attribute (name ?name) (values ?val2) (type inferred) (id ?id2&:(> (str-compare ?id1 ?id2) 0))))
+  ?attr2 <- (user-attribute (name ?name) (values ?val2) (type inferred) (id ?id2&:(> (str-compare ?id1 ?id2) 0)))
   (test (neq ?attr1 ?attr2))
   =>
   (retract ?attr2)
