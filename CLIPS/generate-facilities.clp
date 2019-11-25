@@ -50,6 +50,10 @@
   (facility (name "Trentuno (TR)") (price 10) (city "Trento") (stars 1) (rooms-available 1) (rooms-booked 4) (services tv pet))
   (facility (name "Vento (TR)") (price 65) (city "Trento") (stars 3) (rooms-available 3) (rooms-booked 9) (services tv wifi parking pool))
   (facility (name "Baita tedesca (TR)") (price 80) (city "Trento") (stars 3) (rooms-available 4) (rooms-booked 2) (services tv spa wifi air-conditioning pet))
+  (facility (name "Jodel (TR)") (price 40) (city "Trento") (stars 2) (rooms-available 7) (rooms-booked 1) (services tv spa wifi))
+  (facility (name "Lo strudel (TR)") (price 40) (city "Trento") (stars 2) (rooms-available 1) (rooms-booked 5) (services tv wifi))
+  
+  (facility (name "San Francesco (PG)") (price 40) (city "Assisi") (stars 2) (rooms-available 6) (rooms-booked 2) (services tv)) 
 
   (considered-hotels)
 )
