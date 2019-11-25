@@ -1,4 +1,4 @@
-(defmodule EXTRACT-SOLUTIONS (import GENERATE-FACILITIES ?ALL) (import GENERATE-SOLUTIONS ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL))
+(defmodule EXTRACT-SOLUTIONS (import GENERATE-FACILITIES ?ALL) (import GENERATE-SOLUTIONS ?ALL) (export ?ALL))
 
 (deftemplate EXTRACT-SOLUTIONS::solution
   (multislot facilities (type STRING))

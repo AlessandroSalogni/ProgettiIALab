@@ -1,4 +1,4 @@
-(defmodule PRINT-RESULTS (import EXTRACT-SOLUTIONS ?ALL) (import ITERATION-MANAGER ?ALL))
+(defmodule PRINT-RESULTS (import EXTRACT-SOLUTIONS ?ALL))
 
 (defrule PRINT-RESULTS::header (declare (salience 10))
   (iteration ?i)

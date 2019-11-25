@@ -1,4 +1,4 @@
-(defmodule OPTIONAL-QUESTIONS (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (export ?ALL))
+(defmodule OPTIONAL-QUESTIONS (import MAIN ?ALL) (export ?ALL))
 
 (deftemplate OPTIONAL-QUESTIONS::menu-request
   (slot search-parameter)

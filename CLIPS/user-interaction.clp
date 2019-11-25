@@ -1,4 +1,4 @@
-(defmodule USER-INTERACTION (export ?ALL))
+(defmodule USER-INTERACTION (import USER-ATTRIBUTE ?ALL) (export ?ALL))
 
 (deffunction USER-INTERACTION::ask-question (?question ?allowed-values)
    (printout t ?question)
@@ -9,58 +9,6 @@
       (bind ?answer (read))
       (if (lexemep ?answer) then (bind ?answer (lowcase ?answer))))
    ?answer
-)
-
-(deftemplate USER-INTERACTION::user-attribute
-  (slot name)
-  (multislot values)
-  (slot desire (default TRUE) (allowed-symbols TRUE FALSE))
-  (slot type (allowed-symbols mandatory optional profile inferred) (default optional))
-  (slot id (default-dynamic (gensym*)))
-)
-
-(defrule USER-INTERACTION::combine-user-attribute
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values $?val1) (desire ?desire) (type ?type|~inferred))
-  ?attr2 <- (user-attribute (name ?name) (values ?val2&:(not (member ?val2 $?val1))) (desire ?desire) (type ?type|~inferred))
-  (test (neq ?attr1 ?attr2))
-  =>
-  (retract ?attr1)
-  (modify ?attr2 (values $?val1 ?val2))
-)
-
-(defrule USER-INTERACTION::retract-duplicate-user-attribute
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values ?val) (desire ?desire) (type ?type))
-  ?attr2 <- (user-attribute (name ?name) (values $?prev ?val $?next) (desire ?desire) (type ?type))
-  (test (neq ?attr1 ?attr2))
-  =>
-  (retract ?attr1)
-)
-
-(defrule USER-INTERACTION::override-mandatory-answers
-  ?optional-user-attribute <- (user-attribute (name ?name) (values ?value) (type optional))
-  ?user-attribute <- (user-attribute (name ?name) (type mandatory))
-  =>
-  (modify ?user-attribute (values ?value))
-  (retract ?optional-user-attribute)
-)
-
-(defrule USER-INTERACTION::retract-override-user-attribute-class
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values ?val1) (type inferred) (id ?id1))
-  ?attr2 <- (user-attribute (name ?name) (values ?val2) (type inferred) (id ?id2&:(> (str-compare ?id1 ?id2) 0)))
-  (test (neq ?attr1 ?attr2))
-  =>
-  (retract ?attr2)
-)
-
-(defrule USER-INTERACTION::retract-contraddictory-user-attribute
-  (declare (salience 100) (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values $?prev1 ?val $?next1) (desire ?des1) (type ?type) (id ?id1))
-  ?attr2 <- (user-attribute (name ?name) (values $?prev2 ?val $?next2) (desire ?des2&~?des1) (type ?type) (id ?id2&:(> (str-compare ?id1 ?id2) 0)))
-  =>
-  (modify ?attr2 (values $?prev2 $?next2)) 
 )
 
 (deftemplate USER-INTERACTION::menu-question

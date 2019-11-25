@@ -1,4 +1,4 @@
-(defmodule SET-USER-ATTRIBUTE (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL))
+(defmodule SET-USER-ATTRIBUTE (import MAIN ?ALL) (export ?ALL))
 
 (deftemplate SET-USER-ATTRIBUTE::class-user-attribute
   (slot user-attribute)

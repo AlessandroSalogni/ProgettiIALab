@@ -1,4 +1,4 @@
-(defmodule EXPERTISE (import MAIN ?ALL) (import USER-INTERACTION ?ALL) (import ITERATION-MANAGER ?ALL))
+(defmodule EXPERTISE (import MAIN ?ALL))
 
 (deftemplate EXPERTISE::expertise
   (slot user-attribute)

@@ -1,4 +1,4 @@
-(defmodule GENERATE-CITIES (import MAIN ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL))
+(defmodule GENERATE-CITIES (import MAIN ?ALL) (export ?ALL))
 
 (deftemplate GENERATE-CITIES::city
   (slot name (type STRING))

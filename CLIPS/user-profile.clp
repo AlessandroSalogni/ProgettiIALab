@@ -1,4 +1,4 @@
-(defmodule USER-PROFILE (import USER-INTERACTION ?ALL) (export ?ALL))
+(defmodule USER-PROFILE (import USER-ATTRIBUTE ?ALL) (export ?ALL))
 
 (deftemplate profile ;TODO trattare anche cose che non piacciono ??
   (slot name-surname (type STRING))

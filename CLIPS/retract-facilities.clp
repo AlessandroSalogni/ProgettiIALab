@@ -1,4 +1,4 @@
-(defmodule RETRACT-FACILITIES (import MAIN ?ALL) (import GENERATE-FACILITIES ?ALL) (import ITERATION-MANAGER ?ALL))
+(defmodule RETRACT-FACILITIES (import MAIN ?ALL) (import GENERATE-FACILITIES ?ALL))
 
 (defrule RETRACT-FACILITIES::retract-facilities-base-on-city
   (iteration ?i)

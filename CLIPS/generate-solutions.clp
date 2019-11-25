@@ -1,4 +1,4 @@
-(defmodule GENERATE-SOLUTIONS (import MAIN ?ALL) (import GENERATE-FACILITIES ?ALL) (import GENERATE-CITIES ?ALL)  (import USER-INTERACTION ?ALL) (import ITERATION-MANAGER ?ALL) (export ?ALL))
+(defmodule GENERATE-SOLUTIONS (import MAIN ?ALL) (import GENERATE-FACILITIES ?ALL) (import GENERATE-CITIES ?ALL) (export ?ALL))
 
 (deftemplate GENERATE-SOLUTIONS::possible-solution
   (multislot facilities (type STRING))
