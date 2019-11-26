@@ -6,7 +6,7 @@
 (deftemplate MAIN::attribute
   (slot name)
   (slot value)
-  (slot certainty (type FLOAT) (default 0.8) (range -1.0, 1.0))
+  (slot certainty (type FLOAT) (default 0.8) (range -1.0 1.0))
   (slot iteration)
 )
 
@@ -65,5 +65,5 @@
   (parameter-range (name number-days) (range 1 30))
   (parameter-range (name budget-per-day) (range 10 300))
   (parameter-range (name number-places) (range 1 3))
-  (parameter-enumeration (name group-detail) (values pet-service disability children))
+  (parameter-enumeration (name group-detail) (values disability children))
 )
