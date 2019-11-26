@@ -44,7 +44,7 @@
   (iteration ?i)
   (user-attribute (name ?name) (values $? ?value $?) (desire FALSE) (type optional))
   =>
-  (assert (attribute (name ?name) (value ?value) (certainty -0.99) (iteration ?i)))
+  (assert (attribute (name ?name) (value ?value) (certainty -0.8) (iteration ?i)))
 )
 
 (defrule SET-USER-ATTRIBUTE::convert-profile-user-attribute
@@ -55,7 +55,7 @@
     (type profile)
   )
   =>
-  (assert (attribute (name ?name) (value ?value) (certainty 0.4) (iteration ?i)))
+  (assert (attribute (name ?name) (value ?value) (certainty 0.2) (iteration ?i)))
 )
 
 (defrule SET-USER-ATTRIBUTE::change-range-of-number-places-base-on-numer-days (declare (auto-focus TRUE))
