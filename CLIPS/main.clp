@@ -6,7 +6,7 @@
 (deftemplate MAIN::attribute
   (slot name)
   (slot value)
-  (slot certainty (type FLOAT) (default 0.8) (range -1.0, 1.0))
+  (slot certainty (type FLOAT) (default 0.8) (range -1.0 1.0))
   (slot iteration)
 )
 
