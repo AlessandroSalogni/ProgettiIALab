@@ -1,9 +1,9 @@
-simulateProcess = function(F, H, x0, covX, covZ, covT) {
+simulateProcess = function(F, H, x0, covX, covZ) {
   x = matrix(ncol = length(x0), nrow = 100)
   z = matrix(ncol = length(x0), nrow = 100)
   x[1,] = x0
   
-  for(i in 1 : (nrow()-1)) {
+  for(i in 1 : (nrow(x)-1)) {
     muF = F%*%x[i,]
     transNoise = (mvrnorm(1, muF, covX) - muF) / diag(covX)
     x[i+1,] = muF + transNoise
