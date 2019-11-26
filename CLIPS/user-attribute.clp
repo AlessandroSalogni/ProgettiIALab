@@ -3,7 +3,7 @@
 (deftemplate USER-ATTRIBUTE::user-attribute
   (slot name)
   (multislot values)
-  (slot desire (default TRUE) (allowed-symbols TRUE FALSE))
+  (slot desire (default TRUE) (allowed-symbols TRUE FALSE MAYBE))
   (slot type (allowed-symbols mandatory optional profile inferred) (default optional))
   (slot id (default-dynamic (gensym*)))
 )
@@ -33,10 +33,25 @@
 )
 
 (defrule USER-ATTRIBUTE::retract-contraddictory-optional-user-attribute (declare (auto-focus TRUE))
-  ?attr1 <- (user-attribute (name ?name) (values $?prev1 ?val $?next1) (desire ?des1) (type optional) (id ?id1))
-  ?attr2 <- (user-attribute (name ?name) (values $?prev2 ?val $?next2) (desire ?des2&~?des1) (type optional) (id ?id2&:(> (str-compare ?id1 ?id2) 0)))
+  ?attr1 <- (user-attribute (name ?name) (values $?prev1 ?val $?next1) (desire ?des1&~MAYBE) (type optional) (id ?id1))
+  ?attr2 <- (user-attribute (name ?name) (values $?prev2 ?val $?next2) (desire ?des2&~?des1&~MAYBE) (type optional) (id ?id2&:(> (str-compare ?id1 ?id2) 0)))
   =>
   (modify ?attr2 (values $?prev2 $?next2)) 
+)
+
+(defrule USER-ATTRIBUTE::retract-contraddictory-maybe-optional-user-attribute (declare (auto-focus TRUE))
+  ?attr1 <- (user-attribute (name ?name) (values ?val) (desire MAYBE) (type optional))
+  ?attr2 <- (user-attribute (name ?name) (values $?prev ?val $?next) (desire ?des2&~MAYBE) (type optional))
+  =>
+  (retract ?attr1)
+  (modify ?attr2 (values $?prev $?next)) 
+)
+
+(defrule USER-ATTRIBUTE::retract-maybe-optional-user-attribute (declare (auto-focus TRUE))
+  ?attr1 <- (user-attribute (name ?name) (values ?val) (desire MAYBE) (type optional))
+  (not (user-attribute (name ?name) (values $?prev ?val $?next) (desire ?des2&~MAYBE) (type optional)))
+  =>
+  (retract ?attr1)
 )
 
 (defrule USER-ATTRIBUTE::retract-duplicate-inferred-user-attribute (declare (auto-focus TRUE))
