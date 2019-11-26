@@ -1,6 +1,6 @@
 simulateProcess = function(F, H, x0, covX, covZ) {
-  x = matrix(ncol = length(x0), nrow = 100)
-  z = matrix(ncol = length(x0), nrow = 100)
+  x = matrix(ncol = length(x0), nrow = 10)
+  z = matrix(ncol = length(x0), nrow = 10)
   x[1,] = x0
   
   for(i in 1 : (nrow(x)-1)) {
@@ -13,7 +13,5 @@ simulateProcess = function(F, H, x0, covX, covZ) {
     z[i+1,] = muH + obsNoise ##osservazione sullo stato successivo = muH + errore di misurazione
   }
   
-  par(mfrow = c(1, 2))
-  plot(x[,1], x[,2])
-  plot(z[,1], z[,2])
+  return(z)
 }
