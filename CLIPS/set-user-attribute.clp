@@ -58,20 +58,6 @@
   (assert (attribute (name ?name) (value ?value) (certainty 0.2) (iteration ?i)))
 )
 
-(defrule SET-USER-ATTRIBUTE::set-possible-max-number-places (declare (auto-focus TRUE))
-  (user-attribute (name number-days) (values ?n-days))
-  =>
-  (assert (max-number-places ?n-days))
-)
-
-(defrule SET-USER-ATTRIBUTE::change-range-of-number-places-base-on-number-days
-  ?max-n-places <- (max-number-places ?n-days)
-  ?par <- (parameter-range (name number-places) (range ?min ?max))
-  =>
-  (modify ?par (range ?min (min 3 ?n-days)))
-  (retract ?max-n-places)
-)
-
 (deffacts SET-USER-ATTRIBUTE::define-class-user-attribute
   (class-user-attribute (user-attribute age) (attribute-name age-class) (class-name young) (min 14) (max 29))
   (class-user-attribute (user-attribute age) (attribute-name age-class) (class-name middle-young) (min 30) (max 49))

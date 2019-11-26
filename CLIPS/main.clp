@@ -27,8 +27,7 @@
 	(focus SET-USER-ATTRIBUTE EXPERTISE EXTRACT-SOLUTIONS PRINT-RESULTS ITERATION-MANAGER)
 )
 
-(defrule MAIN::combine-certainties-both-positive
-  (declare (salience 100) (auto-focus TRUE))
+(defrule MAIN::combine-certainties-both-positive (declare (salience 100) (auto-focus TRUE))
   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (iteration ?i))
   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(>= ?c2 0.0)) (iteration ?i))
   (test (neq ?attr1 ?attr2))
@@ -37,8 +36,7 @@
   (modify ?attr2 (certainty (- (+ ?c1 ?c2) (* ?c1 ?c2))))
 )
 
-(defrule MAIN::combine-certainties-both-negative
-  (declare (salience 100) (auto-focus TRUE))
+(defrule MAIN::combine-certainties-both-negative (declare (salience 100) (auto-focus TRUE))
   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(< ?c1 0.0)) (iteration ?i))
   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (iteration ?i))
   (test (neq ?attr1 ?attr2))
@@ -47,13 +45,26 @@
   (modify ?attr2 (certainty (+ (+ ?c1 ?c2) (* ?c1 ?c2))))
 )
 
-(defrule MAIN::combine-certainties-opposite
-  (declare (salience 100) (auto-focus TRUE))
+(defrule MAIN::combine-certainties-opposite (declare (salience 100) (auto-focus TRUE))
   ?attr1 <- (attribute (name ?name) (value ?val) (certainty ?c1&:(>= ?c1 0.0)) (iteration ?i))
   ?attr2 <- (attribute (name ?name) (value ?val) (certainty ?c2&:(< ?c2 0.0)) (iteration ?i))
   =>
   (retract ?attr1)
   (modify ?attr2 (certainty (/ (+ ?c1 ?c2) (- 1 (min (abs ?c1) (abs ?c2))))))
+)
+
+(defrule MAIN::set-possible-max-number-places (declare (auto-focus TRUE))
+  (user-attribute (name number-days) (values ?n-days))
+  =>
+  (assert (max-number-places ?n-days))
+)
+
+(defrule MAIN::change-range-of-number-places-base-on-number-days
+  ?max-n-places <- (max-number-places ?n-days)
+  ?par <- (parameter-range (name number-places) (range ?min ?max))
+  =>
+  (modify ?par (range ?min (min 3 ?n-days)))
+  (retract ?max-n-places)
 )
 
 (deffacts MAIN::define-parameter
