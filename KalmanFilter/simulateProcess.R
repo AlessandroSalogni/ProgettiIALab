@@ -4,13 +4,11 @@ simulateProcess = function(F, H, x0, covX, covZ) {
   x[1,] = x0
   
   for(i in 1 : (nrow(x)-1)) {
-    muF = F%*%x[i,]
-    transNoise = mvrnorm(1, muF, covX) - muF
-    x[i+1,] = muF + transNoise
+    transNoise = mvrnorm(1, 0, covX) ##errore di transizione centrato in 0 per ogni variabile
+    x[i+1,] = F%*%x[i,] + transNoise ##muF + errore di transizione
     
-    muH = H%*%x[i+1,]
-    obsNoise = mvrnorm(1, muH, covZ) - muH
-    z[i+1,] = muH + obsNoise
+    obsNoise = mvrnorm(1, muH, covZ) ##errore di misurazione centrato in 0 per ogni variabile
+    z[i+1,] = H%*%x[i+1,] + obsNoise ##muH + errore di misurazione
   }
   
   par(mfrow = c(1, 2))
