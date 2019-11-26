@@ -141,5 +141,5 @@
   (preference-request (search-parameter stars) (request "How many stars would you like? "))
   (preference-request (search-parameter service) (request "Which service would you like to have? "))
   (preference-request (search-parameter budget-per-day) (request "What budget per day would you like to set? "))
-  (preference-request (search-parameter group-detail) (request "Which of them is present? (pet-service - disability - children) "))
+  (preference-request (search-parameter group-detail) (request "Which of them is present? (disability - children) "))
 )
