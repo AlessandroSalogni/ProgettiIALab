@@ -4,6 +4,7 @@
   (slot user-attribute)
   (slot value)
   (slot type (allowed-symbols mandatory optional profile inferred) (default optional))
+  (slot desire (allowed-symbols TRUE FALSE) (default TRUE))
   (multislot inference)
 )
 
@@ -102,12 +103,36 @@
     service [ pool 0.8 room-service 0.8 spa 0.8 parking 0.8 wifi 0.8 tv 0.8 ] 
     region [ liguria 0.2 valle-d'aosta 0.2 ] ))
   ;Pensare a cosa potrebbe influenzare le stelle di altro 
+
+  (expertise (user-attribute number-days) (value 1) (type inferred) (inference
+    turism [ termal 0.4 lake 0.2 enogastronomic 0.4 ] ))
+
+  (expertise (user-attribute number-days-class) (value lot-days) (type inferred) (inference
+    service [ pet 0.2 laundry 0.4 ] ))
+
+  (expertise (user-attribute group-detail) (value disability) (type inferred) (inference
+   service [ room-service 0.2 ]
+   turism [ sport -0.4 mountain -0.2 sea 0.2 cultural 0.2 ]
+   ))
+
+  (expertise (user-attribute group-detail) (value children) (type inferred) (inference
+   service [ pool 0.2 ]
+   turism [ cultural -0.4 religious -0.4 ]
+  ))
+
+  (expertise (user-attribute group-detail) (value children) (type inferred) (desire FALSE) (inference
+    turism [ religious 0.2 cultural 0.2 ]
+  ))
+
+  (expertise (user-attribute number-places) (value 3) (type inferred) (inference
+    service [ parking 0.4 cultural 0.2 ]
+  ))
 )
 
 (defrule EXPERTISE::expertise-general-rule
   (iteration ?i)
-  (user-attribute (name ?user-attribute) (values $? ?value $?) (type ?type) (desire TRUE)) ;TODO vedere se negare expertise
-  (expertise (user-attribute ?user-attribute) (value ?value) (type ?type) 
+  (user-attribute (name ?user-attribute) (values $? ?value $?) (type ?type) (desire ?desire)) ;TODO vedere se negare expertise
+  (expertise (user-attribute ?user-attribute) (value ?value) (type ?type) (desire ?desire)
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
   =>
   (assert (new-attributes (attribute ?attribute) (values $?values) (iteration ?i)))
@@ -181,8 +206,28 @@
   (assert (new-attributes (attribute ?attribute) (values $?values) (deviation 0.4) (iteration ?i)))
 )
 
-(defrule EXPERTISE::expertise-for-number-of-places-not-defined
-  (not (attribute (name number-places) (value ?number-places)))
+(defrule EXPERTISE::expertise-for-number-of-places-not-defined-for-disability
+  (not (user-attribute (name number-places) (values ?number-places)))
+  (or
+    (user-attribute (name group-detail) (values disability))
+    (user-attribute (name number-days-class) (values few-days))
+  )
   =>
   (assert (user-attribute (name number-places) (values 1)))
+)
+
+(defrule EXPERTISE::expertise-for-number-of-places-not-defined-medium-days
+  (not (user-attribute (name number-places) (values ?number-places)))
+  (not (user-attribute (name group-detail) (values disability)))
+  (user-attribute (name number-days-class) (values lot-days))
+  =>
+  (assert (user-attribute (name number-places) (values 3)))
+)
+
+(defrule EXPERTISE::expertise-for-number-of-places-not-defined-lot-days
+  (not (user-attribute (name number-places) (values ?number-places)))
+  (not (user-attribute (name group-detail) (values disability)))
+  (user-attribute (name number-days-class) (values medium-days))
+  =>
+  (assert (user-attribute (name number-places) (values 2)))
 )
