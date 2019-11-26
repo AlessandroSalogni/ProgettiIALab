@@ -1,0 +1,7 @@
+source('C:/Users/lucap/Desktop/ProgettiIALab/KalmanFilter/simulateProcess.R')
+F = matrix(c(1,0.2,0,1), byrow = TRUE, ncol = 2)
+H = matrix(c(1,0,0,1), byrow = TRUE, ncol = 2)
+x0 = c(10,5)
+covX = matrix(c(10, 0, 0, 10), ncol = 2, byrow = TRUE)
+covZ = matrix(c(10, 0, 0, 10), ncol = 2, byrow = TRUE)
+simulateProcess(F,H,x0,covX,covZ)
