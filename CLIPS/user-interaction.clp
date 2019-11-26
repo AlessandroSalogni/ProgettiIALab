@@ -114,6 +114,26 @@
   )
 )
 
+(defrule USER-INTERACTION::maybe-desire-enumeration-attribute-user-interaction
+  ?user-question <- (enumeration-attribute-question
+    (name ?name)
+    (question ?question)
+    (type-user-interaction ?type-interaction)
+    (valid-answers $?valid-answers)
+  )
+  ?user-answer <- (enumeration-user-answer maybe ?answer&:(member ?answer ?valid-answers))
+  =>
+  (retract ?user-answer ?user-question)
+  (assert
+    (user-attribute
+      (name ?name)
+      (values ?answer)
+      (desire MAYBE)
+      (type ?type-interaction)
+    )
+  )
+)
+
 (defrule USER-INTERACTION::wrong-answer-enumeration-attribute-user-interaction
   ?user-question <- (enumeration-attribute-question
     (valid-answers $?valid-answers)
@@ -121,8 +141,8 @@
   (or
     ?user-answer <- (enumeration-user-answer)
     ?user-answer <- (enumeration-user-answer ?answer&:(not (member ?answer ?valid-answers)))
-    ?user-answer <- (enumeration-user-answer not ?answer&:(not (member ?answer ?valid-answers)))
-    ?user-answer <- (enumeration-user-answer ?first&~not ?second)
+    ?user-answer <- (enumeration-user-answer not|maybe ?answer&:(not (member ?answer ?valid-answers)))
+    ?user-answer <- (enumeration-user-answer ?first&~not&~maybe ?second)
     ?user-answer <- (enumeration-user-answer ?first ?second ?third $?others)
   )
   =>
