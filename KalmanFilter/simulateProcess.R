@@ -5,11 +5,11 @@ simulateProcess = function(F, H, x0, covX, covZ) {
   
   for(i in 1 : (nrow(x)-1)) {
     muF = F%*%x[i,]
-    transNoise = (mvrnorm(1, muF, covX) - muF) / diag(covX)
+    transNoise = (mvrnorm(1, muF, covX) - muF) / diag(sqrt(covX))
     x[i+1,] = muF + transNoise
     
     muH = H%*%x[i+1,]
-    obsNoise = (mvrnorm(1, muH, covZ) - muH) / diag(covZ)
+    obsNoise = (mvrnorm(1, muH, covZ) - muH) / diag(sqrt(covZ))
     z[i+1,] = muH + obsNoise
   }
   
