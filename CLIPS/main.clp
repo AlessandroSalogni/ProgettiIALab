@@ -60,7 +60,7 @@
   (parameter-enumeration (name region) (values piemonte liguria umbria marche toscana lombardia veneto valle-d'aosta trentino-alto-adige friuli-venezia-giulia emilia-romagna))
   (parameter-enumeration (name turism) (values sport religious enogastronomic cultural sea mountain lake termal naturalistic))
   (parameter-range (name stars) (range 1 4))
-  (parameter-enumeration (name service) (values parking pool air-conditioning pet wifi tv spa room-service))
+  (parameter-enumeration (name service) (values parking pool air-conditioning pet wifi tv spa room-service laundry))
   (parameter-range (name number-people) (range 1 10))
   (parameter-range (name number-days) (range 1 30))
   (parameter-range (name budget-per-day) (range 10 300))
