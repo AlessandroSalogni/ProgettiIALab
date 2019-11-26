@@ -122,7 +122,44 @@ profilazione (vedere se continuare lo stesso con il sistema oppure no)
 ;Chiedere se meglio tagliare soluzioni con cf inferiori a parita di citta, oppure tenerle
 
 ;TODO LIST
-;Chiedere budget anche in optional magari ritrattando mandatory
 ;budget massimo e divido per numero di giorni	
 ;Aggiungere varia expertise, inventarci qualcosa
 ;Creare scenari
+
+Domanda obbligatoria:
+	Disabile?
+	Pet?
+
+Disabili
+	Ti consiglio turismi più agevoli
+	Ti consiglio service necessari (room-service)
+	1 posto
+
+Se nposti>1
+	Ti consiglio service parking	
+
+Se nPosti ~ numeroGiorni
+	Ti consiglio ostelli, robe al volo
+
+Se numeroGiorni = 1
+	Gita termale di un giorno
+	Gita enogastronomica di 1 giorno
+	Gita al lago
+
+Se numeroGiorni >>>>>
+	Ti consiglio 3 posti (1 posto ogni 10 giorni?)
+	Consigliare un servizio lavanderia?
+	Consiglio leggermente pet?
+
+Se ci sono bambini
+	Consiglio piscina
+	turismo mare.., sconsiglio turismi noiosi (culturale-religioso)
+	service
+
+Se non ci sono bambini
+	consigliamo un po' di piu sport, mountain, religious, cultural
+	nplaces = 1
+
+se pet
+	consiglio i pet
+	

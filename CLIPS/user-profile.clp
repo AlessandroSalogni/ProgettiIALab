@@ -14,7 +14,6 @@
   (profile
     (name-surname ?name-surname)
     (birth-year ?birth-year)
-    (number-holiday-days ?number-holiday-days)
     (live-region ?live-region)
     (last-region-visited ?last-region-visited)
     (favourite-services $?services)
@@ -28,7 +27,6 @@
   =>
   ; (assert (user-attribute (name age) (values (- ?current-year ?birth-year)) (type profile)))
   (assert (user-attribute (name age) (values 65) (type profile)))
-  (assert (user-attribute (name number-holiday-days) (values ?number-holiday-days) (type profile)))
   (assert (user-attribute (name live-region) (values ?live-region) (type profile)))
   (assert (user-attribute (name last-region-visited) (values ?last-region-visited) (type profile)))
   (assert (user-attribute (name service) (values $?services) (type profile)))
@@ -41,7 +39,6 @@
   (profile
     (name-surname "Riccardo Perotti")
     (birth-year 1996)
-    (number-holiday-days 10)
     (live-region piemonte)
     (last-region-visited liguria)
     (favourite-services wifi)
@@ -50,7 +47,6 @@
   (profile
     (name-surname "Alessandro Salogni")
     (birth-year 1950)
-    (number-holiday-days 7)
     (live-region lombardia)
     (last-region-visited emilia-romagna)
     (favourite-services tv pet)

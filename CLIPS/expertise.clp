@@ -78,14 +78,14 @@
     region [ piemonte 0.4 liguria -0.2 toscana 0.4 lombardia 0.2 trentino-alto-adige -0.4 umbria 0.6 marche 0.4 ]
     turism [ cultural 0.4 ] ))
 
-  ; (expertise (user-attribute age-class) (value young) (type inferred) (inference 
-  ;   turism [ sport 0.4 sea 0.4 religious -0.2 ]))  
-  ; (expertise (user-attribute age-class) (value middle-young) (type inferred) (inference 
-  ;   turism [ cultural 0.2 enogastronomic 0.2 ]))  
-  ; (expertise (user-attribute age-class) (value middle-old) (type inferred) (inference 
-  ;   turism [ cultural 0.2 enogastronomic 0.2 mountain 0.2 ]))  
-  ; (expertise (user-attribute age-class) (value old) (type inferred) (inference 
-  ;   turism [ cultural 0.2 religious 0.2 sport -0.2 termal 0.2 ]))
+  (expertise (user-attribute age-class) (value young) (type inferred) (inference 
+    turism [ sport 0.4 sea 0.2 religious -0.2 ]))  
+  (expertise (user-attribute age-class) (value middle-young) (type inferred) (inference 
+    turism [ cultural 0.2 enogastronomic 0.2 ]))  
+  (expertise (user-attribute age-class) (value middle-old) (type inferred) (inference 
+    turism [ cultural 0.4 enogastronomic 0.2 mountain 0.2 ]))  
+  (expertise (user-attribute age-class) (value old) (type inferred) (inference 
+    turism [ cultural 0.2 religious 0.4 sport -0.2 termal 0.2 ]))
 
   (expertise (user-attribute budget-per-day-class) (value low) (type inferred) (inference
     stars [ 1 0.8 2 0.2 3 -0.4 4 -0.8 ] 
