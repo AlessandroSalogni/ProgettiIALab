@@ -55,7 +55,7 @@
     (type profile)
   )
   =>
-  (assert (attribute (name ?name) (value ?value) (certainty 0.2) (iteration ?i)))
+  (assert (attribute (name ?name) (value ?value) (certainty 0.4) (iteration ?i)))
 )
 
 (deffacts SET-USER-ATTRIBUTE::define-class-user-attribute

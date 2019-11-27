@@ -90,6 +90,17 @@
   (expertise (user-attribute age-class) (value old) (type inferred) (inference 
     turism [ cultural 0.2 religious 0.4 sport -0.2 termal 0.2 ]))
 
+  ; ----- Service -----
+  (expertise (user-attribute service) (value spa) (inference
+    stars [ 1 -0.6 4 0.4 ] 
+    turism [ termal 0.4 ] ))
+  (expertise (user-attribute service) (value room-service) (inference
+    stars [ 1 -0.4 4 0.2 ] ))
+  (expertise (user-attribute service) (value air-conditioning) (inference
+    turism [ sea 0.4 mountain -0.2 ] ))
+  (expertise (user-attribute service) (value tv) (inference
+    turism [ cultural -0.2 ] ))
+
   ; ----- Budget -----
   (expertise (user-attribute budget-per-day-class) (value low) (type inferred) (inference
     stars [ 1 0.8 2 0.2 3 -0.4 4 -0.8 ] 
@@ -113,19 +124,19 @@
     service [ pet 0.2 laundry 0.4 ] ))
 
   ; ----- Disability -----
-  (expertise (user-attribute group-detail) (value disability) (type optional) (inference
+  (expertise (user-attribute group-detail) (value disability) (inference
    service [ room-service 0.2 ]
    turism [ sport -0.4 mountain -0.2 sea 0.2 cultural 0.2 ] ))
 
   ; ----- Children -----
-  (expertise (user-attribute group-detail) (value children) (type optional) (inference
+  (expertise (user-attribute group-detail) (value children) (inference
    service [ pool 0.2 ]
    turism [ cultural -0.4 religious -0.4 ] ))
-  (expertise (user-attribute group-detail) (value children) (type optional) (desire FALSE) (inference
+  (expertise (user-attribute group-detail) (value children) (desire FALSE) (inference
     turism [ religious 0.2 cultural 0.2 ] ))
 
   ; ----- Places -----
-  (expertise (user-attribute number-places) (value 3) (type optional) (inference
+  (expertise (user-attribute number-places) (value 3) (inference
     turism [ cultural 0.2 ]
     service [ parking 0.4 ] ))
   (expertise (user-attribute number-places) (value 3) (type inferred) (inference
@@ -138,7 +149,7 @@
   (user-attribute (name ?user-attribute) (values $? ?value $?) (type ?type) (desire ?desire))
   (expertise (user-attribute ?user-attribute) (value ?value) (type ?type) (desire ?desire)
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
-  =>
+  => 
   (assert (new-attributes (attribute ?attribute) (values $?values) (iteration ?i)))
 )
 
@@ -201,10 +212,10 @@
   (assert (attribute (name region) (value ?region) (certainty -0.4) (iteration ?i)))
 )
 
-(defrule EXPERTISE::expertise-from-favourite-turism
+(defrule EXPERTISE::expertise-from-favourite-attribute
   (iteration ?i)
-  (user-attribute (name turism) (values $? ?turism $?) (type profile))
-  (expertise (user-attribute turism) (value ?turism)
+  (user-attribute (name ?user-attribute) (values $? ?value $?) (type profile))
+  (expertise (user-attribute ?user-attribute) (value ?value)
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
   =>
   (assert (new-attributes (attribute ?attribute) (values $?values) (deviation 0.4) (iteration ?i)))
