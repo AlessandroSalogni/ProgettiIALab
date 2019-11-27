@@ -1,7 +1,7 @@
 kalmanFilter = function(F, H, cov0, covX, covZ, covT, iteration) {
   x = matrix(ncol = dim(cov0)[1], nrow = iteration)
   z = matrix(ncol = dim(cov0)[1], nrow = iteration)
-  t = matrix(ncol = length(t0), nrow = iteration)
+  t = matrix(ncol = dim(cov0)[1], nrow = iteration)
   
   x[1,] = abs(mvrnorm(1, c(0,0), cov0))
   t[1,] = abs(mvrnorm(1, c(0,0), cov0))
@@ -18,7 +18,7 @@ kalmanFilter = function(F, H, cov0, covX, covZ, covT, iteration) {
     p = F*covT*t(F) + covX
     kalmanGain = p*t(H)*inv(H*p*t(H) + covZ)
     covT = (diag(dim(covT)[1]) - kalmanGain*H)*p
-    t[i+1,] = F%*%t[i,] + kalmanGain%*%(z[i+1,] - (H%*%F%*%t[i,]))   
+    t[i+1,] = F%*%t[i,] + kalmanGain%*%(z[i+1,] - H%*%F%*%t[i,])
   }
   
   return(list("real" = x, "observed" = z, "kalman" = t))
