@@ -23,10 +23,9 @@
     (name name-surname)
     (values ?name-surname)
   )
-  ; (local-time ?current-year $?)
+  (current-year ?current-year)
   =>
-  ; (assert (user-attribute (name age) (values (- ?current-year ?birth-year)) (type profile)))
-  (assert (user-attribute (name age) (values 65) (type profile)))
+  (assert (user-attribute (name age) (values (- ?current-year ?birth-year)) (type profile)))
   (assert (user-attribute (name live-region) (values ?live-region) (type profile)))
   (assert (user-attribute (name last-region-visited) (values ?last-region-visited) (type profile)))
   (assert (user-attribute (name service) (values $?services) (type profile)))
@@ -34,7 +33,7 @@
 )
 
 (deffacts USER-PROFILE::profile-definition
-  ; (local-time (local-time))
+  (current-year 2019)
   
   (profile
     (name-surname "Riccardo Perotti")
