@@ -1,13 +1,25 @@
-kalmanFilter = function(z, F, H, t0, covX, covZ, sigmaT) {
-  t = matrix(ncol = length(t0), nrow = 20)
-  t[1,] = t0
+kalmanFilter = function(F, H, cov0, covX, covZ, covT, iteration) {
+  x = matrix(ncol = dim(cov0)[1], nrow = iteration)
+  z = matrix(ncol = dim(cov0)[1], nrow = iteration)
+  t = matrix(ncol = length(t0), nrow = iteration)
   
-  for(i in 1 : (nrow(t)-1)) {
-    tmp = F*sigmaT*t(F) + covX
-    kalmanGain = tmp*t(H)*inv(H*tmp*t(H) + covZ)   ##matrix(rep(0.000001, 4), nrow=2)
-    sigmaT = (diag(length(t0)) - kalmanGain*H)*tmp
-    t[i+1,] = F%*%t[i,] + kalmanGain%*%(z[i+1,] - (H%*%F%*%t[i,])) 
+  x[1,] = mvrnorm(1, c(0,0), cov0)
+  t[1,] = mvrnorm(1, c(0,0), cov0)
+  
+  for(i in 1 : (nrow(x)-1)) {
+    muF = F%*%x[i,]
+    transNoise = mvrnorm(1, muF, covX) - muF ##errore di transizione centrato in 0 per ogni variabile
+    x[i+1,] = muF + transNoise ##stato successivo = muF + errore di transizione
+    
+    muH = H%*%x[i+1,]
+    obsNoise = mvrnorm(1, muH, covZ) - muH ##errore di misurazione centrato in 0 per ogni variabile
+    z[i+1,] = muH + obsNoise ##osservazione sullo stato successivo = muH + errore di misurazione
+    
+    p = F*covT*t(F) + covX
+    kalmanGain = p*t(H)*inv(H*p*t(H) + covZ)
+    sigmaT = (diag(dim(covT)[1]) - kalmanGain*H)*p
+    t[i+1,] = F%*%t[i,] + kalmanGain%*%(z[i+1,] - (H%*%F%*%t[i,]))   
   }
   
-  return(t)
+  return(list("real" = x, "observed" = z, "kalman" = t))
 }
