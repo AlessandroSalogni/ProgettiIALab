@@ -71,25 +71,25 @@
   (considered-hotels)
 )
 
-;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base alle stelle
+;Ho una confidenza in più sull'hotel da -0.2 a 0.2 in base alle stelle
 (defrule GENERATE-FACILITIES::generate-facility-from-stars
   (iteration ?i)
   (attribute (name stars) (value ?stars) (certainty ?cf-stars) (iteration ?i))
   (facility (name ?name) (stars ?stars))
   =>
-  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-stars 0.4)) (iteration ?i)))
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-stars 0.2)) (iteration ?i)))
 )
 
-;Ho una confidenza in più sull'hotel da -0.6 a 0.6 in base alla città
+;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base alla città
 (defrule GENERATE-FACILITIES::generate-facility-from-city 
   (iteration ?i)
   (attribute (name city) (value ?city) (certainty ?cf-city) (iteration ?i))
   (facility (name ?name) (city ?city))
   =>
-  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-city 0.6)) (iteration ?i)))
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-city 0.4)) (iteration ?i)))
 )
 
-;Ho una confidenza in più sull'hotel da -0.6 a 0.6 in base al budget
+;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base al budget
 (defrule GENERATE-FACILITIES::generate-facility-from-budget-upper-then-price
   (iteration ?i)
   (parameter-range (name budget-per-day) (range ?budget-min ?budget-max))
@@ -97,7 +97,7 @@
   (facility (name ?name) (price ?price&:(< ?price ?budget-per-day)))
   =>
   (bind ?lower-bound (- ?budget-per-day 60))
-  (bind ?result (max (+ -0.6 (* (/ (- ?price ?lower-bound) (- ?budget-per-day ?lower-bound)) 1.2)) -0.6))
+  (bind ?result (max (+ -0.4 (* (/ (- ?price ?lower-bound) (- ?budget-per-day ?lower-bound)) 0.8)) -0.4))
 
   (assert 
     (attribute 
@@ -109,7 +109,7 @@
   )
 )
 
-;Ho una confidenza in più sull'hotel da -0.6 a 0.6 in base al budget
+;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base al budget
 (defrule GENERATE-FACILITIES::generate-facility-from-budget-lower-then-price
   (iteration ?i)
   (parameter-range (name budget-per-day) (range ?budget-min ?budget-max))
@@ -117,7 +117,7 @@
   (facility (name ?name) (price ?price&:(>= ?price ?budget-per-day)))
   =>
   (bind ?upper-bound (+ ?budget-per-day 40))
-  (bind ?result (max (+ -0.6 (* (/ (- ?price ?upper-bound) (- ?budget-per-day ?upper-bound)) 1.2)) -0.6))
+  (bind ?result (max (+ -0.4 (* (/ (- ?price ?upper-bound) (- ?budget-per-day ?upper-bound)) 0.8)) -0.4))
 
   (assert 
     (attribute 
@@ -129,13 +129,13 @@
   )
 )
 
-;Ho una confidenza in più sull'hotel da -0.2 a 0.2 in base ai servizi (più servizi ho in un hotel e più confidenza ho)
+;Ho una confidenza in più sull'hotel da -0.1 a 0.1 in base ai servizi (più servizi ho in un hotel e più confidenza ho)
 (defrule GENERATE-FACILITIES::generate-facility-from-services-present-in-facility ;Voglio o no il service, e l'hotel ce l'ha
   (iteration ?i)
   (attribute (name service) (value ?service) (certainty ?cf-service) (iteration ?i))
   (facility (name ?name) (services $? ?service $?))
   =>  
-  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.2)) (iteration ?i)))
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.1)) (iteration ?i)))
 )
 
 (defrule GENERATE-FACILITIES::generate-facility-from-services-not-present-in-facility ;Voglio o no il service, e l'hotel NON ce l'ha
@@ -143,17 +143,17 @@
   (attribute (name service) (value ?service) (certainty ?cf-service) (iteration ?i))
   (facility (name ?name) (services $?services&:(not (member ?service ?services))))
   => 
-  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.2 -1)) (iteration ?i)))
+  (assert (attribute (name facility) (value ?name) (certainty (* ?cf-service 0.1 -1)) (iteration ?i)))
 )
 
-;Ho una confidenza in più sull'hotel da -0.4 a 0.4 in base all'ocupazione della struttura
+;Ho una confidenza in più sull'hotel da -0.2 a 0.2 in base all'ocupazione della struttura
 (defrule GENERATE-FACILITIES::generate-facility-from-availability
   (iteration ?i)
   ?attribute-facility <- (attribute (name facility) (value ?name) (iteration ?i)) 
   (facility (name ?name) (rooms-available ?rooms-available) (rooms-booked ?rooms-booked))  
   ?considered <- (considered-hotels $?considered-hotels&:(not (member ?name $?considered-hotels)))
   =>
-  (bind ?cf-contribution (+ (* (/ ?rooms-available (+ ?rooms-booked ?rooms-available)) 0.8) -0.4))
+  (bind ?cf-contribution (+ (* (/ ?rooms-available (+ ?rooms-booked ?rooms-available)) 0.4) -0.2))
   (retract ?considered)
   (assert (considered-hotels $?considered-hotels ?name))
   (assert (attribute (name facility) (value ?name) (certainty ?cf-contribution) (iteration ?i)))
