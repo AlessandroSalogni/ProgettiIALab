@@ -42,7 +42,7 @@
   (modify ?sol (cities ?head ?city ?city-next ?tail))
 )
 
-(defrule GENERATE-SOLUTIONS::retract-solutions-with-same-cities ; TODO mettere salience?? o eliminare solo stesse città con stessi hotel
+(defrule GENERATE-SOLUTIONS::retract-solutions-with-same-cities 
   ?sol1 <- (possible-solution (cities $?cities) (certainty ?cf1) (number-places ?n))
   ?sol2 <- (possible-solution (cities $?cities) (certainty ?cf2&:(<= ?cf2 ?cf1)) (number-places ?n))
   (test (neq ?sol1 ?sol2))
