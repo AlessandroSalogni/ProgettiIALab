@@ -141,5 +141,5 @@
   (preference-request (search-parameter service) (request "Which service would you like to have?"))
   (preference-request (search-parameter budget-per-day) (request "What budget per day would you like to set?"))
   (preference-request (search-parameter group-detail) (request "Which of them is present? (disability / children)"))
-  (preference-request (search-parameter number-days) (request "How much days?"))
+  (preference-request (search-parameter number-days) (request "How many nights?"))
 )
