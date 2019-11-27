@@ -17,7 +17,7 @@ kalmanFilter = function(F, H, cov0, covX, covZ, covT, iteration) {
     
     p = F*covT*t(F) + covX
     kalmanGain = p*t(H)*inv(H*p*t(H) + covZ)
-    sigmaT = (diag(dim(covT)[1]) - kalmanGain*H)*p
+    covT = (diag(dim(covT)[1]) - kalmanGain*H)*p
     t[i+1,] = F%*%t[i,] + kalmanGain%*%(z[i+1,] - (H%*%F%*%t[i,]))   
   }
   
