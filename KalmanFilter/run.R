@@ -17,7 +17,10 @@ x = filter$real
 z = filter$observed
 t = filter$kalman
 
+png("chart.png", width=1500)
 par(mfrow = c(1, 1))
-plot(t, col="red", type="b", pch="F")
-points(z, col="green", type="b", pch="O")
-points(x, col="blue", type="b", pch="R")
+plot(t, col="red", type="b", pch=4)
+points(z, col="green", pch=8)
+points(x, col="blue", pch=0)
+
+dev.off()
