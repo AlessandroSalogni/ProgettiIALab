@@ -18,6 +18,6 @@ z = filter$observed
 t = filter$kalman
 
 par(mfrow = c(1, 1))
-plot(z, col="green", type="b", pch=8, xlim=c(0, max(z[,1], na.rm = TRUE)), ylim=c(0, max(z[,2], na.rm = TRUE)))
-points(t, col="red", type="b", pch=4)
-points(x, col="blue", type="b", pch=0)
+plot(z, col="green", type="b", lty=2, pch=8, xlim=c(0, max(z[,1], na.rm = TRUE)), ylim=c(0, max(z[,2], na.rm = TRUE)))
+lines(t, col="red", type="b", pch=4)
+lines(x, col="blue", type="b", lty=4, pch=0)
