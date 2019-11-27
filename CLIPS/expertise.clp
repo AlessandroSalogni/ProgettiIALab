@@ -16,6 +16,7 @@
 )
 
 (deffacts EXPERTISE::expertise-knowledge
+  ; ----- Region -----
   (expertise (user-attribute region) (value piemonte) (inference
     turism [ sea -0.6 mountain 0.6 enogastronomic 0.6 lake 0.4 termal 0.2 religious 0.4 cultural 0.4 ]
     region [ liguria 0.2 toscana -0.4 lombardia 0.6 valle-d'aosta 0.6 veneto -0.2 umbria -0.2 marche -0.8 friuli-venezia-giulia -0.6 ] ))
@@ -79,6 +80,7 @@
     region [ piemonte 0.4 liguria -0.2 toscana 0.4 lombardia 0.2 trentino-alto-adige -0.4 umbria 0.6 marche 0.4 ]
     turism [ cultural 0.4 ] ))
 
+  ; ----- Age -----
   (expertise (user-attribute age-class) (value young) (type inferred) (inference 
     turism [ sport 0.4 sea 0.2 religious -0.2 ]))  
   (expertise (user-attribute age-class) (value middle-young) (type inferred) (inference 
@@ -88,6 +90,7 @@
   (expertise (user-attribute age-class) (value old) (type inferred) (inference 
     turism [ cultural 0.2 religious 0.4 sport -0.2 termal 0.2 ]))
 
+  ; ----- Budget -----
   (expertise (user-attribute budget-per-day-class) (value low) (type inferred) (inference
     stars [ 1 0.8 2 0.2 3 -0.4 4 -0.8 ] 
     service [ pool -0.8 room-service -0.8 spa -0.8 ]
@@ -102,36 +105,37 @@
     stars [ 1 -0.8 2 -0.4 3 0.2 4 0.8 ] 
     service [ pool 0.8 room-service 0.8 spa 0.8 parking 0.8 wifi 0.8 tv 0.8 ] 
     region [ liguria 0.2 valle-d'aosta 0.2 ] ))
-  ;Pensare a cosa potrebbe influenzare le stelle di altro 
 
-  (expertise (user-attribute number-days) (value 1) (type inferred) (inference
+  ; ----- Days -----
+  (expertise (user-attribute number-days) (value 1) (type mandatory) (inference
     turism [ termal 0.4 lake 0.2 enogastronomic 0.4 ] ))
-
   (expertise (user-attribute number-days-class) (value lot-days) (type inferred) (inference
     service [ pet 0.2 laundry 0.4 ] ))
 
-  (expertise (user-attribute group-detail) (value disability) (type inferred) (inference
+  ; ----- Disability -----
+  (expertise (user-attribute group-detail) (value disability) (type optional) (inference
    service [ room-service 0.2 ]
-   turism [ sport -0.4 mountain -0.2 sea 0.2 cultural 0.2 ]
-   ))
+   turism [ sport -0.4 mountain -0.2 sea 0.2 cultural 0.2 ] ))
 
-  (expertise (user-attribute group-detail) (value children) (type inferred) (inference
+  ; ----- Children -----
+  (expertise (user-attribute group-detail) (value children) (type optional) (inference
    service [ pool 0.2 ]
-   turism [ cultural -0.4 religious -0.4 ]
-  ))
+   turism [ cultural -0.4 religious -0.4 ] ))
+  (expertise (user-attribute group-detail) (value children) (type optional) (desire FALSE) (inference
+    turism [ religious 0.2 cultural 0.2 ] ))
 
-  (expertise (user-attribute group-detail) (value children) (type inferred) (desire FALSE) (inference
-    turism [ religious 0.2 cultural 0.2 ]
-  ))
-
+  ; ----- Places -----
+  (expertise (user-attribute number-places) (value 3) (type optional) (inference
+    turism [ cultural 0.2 ]
+    service [ parking 0.4 ] ))
   (expertise (user-attribute number-places) (value 3) (type inferred) (inference
-    service [ parking 0.4 cultural 0.2 ]
-  ))
+    turism [ cultural 0.2 ]
+    service [ parking 0.4 ] ))
 )
 
 (defrule EXPERTISE::expertise-general-rule
   (iteration ?i)
-  (user-attribute (name ?user-attribute) (values $? ?value $?) (type ?type) (desire ?desire)) ;TODO vedere se negare expertise
+  (user-attribute (name ?user-attribute) (values $? ?value $?) (type ?type) (desire ?desire))
   (expertise (user-attribute ?user-attribute) (value ?value) (type ?type) (desire ?desire)
     (inference $? ?attribute [ $?values&:(not (member ] ?values)) ] $?))  
   =>
@@ -206,28 +210,33 @@
   (assert (new-attributes (attribute ?attribute) (values $?values) (deviation 0.4) (iteration ?i)))
 )
 
-(defrule EXPERTISE::expertise-for-number-of-places-not-defined-for-disability
-  (not (user-attribute (name number-places) (values ?number-places)))
-  (or
-    (user-attribute (name group-detail) (values disability))
-    (user-attribute (name number-days-class) (values few-days))
+(defrule EXPERTISE::expertise-from-disability-disability-or-few-days
+  (iteration ?i)
+  (not (user-attribute (name number-places) (type optional)))
+  (exists
+    (or
+      (user-attribute (name group-detail) (values disability))
+      (user-attribute (name number-days-class) (values few-days))
+    )
   )
   =>
-  (assert (user-attribute (name number-places) (values 1)))
+  (assert (user-attribute (name number-places) (values 1) (type inferred)))
 )
 
-(defrule EXPERTISE::expertise-for-number-of-places-not-defined-medium-days
-  (not (user-attribute (name number-places) (values ?number-places)))
+(defrule EXPERTISE::expertise-from-medium-days
+  (iteration ?i)
+  (not (user-attribute (name number-places) (type optional)))
   (not (user-attribute (name group-detail) (values disability)))
   (user-attribute (name number-days-class) (values lot-days))
   =>
-  (assert (user-attribute (name number-places) (values 3)))
+  (assert (user-attribute (name number-places) (values 3) (type inferred)))
 )
 
-(defrule EXPERTISE::expertise-for-number-of-places-not-defined-lot-days
-  (not (user-attribute (name number-places) (values ?number-places)))
+(defrule EXPERTISE::expertise-from-lot-days
+  (iteration ?i)
+  (not (user-attribute (name number-places) (type optional)))
   (not (user-attribute (name group-detail) (values disability)))
   (user-attribute (name number-days-class) (values medium-days))
   =>
-  (assert (user-attribute (name number-places) (values 2)))
+  (assert (user-attribute (name number-places) (values 2) (type inferred)))
 )
