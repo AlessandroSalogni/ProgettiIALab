@@ -41,7 +41,7 @@
     (live-region piemonte)
     (last-region-visited liguria)
     (favourite-services wifi parking pool)
-    (favourite-turisms mountain termal)
+    (favourite-turisms mountain termal sport)
   )
   (profile
     (name-surname "Alessandro Salogni")
@@ -49,5 +49,5 @@
     (live-region lombardia)
     (last-region-visited emilia-romagna)
     (favourite-services tv pet)
-    (favourite-turisms sea sport))
+    (favourite-turisms sea))
 )
