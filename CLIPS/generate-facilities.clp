@@ -49,6 +49,7 @@
   (facility (name "L'azzardo (AO)") (price 100) (city "Saint Vincent") (stars 3) (rooms-available 5) (rooms-booked 7) (services parking wifi tv spa air-conditioning))
   (facility (name "Arietta (AO)") (price 90) (city "Saint Vincent") (stars 3) (rooms-available 4) (rooms-booked 5) (services parking wifi tv))
   (facility (name "Il giocatore (AO)") (price 130) (city "Saint Vincent") (stars 4) (rooms-available 6) (rooms-booked 10) (services parking wifi tv room-service pool air-conditioning))
+  (facility (name "Una giocata al volo (AO)") (price 35) (city "Saint Vincent") (stars 1) (rooms-available 10) (rooms-booked 12) (services parking tv))
 
   (facility (name "La slavina (AO)") (price 60) (city "Aosta") (stars 2) (rooms-available 14) (rooms-booked 6) (services parking wifi tv))
 
