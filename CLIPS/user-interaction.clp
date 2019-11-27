@@ -1,7 +1,7 @@
 (defmodule USER-INTERACTION (import USER-ATTRIBUTE ?ALL) (export ?ALL))
 
 (deffunction USER-INTERACTION::ask-question (?question ?allowed-values)
-   (printout t ?question)
+   (printout t ?question " " ?allowed-values " ")
    (bind ?answer (read))
    (if (lexemep ?answer) then (bind ?answer (lowcase ?answer)))
    (while (not (member ?answer ?allowed-values)) do
@@ -54,7 +54,7 @@
   )
   =>
   (retract ?user-question)
-  (printout t ?question)
+  (printout t ?question " ")
   (bind ?answer (readline))
   (assert
     (user-attribute
@@ -71,7 +71,7 @@
     (valid-answers $?valid-answers)
   )
   =>
-  (printout t ?question)
+  (printout t ?question " " ?valid-answers " ")
   (assert (enumeration-user-answer (explode$ (readline))))
 )
 
@@ -154,9 +154,10 @@
   (range-attribute-question
     (name ?name)
     (question ?question)
+    (range ?min ?max)
   )
   =>
-  (printout t ?question)
+  (printout t ?question " (from " ?min " to " ?max ") ")
   (bind ?answer (read))
   (assert (range-user-answer ?answer))
 )

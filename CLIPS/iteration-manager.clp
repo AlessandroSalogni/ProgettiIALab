@@ -5,7 +5,7 @@
   =>
   (assert 
     (menu-question
-      (question "Dou you want to refine your search? (y/n) ")
+      (question "Dou you want to refine your search?")
       (valid-answers y n)
     )
   )
