@@ -40,8 +40,8 @@
     (birth-year 1996)
     (live-region piemonte)
     (last-region-visited liguria)
-    (favourite-services wifi)
-    (favourite-turisms mountain)
+    (favourite-services wifi parking pool)
+    (favourite-turisms mountain termal)
   )
   (profile
     (name-surname "Alessandro Salogni")
