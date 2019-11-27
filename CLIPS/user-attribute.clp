@@ -54,6 +54,13 @@
   (retract ?attr1)
 )
 
+(defrule USER-ATTRIBUTE::retract-inferred-with-duplicate-not-inferred-user-attribute (declare (auto-focus TRUE))
+  ?attr1 <- (user-attribute (name ?name) (type ~inferred))
+  ?attr2 <- (user-attribute (name ?name) (type inferred))
+  =>
+  (retract ?attr2)
+)
+
 (defrule USER-ATTRIBUTE::retract-duplicate-inferred-user-attribute (declare (auto-focus TRUE))
   ?attr1 <- (user-attribute (name ?name) (values ?val1) (type inferred) (id ?id1))
   ?attr2 <- (user-attribute (name ?name) (values ?val2) (type inferred) (id ?id2&:(> (str-compare ?id1 ?id2) 0)))
