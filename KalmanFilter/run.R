@@ -1,5 +1,3 @@
-source("C:/Users/lucap/Desktop/ProgettiIALab/KalmanFilter/simulateProcess.R")
-source("C:/Users/lucap/Desktop/ProgettiIALab/KalmanFilter/kalmanFilter.R")
 library(MASS)
 library(matlib)
 
