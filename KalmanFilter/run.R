@@ -5,7 +5,7 @@ library(matlib)
 
 F = matrix(c(1,0.2,0,1), byrow = TRUE, ncol = 2)
 H = matrix(c(1,0,0,1), byrow = TRUE, ncol = 2)
-iteration = 100
+iteration = 20
 
 cov0 = matrix(c(10, 0, 0, 11), ncol = 2, byrow = TRUE)
 covX = matrix(c(0.1, 0, 0, 0.1), ncol = 2, byrow = TRUE)
@@ -18,6 +18,6 @@ z = filter$observed
 t = filter$kalman
 
 par(mfrow = c(1, 1))
-plot(t, col="red", type="b", pch=4)
-points(z, col="green", pch=8)
-points(x, col="blue", pch=0)
+plot(z, col="green", type="b", pch=8, xlim=c(0, max(z[,1], na.rm = TRUE)), ylim=c(0, max(z[,2], na.rm = TRUE)))
+points(t, col="red", type="b", pch=4)
+points(x, col="blue", type="b", pch=0)
