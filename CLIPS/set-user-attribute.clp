@@ -67,7 +67,7 @@
   (class-user-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name middle-low) (min 50) (max 99))
   (class-user-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name middle-high) (min 100) (max 149))
   (class-user-attribute (user-attribute budget-per-day) (attribute-name budget-per-day-class) (class-name high) (min 150) (max 300))
-  (class-user-attribute (user-attribute number-days) (attribute-name number-days-class) (class-name few-days) (min 2) (max 9))
+  (class-user-attribute (user-attribute number-days) (attribute-name number-days-class) (class-name few-days) (min 1) (max 9))
   (class-user-attribute (user-attribute number-days) (attribute-name number-days-class) (class-name medium-days) (min 10) (max 19))
   (class-user-attribute (user-attribute number-days) (attribute-name number-days-class) (class-name lot-days) (min 20) (max 30))
 )
