@@ -1,3 +1,6 @@
+source("kalmanFilter.R")
+source("simulateProcess.R")
+
 library(MASS)
 library(matlib)
 
