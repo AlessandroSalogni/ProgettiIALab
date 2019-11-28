@@ -98,7 +98,7 @@
   (facility (name ?name) (price ?price&:(< ?price ?budget-per-day)))
   =>
   (bind ?lower-bound (- ?budget-per-day 60))
-  (bind ?result (max (+ -0.4 (* (/ (- ?price ?lower-bound) (- ?budget-per-day ?lower-bound)) 0.8)) -0.4))
+  (bind ?result (max (+ -0.4 (* (/ (- ?price ?lower-bound) (- ?budget-per-day ?lower-bound)) 0.8)) -0.8))
 
   (assert 
     (attribute 
@@ -118,7 +118,7 @@
   (facility (name ?name) (price ?price&:(>= ?price ?budget-per-day)))
   =>
   (bind ?upper-bound (+ ?budget-per-day 40))
-  (bind ?result (max (+ -0.4 (* (/ (- ?price ?upper-bound) (- ?budget-per-day ?upper-bound)) 0.8)) -0.4))
+  (bind ?result (max (+ -0.4 (* (/ (- ?price ?upper-bound) (- ?budget-per-day ?upper-bound)) 0.8)) -0.8))
 
   (assert 
     (attribute 
