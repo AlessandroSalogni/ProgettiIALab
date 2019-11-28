@@ -3,7 +3,6 @@
 (deftemplate profile
   (slot name-surname (type STRING))
   (slot birth-year (type INTEGER))
-  (slot number-holiday-days (type INTEGER))
   (slot live-region)
   (slot last-region-visited)
   (multislot favourite-services)
