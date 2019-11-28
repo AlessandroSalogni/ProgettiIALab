@@ -5,8 +5,8 @@
   (slot city (type STRING))
   (slot price (type INTEGER))
   (slot stars (type INTEGER) (range 1 4))
-  (multislot rooms-available (type INTEGER) (range 0 ?VARIABLE)) 
-  (multislot rooms-booked (type INTEGER) (range 0 ?VARIABLE)) 
+  (slot rooms-available (type INTEGER) (range 0 ?VARIABLE)) 
+  (slot rooms-booked (type INTEGER) (range 0 ?VARIABLE)) 
   (multislot services (cardinality 0 ?VARIABLE))
 )
 
