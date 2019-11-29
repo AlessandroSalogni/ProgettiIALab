@@ -9,7 +9,7 @@ percorso("Central",0,["East Acton","White City","Shepherd's Bush","Holland Park"
 percorso("Circle",0,["Embankment","Westminster","St. James's Park","Victoria","Sloane Square","South Kensington","Gloucester Road",
   "High Street Kensington","Notting Hill Gate","Bayswater","Paddington","Edgware Road","Baker Street","Great Portland Street",
   "Euston Square","King's Cross St. Pancras","Farringdon","Barbican","Moorgate","Liverpool Street","Aldgate","Tower Hill","Monument",
-  "Cannon Street","Mansion House","Blackfriars","Temple","Embankment"]). %Pensare bene alla lista circolare
+  "Cannon Street","Mansion House","Blackfriars","Temple","Embankment"]).
 percorso("District East-West",0,["Bow Road","Mile End","Stepney Green","Whitechapel","Aldgate East","Tower Hill","Monument","Cannon Street",
   "Mansion House","Blackfriars","Temple","Embankment","Westminster","St. James's Park","Victoria","Sloane Square","South Kensington",
   "Gloucester Road","Earl's Court","West Kensington","Barons Court","Hammersmith","Ravenscourt Park","Stamford Brook"]).
@@ -87,17 +87,14 @@ stazione("Oxford Circus", -0.140025246, 51.51481046).
 stazione("Holborn", -0.1188087, 51.51706879).
 stazione("Chancery Lane", -0.109960547, 51.5177395).
 stazione("St. Paul's", -0.095907533, 51.51444286).
-stazione("Paddington", -0.174388339, 51.51605291).
 stazione("Embankment", -0.120562428, 51.50694137).
 stazione("Westminster", -0.124052209, 51.50045311).
 stazione("Euston", -0.132992071, 51.52757668).
 stazione("Waterloo", -0.112818812, 51.50291418).
 stazione("Green Park", -0.140937126, 51.50635747).
-%stazione("Paddington (H&C Line)", -0.17719615, 51.51800497).
 stazione("Piccadilly Circus", -0.132081484, 51.50955061).
 stazione("Charing Cross", -0.125777173, 51.50686754).
 stazione("Lambeth North", -0.110624882, 51.49833058).
-%stazione("Edgware Road (Bakerloo)", -0.168645951, 51.51996099).
 stazione("Marylebone", -0.162637346, 51.52165079).
 stazione("Regent's Park", -0.144708117, 51.52277011).
 stazione("Sloane Square", -0.15473274, 51.49182524).
@@ -135,7 +132,6 @@ stazione("Bethnal Green", -0.053074702, 51.52672839).
 stazione("Kensington (Olympia)", -0.208533266, 51.49722528).
 stazione("Finsbury Park", -0.105068129, 51.56406609).
 stazione("Stockwell", -0.121436641, 51.47131386).
-%stazione("Hammersmith (H&C Line)", -0.223334507, 51.49327356).
 stazione("Kensal Green", -0.222882378, 51.5300656).
 stazione("Elephant & Castle", -0.099577259, 51.4953253).
 stazione("Warwick Avenue", -0.182005998, 51.52269118).

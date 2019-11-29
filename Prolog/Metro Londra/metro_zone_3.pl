@@ -9,7 +9,7 @@ percorso("Central",0,["Ealing Broadway","West Acton","North Acton","East Acton",
 percorso("Circle",0,["Embankment","Westminster","St. James's Park","Victoria","Sloane Square","South Kensington","Gloucester Road",
   "High Street Kensington","Notting Hill Gate","Bayswater","Paddington","Edgware Road","Baker Street","Great Portland Street",
   "Euston Square","King's Cross St. Pancras","Farringdon","Barbican","Moorgate","Liverpool Street","Aldgate","Tower Hill","Monument",
-  "Cannon Street","Mansion House","Blackfriars","Temple","Embankment"]). %Pensare bene alla lista circolare
+  "Cannon Street","Mansion House","Blackfriars","Temple","Embankment"]).
 percorso("District East-West",0,["Upton Park","Plaistow","West Ham","Bromley By Bow","Bow Road","Mile End","Stepney Green",
   "Whitechapel","Aldgate East","Tower Hill","Monument","Cannon Street","Mansion House","Blackfriars","Temple","Embankment","Westminster",
   "St. James's Park","Victoria","Sloane Square","South Kensington","Gloucester Road","Earl's Court","West Kensington","Barons Court",
@@ -36,7 +36,7 @@ percorso("Northern West",0,["Hendon Central","Brent Cross","Golders Green","Hamp
 percorso("Piccadilly",0,["Bounds Green","Wood Green","Turnpike Lane","Manor House","Finsbury Park","Arsenal","Holloway Road",
   "Caledonian Road","King's Cross St. Pancras","Russell Square","Holborn","Covent Garden","Leicester Square","Piccadilly Circus",
   "Green Park","Hyde Park Corner","Knightsbridge","South Kensington","Gloucester Road","Earl's Court","Barons Court","Hammersmith",
-  /*"Turnham Green",*/"Acton Town","Ealing Common","North Ealing","Park Royal"]).
+  "Acton Town","Ealing Common","North Ealing","Park Royal"]).
 percorso("Victoria",0,["Walthamstow Central","Blackhorse Road","Tottenham Hale","Seven Sisters","Finsbury Park","Highbury & Islington",
   "King's Cross St. Pancras","Euston","Warren Street","Oxford Circus","Green Park","Victoria","Pimlico","Vauxhall","Stockwell","Brixton"]).
 percorso("Waterloo & City",0,["Bank","Waterloo"]).
@@ -92,17 +92,14 @@ stazione("Oxford Circus", -0.140025246, 51.51481046).
 stazione("Holborn", -0.1188087, 51.51706879).
 stazione("Chancery Lane", -0.109960547, 51.5177395).
 stazione("St. Paul's", -0.095907533, 51.51444286).
-stazione("Paddington", -0.174388339, 51.51605291).
 stazione("Embankment", -0.120562428, 51.50694137).
 stazione("Westminster", -0.124052209, 51.50045311).
 stazione("Euston", -0.132992071, 51.52757668).
 stazione("Waterloo", -0.112818812, 51.50291418).
 stazione("Green Park", -0.140937126, 51.50635747).
-%stazione("Paddington (H&C Line)", -0.17719615, 51.51800497).
 stazione("Piccadilly Circus", -0.132081484, 51.50955061).
 stazione("Charing Cross", -0.125777173, 51.50686754).
 stazione("Lambeth North", -0.110624882, 51.49833058).
-%stazione("Edgware Road (Bakerloo)", -0.168645951, 51.51996099).
 stazione("Marylebone", -0.162637346, 51.52165079).
 stazione("Regent's Park", -0.144708117, 51.52277011).
 stazione("Sloane Square", -0.15473274, 51.49182524).
@@ -140,7 +137,6 @@ stazione("Bethnal Green", -0.053074702, 51.52672839).
 stazione("Kensington (Olympia)", -0.208533266, 51.49722528).
 stazione("Finsbury Park", -0.105068129, 51.56406609).
 stazione("Stockwell", -0.121436641, 51.47131386).
-%stazione("Hammersmith (H&C Line)", -0.223334507, 51.49327356).
 stazione("Kensal Green", -0.222882378, 51.5300656).
 stazione("Elephant & Castle", -0.099577259, 51.4953253).
 stazione("Warwick Avenue", -0.182005998, 51.52269118).
@@ -190,7 +186,6 @@ stazione("Golders Green", -0.192420671, 51.57178437).
 stazione("South Ealing", -0.305919519, 51.50039136).
 stazione("North Ealing", -0.287236576, 51.51697561).
 stazione("Park Royal", -0.282378071, 51.52597425).
-%stazione("Hanger Lane", -0.291095909, 51.52968038).
 stazione("North Acton", -0.258167978, 51.52310534).
 stazione("Leyton", -0.00386474, 51.55609689).
 stazione("Bromley By Bow", -0.009841042, 51.52424987).
@@ -207,8 +202,6 @@ stazione("Ealing Common", -0.286555479, 51.50903565).
 stazione("South Wimbledon", -0.191711278, 51.41446924).
 stazione("Northfields", -0.311409865, 51.49914634).
 stazione("Harlesden", -0.256997378, 51.53619355).
-%stazione("Kew Gardens", -0.283453589, 51.47648632).
-%stazione("Gunnersbury", -0.273547129, 51.49123204).
 stazione("North Greenwich", 0.005908784, 51.50002099).
 stazione("Canning Town", 0.009568884, 51.51360991).
 stazione("Willesden Green", -0.221119357, 51.54886838).
@@ -232,6 +225,11 @@ fermata(Stazione,Linea) :- percorso(Linea,0,P), member(Stazione,P).
 
 
 iniziale([at("Ealing Broadway"),ground]).
+%iniziale([at("Park Royal"),ground]).
+%iniziale([at("Bayswater"), ground]).
 
 %finale([at("Stratford"),ground]).
 finale([at("North Greenwich"),ground]).
+%finale([at("Notting Hill Gate"),ground]).
+%finale([at("Leyton"),ground]).
+%finale([at("Cannon Street"), ground]).
