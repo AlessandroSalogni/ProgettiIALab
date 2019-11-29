@@ -11,9 +11,13 @@ expand_children_as_heuristic(nodo(S, _, CostoAzPerS, EurDaS), [Az|AltreAz], Vis,
   costo_heuristic(Az, Costo),
   CostoAzPerSNuovo is CostoAzPerS + Costo,
   revisit_node(nodo(S_Nuovo, CostoAzPerSNuovo), Vis, NuoviVis), !,
-  coords_distance([at(S_Nuovo),ground], EurDaSNuovo),
+  coords_distance_heuristic(S_Nuovo, EurDaSNuovo),
   expand_children_as_heuristic(nodo(S, [], CostoAzPerS, EurDaS), AltreAz, NuoviVis, FigliTail).
 expand_children_as_heuristic(Nodo, [_|AltreAz], Vis, FigliTail) :- expand_children_as_heuristic(Nodo, AltreAz, Vis, FigliTail).
+
+coords_distance_heuristic(SP, Costo) :-
+  finale([at(SA),_]),
+  coords_distance(SP,SA,Costo).
 
 applicabile_heuristic(vai(SP, SA, Dir), SP) :- coppie_stazioni(SP, SA, Dir).%, \+chiuso(SP, SA).
 trasforma_heuristic(vai(SP, SA, _), SP, SA).
