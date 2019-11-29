@@ -25,11 +25,6 @@ costo_heuristic(vai(SP, SA, _), Costo) :- coords_distance(SP,SA,Costo).
 
 
 /* Bakerloo */
-% coppie_stazioni("Harrow & Wealdstone", "Kenton", 0).
-% coppie_stazioni("Kenton", "South Kenton", 0).
-% coppie_stazioni("South Kenton", "North Wembley", 0).
-% coppie_stazioni("North Wembley", "Wembley Central", 0).
-% coppie_stazioni("Wembley Central", "Stonebridge Park", 0).
 coppie_stazioni("Stonebridge Park", "Harlesden", 0).
 coppie_stazioni("Harlesden", "Willesden Junction", 0).
 coppie_stazioni("Willesden Junction", "Kensal Green", 0).
@@ -48,13 +43,6 @@ coppie_stazioni("Waterloo", "Lambeth North", 0).
 coppie_stazioni("Lambeth North", "Elephant & Castle", 0).
 
 /* Central */
-% coppie_stazioni("West Ruislip", "Ruislip Gardens", 0).
-% coppie_stazioni("Ruislip Gardens", "South Ruislip", 0).
-% coppie_stazioni("South Ruislip", "Northolt", 0).
-% coppie_stazioni("Northolt", "Greenford", 0).
-% coppie_stazioni("Greenford", "Perivale", 0).
-% coppie_stazioni("Perivale", "Hanger Lane", 0).
-% coppie_stazioni("Hanger Lane", "North Acton", 0).
 coppie_stazioni("Ealing Broadway", "West Acton", 0).
 coppie_stazioni("West Acton", "North Acton", 0).
 coppie_stazioni("North Acton", "East Acton", 0).
@@ -77,26 +65,6 @@ coppie_stazioni("Liverpool Street", "Bethnal Green", 0).
 coppie_stazioni("Bethnal Green", "Mile End", 0).
 coppie_stazioni("Mile End", "Stratford", 0).
 coppie_stazioni("Stratford", "Leyton", 0).
-% coppie_stazioni("Leyton", "Leytonstone", 0).
-% coppie_stazioni("Leytonstone", "Wanstead", 0).
-% coppie_stazioni("Wanstead", "Redbridge", 0).
-% coppie_stazioni("Redbridge", "Gants Hill", 0).
-% coppie_stazioni("Gants Hill", "Newbury Park", 0).
-% coppie_stazioni("Newbury Park", "Barkingside", 0).
-% coppie_stazioni("Barkingside", "Fairlop", 0).
-% coppie_stazioni("Fairlop", "Hainault", 0).
-% coppie_stazioni("Leytonstone", "Snaresbrook", 0).
-% coppie_stazioni("Snaresbrook", "South Woodford", 0).
-% coppie_stazioni("South Woodford", "Woodford", 0).
-% coppie_stazioni("Roding Valley", "Woodford", 0).
-% coppie_stazioni("Chigwell", "Roding Valley", 0).
-% coppie_stazioni("Grange Hill", "Chigwell", 0).
-% coppie_stazioni("Hainault", "Grange Hill", 0).
-% coppie_stazioni("Woodford", "Buckhurst Hill", 0).
-% coppie_stazioni("Buckhurst Hill", "Loughton", 0).
-% coppie_stazioni("Loughton", "Debden", 0).
-% coppie_stazioni("Debden", "Theydon Bois", 0).
-% coppie_stazioni("Theydon Bois", "Epping", 0).
 
 /* Victoria*/
 coppie_stazioni("Walthamstow Central", "Blackhorse Road", 0).
@@ -117,11 +85,6 @@ coppie_stazioni("Stockwell", "Brixton", 0).
 coppie_stazioni("Waterloo", "Bank", 0).
 
 /* Jubilee */
-% coppie_stazioni("Stanmore", "Canons Park", 0).
-% coppie_stazioni("Canons Park", "Queensbury", 0).
-% coppie_stazioni("Queensbury", "Kingsbury", 0).
-% coppie_stazioni("Kingsbury", "Wembley Park", 0).
-% coppie_stazioni("Wembley Park", "Neasden", 0).
 coppie_stazioni("Neasden", "Dollis Hill", 0).
 coppie_stazioni("Dollis Hill", "Willesden Green", 0).
 coppie_stazioni("Willesden Green", "Kilburn", 0).
@@ -145,21 +108,12 @@ coppie_stazioni("Canning Town", "West Ham", 0).
 coppie_stazioni("West Ham", "Stratford", 0).
 
 /* Northern */
-% coppie_stazioni("Edgware", "Burnt Oak", 0).
-% coppie_stazioni("Burnt Oak", "Colindale", 0).
-% coppie_stazioni("Colindale", "Hendon Central", 0).
 coppie_stazioni("Hendon Central", "Brent Cross", 0).
 coppie_stazioni("Brent Cross", "Golders Green", 0).
 coppie_stazioni("Golders Green", "Hampstead", 0).
 coppie_stazioni("Hampstead", "Belsize Park", 0).
 coppie_stazioni("Belsize Park", "Chalk Farm", 0).
 coppie_stazioni("Chalk Farm", "Camden Town", 0).
-% coppie_stazioni("High Barnet", "Totteridge & Whetstone", 0).
-% coppie_stazioni("Totteridge & Whetstone", "Woodside Park", 0).
-% coppie_stazioni("Woodside Park", "West Finchley", 0).
-% coppie_stazioni("West Finchley", "Finchley Central", 0).
-% coppie_stazioni("Mill Hill East", "Finchley Central", 0).
-% coppie_stazioni("Finchley Central", "East Finchley", 0).
 coppie_stazioni("East Finchley", "Highgate", 0).
 coppie_stazioni("Highgate", "Archway", 0).
 coppie_stazioni("Archway", "Tufnell Park", 0).
@@ -195,25 +149,10 @@ coppie_stazioni("Balham", "Tooting Bec", 0).
 coppie_stazioni("Tooting Bec", "Tooting Broadway", 0).
 coppie_stazioni("Tooting Broadway", "Colliers Wood", 0).
 coppie_stazioni("Colliers Wood", "South Wimbledon", 0).
-% coppie_stazioni("South Wimbledon", "Morden", 0).
 
 /* Piccadilly */
-% coppie_stazioni("Rayners Lane", "South Harrow", 0).
-% coppie_stazioni("South Harrow", "Sudbury Hill", 0).
-% coppie_stazioni("Sudbury Hill", "Sudbury Town", 0).
-% coppie_stazioni("Sudbury Town", "Alperton", 0).
-% coppie_stazioni("Alperton", "Park Royal", 0).
 coppie_stazioni("Park Royal", "North Ealing", 0).
 coppie_stazioni("North Ealing", "Ealing Common", 0).
-% coppie_stazioni("Heathrow 123", "Hatton Cross", 0).
-% coppie_stazioni("Hatton Cross", "Hounslow West", 0).
-% coppie_stazioni("Hounslow West", "Hounslow Central", 0).
-% coppie_stazioni("Hounslow Central", "Hounslow East", 0).
-% coppie_stazioni("Hounslow East", "Osterley", 0).
-% coppie_stazioni("Osterley", "Boston Manor", 0).
-% coppie_stazioni("Boston Manor", "Northfields", 0).
-% coppie_stazioni("Northfields", "South Ealing", 0).
-% coppie_stazioni("South Ealing", "Acton Town", 0).
 coppie_stazioni("Acton Town", "Hammersmith", 0).
 coppie_stazioni("Barons Court", "Earl's Court", 0).
 coppie_stazioni("South Kensington", "Knightsbridge", 0).
@@ -233,39 +172,9 @@ coppie_stazioni("Finsbury Park", "Manor House", 0).
 coppie_stazioni("Manor House", "Turnpike Lane", 0).
 coppie_stazioni("Turnpike Lane", "Wood Green", 0).
 coppie_stazioni("Wood Green", "Bounds Green", 0).
-% coppie_stazioni("Bounds Green", "Arnos Grove", 0).
-% coppie_stazioni("Arnos Grove", "Southgate", 0).
-% coppie_stazioni("Southgate", "Oakwood", 0).
-% coppie_stazioni("Oakwood", "Cockfosters", 0).
 
 /* Metropolitan */
 coppie_stazioni("Baker Street", "Finchley Road", 0).
-% coppie_stazioni("Finchley Road", "Wembley Park", 0).
-% coppie_stazioni("Wembley Park", "Preston Road", 0).
-% coppie_stazioni("Preston Road", "Northwick Park", 0).
-% coppie_stazioni("Northwick Park", "Harrow-on-the-hill", 0).
-% coppie_stazioni("Finchley Road", "Harrow-on-the-hill", 0).
-% coppie_stazioni("Harrow-on-the-hill", "West Harrow", 0).
-% coppie_stazioni("West Harrow", "Rayners Lane", 0).
-% coppie_stazioni("Rayners Lane", "Eastcote", 0).
-% coppie_stazioni("Eastcote", "Ruislip Manor", 0).
-% coppie_stazioni("Ruislip Manor", "Ruislip", 0).
-% coppie_stazioni("Ruislip", "Ickenham", 0).
-% coppie_stazioni("Ickenham", "Hillingdon", 0).
-% coppie_stazioni("Hillingdon", "Uxbridge", 0).
-% coppie_stazioni("Harrow-on-the-hill", "North Harrow", 0).
-% coppie_stazioni("North Harrow", "Pinner", 0).
-% coppie_stazioni("Pinner", "Northwood Hills", 0).
-% coppie_stazioni("Northwood Hills", "Northwood", 0).
-% coppie_stazioni("Northwood", "Moor Park", 0).
-% coppie_stazioni("Harrow-on-the-hill", "Moor Park", 0).
-% coppie_stazioni("Moor Park", "Croxley", 0).
-% coppie_stazioni("Croxley", "Watford", 0).
-% coppie_stazioni("Moor Park", "Rickmansworth", 0).
-% coppie_stazioni("Rickmansworth", "Chorleywood", 0).
-% coppie_stazioni("Chorleywood", "Chalfont & Latimer", 0).
-% coppie_stazioni("Chalfont & Latimer", "Chesham", 0).
-% coppie_stazioni("Chalfont & Latimer", "Amersham", 0).
 
 /* Hammersmith & City */
 coppie_stazioni("Hammersmith", "Goldhawk Road", 0).
@@ -291,16 +200,6 @@ coppie_stazioni("Aldgate", "Liverpool Street", 0).
 coppie_stazioni("Baker Street", "Edgware Road", 0).
 
 /* District */
-% coppie_stazioni("Upminster", "Upminster Bridge", 0).
-% coppie_stazioni("Upminster Bridge", "Hornchurch", 0).
-% coppie_stazioni("Hornchurch", "Elm Park", 0).
-% coppie_stazioni("Elm Park", "Dagenham East", 0).
-% coppie_stazioni("Dagenham East", "Dagenham Heathway", 0).
-% coppie_stazioni("Dagenham Heathway", "Becontree", 0).
-% coppie_stazioni("Becontree", "Upney", 0).
-% coppie_stazioni("Upney", "Barking", 0).
-% coppie_stazioni("Barking", "East Ham", 0).
-% coppie_stazioni("East Ham", "Upton Park", 0).
 coppie_stazioni("Upton Park", "Plaistow", 0).
 coppie_stazioni("Plaistow", "West Ham", 0).
 coppie_stazioni("West Ham", "Bromley By Bow", 0).
@@ -328,7 +227,6 @@ coppie_stazioni("Paddington", "Bayswater", 0).
 coppie_stazioni("Bayswater", "Notting Hill Gate", 0).
 coppie_stazioni("Notting Hill Gate", "High Street Kensington", 0).
 coppie_stazioni("High Street Kensington", "Earl's Court", 0).
-% coppie_stazioni("Earl's Court", "Kensington (olympia)", 0).
 coppie_stazioni("Earl's Court", "West Brompton", 0).
 coppie_stazioni("West Brompton", "Fulham Broadway", 0).
 coppie_stazioni("Fulham Broadway", "Parsons Green", 0).
@@ -347,8 +245,5 @@ coppie_stazioni("Turnham Green", "Chiswick Park", 0).
 coppie_stazioni("Chiswick Park", "Acton Town", 0).
 coppie_stazioni("Acton Town", "Ealing Common", 0).
 coppie_stazioni("Ealing Common", "Ealing Broadway", 0).
-% coppie_stazioni("Turnham Green", "Gunnersbury", 0).
-% coppie_stazioni("Gunnersbury", "Kew Gardens", 0).
-% coppie_stazioni("Kew Gardens", "Richmond", 0).
 
 coppie_stazioni(SP, SA, 1) :- coppie_stazioni(SA, SP, 0).
