@@ -19,6 +19,6 @@ coords_distance_heuristic(SP, Costo) :-
   finale([at(SA),_]),
   coords_distance(SP,SA,Costo).
 
-applicabile_heuristic(vai(SP, SA, Dir), SP) :- coppie_stazioni(SP, SA, Dir).%, \+chiuso(SP, SA).
-trasforma_heuristic(vai(SP, SA, _), SP, SA).
-costo_heuristic(vai(SP, SA, _), Costo) :- coords_distance(SP,SA,Costo).
+applicabile_heuristic(vai(SP, SA), SP) :- coppie_stazioni(SP, SA, _).%, \+chiuso(SP, SA).
+trasforma_heuristic(vai(SP, SA), SP, SA).
+costo_heuristic(vai(SP, SA), Costo) :- coords_distance(SP,SA,Costo).
