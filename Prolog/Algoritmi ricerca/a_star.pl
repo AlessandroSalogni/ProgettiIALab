@@ -1,11 +1,12 @@
 a_star(Soluzione) :-
   statistics(walltime, [TimeSinceStart | [TimeSinceLastCall]]),
   iniziale(S),
-  as([nodo(S, [], 0, 0)], Soluzione, [], 0), %Eur a 0?
+  heuristic(S, EurDaS),
+  as([nodo(S, [], 0, EurDaS)], Soluzione, [], 0),
   statistics(walltime, [NewTimeSinceStart | [ExecutionTime]]),
   write('Execution took '), write(ExecutionTime), write(' ms.'), nl.
 
-as([nodo(S, AzPerS, CostoAzPerS, _)|_], AzPerS, _, Espansi) :- finale(S), write(CostoAzPerS), nl, !, write(Espansi), nl.
+as([nodo(S, AzPerS, CostoAzPerS, _)|_], AzPerS, _, Espansi) :- finale(S), write(CostoAzPerS), nl, write(Espansi), nl, !.
 as([nodo(S, AzPerS, CostoAzPerS, EurDaS)|Tail], Soluzione, Vis, Espansi) :-
   findall(Az, applicabile(Az, S), ListaAzApplicabili),
   expand_children_as(nodo(S, AzPerS, CostoAzPerS, EurDaS), ListaAzApplicabili, Vis, ListaFigli),

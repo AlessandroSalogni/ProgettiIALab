@@ -11,7 +11,7 @@ uc([nodo(S, AzPerS, CostoAzPerS, _)|Tail], Soluzione, Visitati, Espansi) :-
   expand_children_uc(nodo(S, AzPerS, CostoAzPerS, 0), ListaAzApplicabili, Visitati, ListaFigli),
   priority_queue(Tail, ListaFigli, NuovaCoda),
   NodiEspansi is Espansi + 1,
-  write(nodo(S, CostoAzPerS)), nl,
+  %write(nodo(S, CostoAzPerS)), nl,
   uc(NuovaCoda, Soluzione, [S|Visitati], NodiEspansi).
 
 expand_children_uc(_, [], _, []).

@@ -1,6 +1,6 @@
 ida_star(Soluzione) :-
-  iniziale(S),
   statistics(walltime, [TimeSinceStart | [TimeSinceLastCall]]),
+  iniziale(S),
   heuristic(S, EurDaS),
   idas_limit(nodo(S, 0, EurDaS), Soluzione, [S], EurDaS),
   statistics(walltime, [NewTimeSinceStart | [ExecutionTime]]),
@@ -16,7 +16,6 @@ idas_limit(S, Soluzione, Visitati, _) :-
 
 dfs_idas_limit(nodo(S, CostoAzPerS, _), [], _, _) :- finale(S),  write(CostoAzPerS), nl, !.
 dfs_idas_limit(nodo(S, CostoAzPerS, EurDaS), [Az|SequenzaAzioni], Visitati, Soglia) :-
-  nuova_soglia(NuovaSoglia),
   Soglia >= CostoAzPerS + EurDaS, !,
   applicabile(Az, S),
   trasforma(Az, S, S_Nuovo),

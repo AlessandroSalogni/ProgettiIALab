@@ -1,4 +1,4 @@
-cambi_in_linea_heuristic([at(SP),in(Linea,_)], [at(SA),_], Costo) :-
+cambi_in_linea_heuristic([at(_),in(Linea,_)], [at(SA),_], Costo) :-
   findall(sali(LineaArrivo, 0), applicabile(sali(LineaArrivo, 0), [at(SA),ground]), ListaLineeArrivo),
   calcola_min_cambi_in_linea(Linea, ListaLineeArrivo, MinCambi),
   costo_sali_scendi(CostoSaliScendi),
