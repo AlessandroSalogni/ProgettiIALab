@@ -13,11 +13,11 @@ cambi_in_ground_heuristic([at(SP),ground], [at(SA),_], Costo) :-
 
 calcola_min_cambi_in_linea(Linea, [sali(Linea,_)], 0) :- !.
 calcola_min_cambi_in_linea(Linea, [sali(LineaFinale,_)], CambiCorrenti) :-
-  cambi(Linea, LineaFinale, CambiCorrenti), !.
+  cambi(Linea, LineaFinale, _, CambiCorrenti), !.
 calcola_min_cambi_in_linea(Linea, [sali(Linea,_)|_], 0) :- !.
 calcola_min_cambi_in_linea(Linea, [sali(LineaFinale,_)|AltreAz], MinCambi) :-
   calcola_min_cambi_in_linea(Linea, AltreAz, Cambi),
-  cambi(Linea, LineaFinale, CambiCorrenti),
+  cambi(Linea, LineaFinale, _, CambiCorrenti),
   MinCambi is min(Cambi, CambiCorrenti).
 
 calcola_min_cambi_in_ground([sali(LineaPartenza,_)], AzArrivo, CambiCorrenti) :-
