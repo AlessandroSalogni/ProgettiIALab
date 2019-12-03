@@ -60,22 +60,23 @@ public class Main {
 //        startTime = System.nanoTime();
 //
 //        CategoricalDistribution resMap = new MapEliminationAsk().ask(mapVar, e, bn);
+
+//        timeElapsed = endTime - startTime;
 //        System.out.println("MAP Probability: " +  resMap.getValues()[0]);
 //        for(Map.Entry<RandomVariable,Object> varValue : resMap.getBestVarsValues()[0].entrySet())
 //            System.out.println(varValue.getKey() + " -> " + varValue.getValue());
 //
 //        endTime = System.nanoTime();
-//        timeElapsed = endTime - startTime;
 //        System.out.println("MAP - Execution time in milliseconds: " + timeElapsed / 1000000 + "\n\n");
 //
 //        startTime = System.nanoTime();
 //
 //        CategoricalDistribution resMpe = new MpeEliminationAsk().ask(null, e, bn);
+//        endTime = System.nanoTime();
 //        System.out.println("MPE Probability: " +  resMpe.getValues()[0]);
 //        for(Map.Entry<RandomVariable,Object> varValue : resMpe.getBestVarsValues()[0].entrySet())
 //            System.out.println(varValue.getKey() + " -> " + varValue.getValue());
 //
-//        endTime = System.nanoTime();
 //        timeElapsed = endTime - startTime;
 //        System.out.println("MPE - Execution time in milliseconds: " + timeElapsed / 1000000);
 
@@ -109,11 +110,13 @@ public class Main {
         timeElapsed = (endTime - startTime)/1000000;
         System.out.println("MPE polytree - Execution time in milliseconds: " + timeElapsed);
 
-        startTime = System.nanoTime();
+
 
         int mapVarsDim = 18;
         RandVar[] mapVars = new RandVar[mapVarsDim];
         System.arraycopy(X, 1, mapVars, 0, mapVarsDim);
+
+        startTime = System.nanoTime();
 
         CategoricalDistribution resMapPolytree = new MapEliminationAsk().ask(mapVars, new AssignmentProposition[]{new AssignmentProposition(X[numberOfNode-1], true)}, polytree);
 
