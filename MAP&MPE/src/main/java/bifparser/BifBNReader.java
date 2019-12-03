@@ -4,7 +4,7 @@ import aima.core.probability.RandomVariable;
 import aima.core.probability.bayes.BayesianNetwork;
 import aima.core.probability.bayes.Node;
 import aima.core.probability.bayes.impl.BayesNet;
-import javafx.util.Pair;
+import aima.core.util.datastructure.Pair;
 
 import java.io.*;
 import java.util.*;

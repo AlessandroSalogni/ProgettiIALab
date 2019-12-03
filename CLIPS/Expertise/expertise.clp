@@ -224,30 +224,6 @@
 (defrule EXPERTISE::expertise-from-disability-disability-or-few-days
   (iteration ?i)
   (not (user-attribute (name number-places) (type optional)))
-  (exists
-    (or
-      (user-attribute (name group-detail) (values disability))
-      (user-attribute (name number-days-class) (values few-days))
-    )
-  )
   =>
   (assert (user-attribute (name number-places) (values 1) (type inferred)))
-)
-
-(defrule EXPERTISE::expertise-from-medium-days
-  (iteration ?i)
-  (not (user-attribute (name number-places) (type optional)))
-  (not (user-attribute (name group-detail) (values disability)))
-  (user-attribute (name number-days-class) (values lot-days))
-  =>
-  (assert (user-attribute (name number-places) (values 3) (type inferred)))
-)
-
-(defrule EXPERTISE::expertise-from-lot-days
-  (iteration ?i)
-  (not (user-attribute (name number-places) (type optional)))
-  (not (user-attribute (name group-detail) (values disability)))
-  (user-attribute (name number-days-class) (values medium-days))
-  =>
-  (assert (user-attribute (name number-places) (values 2) (type inferred)))
 )
