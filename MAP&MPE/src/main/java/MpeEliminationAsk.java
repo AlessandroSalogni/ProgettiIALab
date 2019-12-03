@@ -3,36 +3,13 @@ import aima.core.probability.Factor;
 import aima.core.probability.RandomVariable;
 import aima.core.probability.bayes.BayesInference;
 import aima.core.probability.bayes.BayesianNetwork;
-import aima.core.probability.bayes.FiniteNode;
-import aima.core.probability.bayes.Node;
+import aima.core.probability.bayes.exact.EliminationAsk;
 import aima.core.probability.proposition.AssignmentProposition;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class MpeEliminationAsk implements BayesInference {
-
-    private CategoricalDistribution mpeEliminationAsk(AssignmentProposition[] e, BayesianNetwork bn) {
-        List<RandomVariable> topologicOrderVar = new ArrayList();
-        topologicOrderVar.addAll(bn.getVariablesInTopologicalOrder());
-        List<RandomVariable> reverseTopologicOrderVar = reverseOrder(topologicOrderVar);
-
-        List<Factor> factors = new ArrayList();
-        for(RandomVariable var : reverseTopologicOrderVar) {
-            factors.add(makeFactor(var, e, bn));
-            factors = maxOut(var, factors);
-        }
-
-        return (CategoricalDistribution) pointwiseProduct(factors);
-    }
-
-    public CategoricalDistribution ask(RandomVariable[] X, AssignmentProposition[] observedEvidence, BayesianNetwork bn) {
-        return mpeEliminationAsk(observedEvidence, bn);
-    }
-
-    private CategoricalDistribution mpeEliminationAsk(Factor factor, RandomVariable[] X, BayesianNetwork bn) {
+    private CategoricalDistribution mpeEliminationAsk(Factor factor, RandomVariable[] X) {
         List<Factor> factors = new ArrayList();
         factors.add(factor);
 
@@ -42,33 +19,19 @@ public class MpeEliminationAsk implements BayesInference {
         return (CategoricalDistribution) pointwiseProduct(factors);
     }
 
-    public CategoricalDistribution ask(Factor factor, RandomVariable[] X, BayesianNetwork bn) {
-        return mpeEliminationAsk(factor, X, bn);
+    public CategoricalDistribution ask(RandomVariable[] X, AssignmentProposition[] observedEvidence, BayesianNetwork bn) { return null; }
+
+    public CategoricalDistribution ask(AssignmentProposition[] observedEvidence, BayesianNetwork bn) {
+        List<RandomVariable> varWithoutEvidence = new ArrayList(bn.getVariablesInTopologicalOrder());
+        for (AssignmentProposition ap : observedEvidence)
+            varWithoutEvidence.removeAll(ap.getScope());
+
+        Factor eliminationFactor = (Factor) new EliminationAsk().ask(varWithoutEvidence.toArray(new RandomVariable[varWithoutEvidence.size()]), observedEvidence, bn);
+        return mpeEliminationAsk(eliminationFactor, varWithoutEvidence.toArray(new RandomVariable[varWithoutEvidence.size()]));
     }
 
-    protected List<RandomVariable> reverseOrder(Collection<RandomVariable> vars) {
-        List<RandomVariable> order = new ArrayList(vars);
-        Collections.reverse(order);
-        return order;
-    }
-
-    private Factor makeFactor(RandomVariable var, AssignmentProposition[] e, BayesianNetwork bn) {
-        Node n = bn.getNode(var);
-        if (!(n instanceof FiniteNode)) {
-            throw new IllegalArgumentException("Elimination-Ask only works with finite Nodes.");
-        } else {
-            FiniteNode fn = (FiniteNode)n;
-            List<AssignmentProposition> evidence = new ArrayList();
-
-            for(int i = 0; i < e.length; i++) {
-                AssignmentProposition ap = e[i];
-                if (fn.getCPT().contains(ap.getTermVariable())) {
-                    evidence.add(ap);
-                }
-            }
-
-            return fn.getCPT().getFactorFor((AssignmentProposition[])evidence.toArray(new AssignmentProposition[evidence.size()]));
-        }
+    public CategoricalDistribution ask(Factor factor, RandomVariable[] X) {
+        return mpeEliminationAsk(factor, X);
     }
 
     private List<Factor> maxOut(RandomVariable var, List<Factor> oldFactors) {
