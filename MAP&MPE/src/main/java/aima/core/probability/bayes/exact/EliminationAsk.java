@@ -83,12 +83,8 @@ public class EliminationAsk implements BayesInference {
 				factors = sumOut(var, factors, bn);
 			}
 		}
-		// return NORMALIZE(POINTWISE-PRODUCT(factors))
-		Factor product = pointwiseProduct(factors);
-		// Note: Want to ensure the order of the product matches the
-		// query variables
-		return ((ProbabilityTable) product.pointwiseProductPOS(_identity, X))
-				.normalize();
+		
+		return (CategoricalDistribution) pointwiseProduct(factors);
 	}
 
 	//
