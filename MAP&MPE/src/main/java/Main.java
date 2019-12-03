@@ -98,7 +98,7 @@ public class Main {
 
         startTime = System.nanoTime();
 
-        CategoricalDistribution resMpePolytree = new MpeEliminationAsk().ask(new AssignmentProposition[]{new AssignmentProposition(X[numberOfNode-1], true)}, polytree);
+        CategoricalDistribution resMpePolytree = new MpeEliminationAsk().ask(null, new AssignmentProposition[]{new AssignmentProposition(X[numberOfNode-1], true)}, polytree);
 
         endTime = System.nanoTime();
 
@@ -111,9 +111,9 @@ public class Main {
 
         startTime = System.nanoTime();
 
-        int mapVarsDim = 4;
+        int mapVarsDim = 18;
         RandVar[] mapVars = new RandVar[mapVarsDim];
-        System.arraycopy(X, 0, mapVars, 0, mapVarsDim);
+        System.arraycopy(X, 1, mapVars, 0, mapVarsDim);
 
         CategoricalDistribution resMapPolytree = new MapEliminationAsk().ask(mapVars, new AssignmentProposition[]{new AssignmentProposition(X[numberOfNode-1], true)}, polytree);
 

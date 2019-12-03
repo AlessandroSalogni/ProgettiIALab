@@ -83,7 +83,7 @@ public class EliminationAsk implements BayesInference {
 				factors = sumOut(var, factors, bn);
 			}
 		}
-		
+
 		return (CategoricalDistribution) pointwiseProduct(factors);
 	}
 
