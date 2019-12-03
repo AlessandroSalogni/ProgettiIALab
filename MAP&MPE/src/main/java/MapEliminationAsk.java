@@ -10,6 +10,6 @@ public class MapEliminationAsk implements BayesInference {
     @Override
     public CategoricalDistribution ask(RandomVariable[] mapVar, AssignmentProposition[] e, BayesianNetwork bn) {
         Factor eliminationFactor = (Factor) new EliminationAsk().ask(mapVar, e, bn);
-        return new MpeEliminationAsk().ask(eliminationFactor, mapVar, bn);
+        return new MpeEliminationAsk().ask(eliminationFactor, mapVar);
     }
 }
