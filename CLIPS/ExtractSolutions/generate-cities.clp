@@ -58,20 +58,16 @@
     (under-100 "Savona" "Celle Ligure"))
   (city (name "Genova") (region liguria) (turism sea 4 mountain 1 sport 2 enogastronomic 3 naturalistic 1)
     (under-30 )
-    (under-60 "Celle Ligure" "Sestri Levante")
-    (under-100 "Savona"))
+    (under-60 "Celle Ligure")
+    (under-100 "Savona" "La Spezia"))
   (city (name "La Spezia") (region liguria) (turism sea 4 mountain 1 sport 2 enogastronomic 3 naturalistic 1)
     (under-30 "Massa")
-    (under-60 "Sestri Levante")
-    (under-100 ))
+    (under-60 )
+    (under-100 "La Spezia" ))
   (city (name "Celle Ligure") (region liguria) (turism sea 5 sport 2 enogastronomic 2 naturalistic 2)
     (under-30 )
-    (under-60 "Savona" "Genova")
-    (under-100 "Imperia" "Sestri Levante"))
-  (city (name "Sestri Levante") (region liguria) (turism sea 5 sport 2 enogastronomic 2 naturalistic 2)
-    (under-30 )
-    (under-60 "Genova" "La Spezia")
-    (under-100 "Massa" "Celle Ligure"))
+    (under-60 "Savona" "Genova" )
+    (under-100 "Imperia" ))
   (city (name "Torino") (region piemonte) (turism mountain 3 cultural 4 sport 1 enogastronomic 3 naturalistic 2 religious 2)
     (under-30 )
     (under-60 )
@@ -174,7 +170,7 @@
   (city (name ?city) (turism $? ?turism ?score $?))       
   =>
   (bind ?cf-score (- (/ (* ?score 1.98) 5) 0.99))
-  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.2)) (iteration ?i)))
+  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.1)) (iteration ?i)))
 )
 
 (defrule GENERATE-CITIES::generate-city-from-turism-not-present-in-city
@@ -183,7 +179,7 @@
   (city (name ?city) (turism $?turisms&:(not (member ?turism ?turisms))))
   =>
   (bind ?cf-score -0.99)
-  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.2)) (iteration ?i)))
+  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.1)) (iteration ?i)))
 )
 
 (defrule GENERATE-CITIES::generate-city-from-region

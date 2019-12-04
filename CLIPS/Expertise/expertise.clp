@@ -22,7 +22,7 @@
     region [ liguria 0.2 toscana -0.4 lombardia 0.6 valle-d'aosta 0.6 veneto -0.2 umbria -0.2 marche -0.8 friuli-venezia-giulia -0.6 ] ))
   (expertise (user-attribute region) (value liguria) (inference
     turism [ sea 0.6 mountain 0.2 enogastronomic 0.4 lake -0.6 termal -0.4 sport 0.2 naturalistic 0.4 ]
-    region [ piemonte 0.2 toscana 0.6 lombardia -0.2 valle-d'aosta -0.6 trentino-alto-adige -0.8 emilia-romagna 0.2 umbria -0.6 ] ))
+    region [ piemonte 0.2 toscana 0.4 lombardia -0.2 valle-d'aosta -0.6 trentino-alto-adige -0.8 emilia-romagna -0.2 umbria -0.6 ] ))
   (expertise (user-attribute region) (value toscana) (inference
     turism [ sea 0.6 mountain -0.2 enogastronomic 0.4 lake -0.6 sport 0.2 naturalistic 0.6 religious 0.2 cultural 0.6 ]
     region [ piemonte -0.4 liguria 0.6 valle-d'aosta -0.8 trentino-alto-adige -0.8 emilia-romagna 0.4 umbria 0.4 marche 0.2 ] ))
@@ -40,7 +40,7 @@
     region [ piemonte -0.2 lombardia -0.2 trentino-alto-adige 0.2 emilia-romagna 0.6 marche 0.2 friuli-venezia-giulia 0.4 ] ))
   (expertise (user-attribute region) (value emilia-romagna) (inference
     turism [ sea 0.4 mountain -0.8 enogastronomic 0.4 lake 0.2 cultural 0.2 ]
-    region [ liguria 0.2 toscana 0.4 lombardia 0.4 valle-d'aosta -0.4 veneto 0.6 umbria 0.4 marche 0.6 ] ))
+    region [ liguria -0.2 toscana 0.4 lombardia 0.4 valle-d'aosta -0.4 veneto 0.6 umbria 0.4 marche 0.6 ] ))
   (expertise (user-attribute region) (value umbria) (inference
     turism [ sea -0.8 mountain 0.4 enogastronomic 0.2 lake 0.2 sport -0.2 religious 0.6 cultural 0.6 ]
     region [ liguria -0.8 toscana 0.4 lombardia -0.2 valle-d'aosta -0.6 trentino-alto-adige -0.4 emilia-romagna 0.4 marche 0.2 ] ))
