@@ -4,7 +4,7 @@
   (iteration ?i)
   ?attr <- (attribute (name facility) (value ?name) (iteration ?i))
   (facility (name ?name) (city ?city))
-  (attribute (name city) (value ?city) (certainty ?cf&:(<= ?cf -0.4)) (iteration ?i))
+  (attribute (name city) (value ?city) (certainty ?cf&:(<= ?cf -0.2)) (iteration ?i))
   =>
   (retract ?attr)
 )
