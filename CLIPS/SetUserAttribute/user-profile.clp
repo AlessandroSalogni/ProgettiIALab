@@ -35,7 +35,7 @@
   (current-year 2019)
   
   (profile
-    (name-surname "Riccardo Perotti")
+    (name-surname "Giuseppe Verdi")
     (birth-year 1996)
     (live-region piemonte)
     (last-region-visited liguria)
@@ -43,7 +43,7 @@
     (favourite-turisms mountain termal sport)
   )
   (profile
-    (name-surname "Alessandro Salogni")
+    (name-surname "Mario Rossi")
     (birth-year 1950)
     (live-region lombardia)
     (last-region-visited emilia-romagna)
