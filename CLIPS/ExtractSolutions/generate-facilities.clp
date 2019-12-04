@@ -24,7 +24,7 @@
   (facility (name "Ostello della gioventu (VR)") (price 30) (city "Verona") (stars 1) (rooms-available 0) (rooms-booked 10) (services pet))
 
   (facility (name "Bella vista (GE)") (price 80) (city "Genova") (stars 3) (rooms-available 20) (rooms-booked 4) (services parking wifi tv pool pet))
-  (facility (name "Il porticciolo (GE)") (price 50) (city "Genova") (stars 2) (rooms-available 20) (rooms-booked 4) (services tv wifi))
+  (facility (name "Il porticciolo (GE)") (price 50) (city "Genova") (stars 2) (rooms-available 20) (rooms-booked 4) (services tv wifi laundry))
 
   (facility (name "Al fresco (IM)") (price 30) (city "Imperia") (stars 1) (rooms-available 10) (rooms-booked 5) (services tv wifi))
   (facility (name "Al caldo (IM)") (price 30) (city "Imperia") (stars 2) (rooms-available 10) (rooms-booked 5) (services tv wifi))
@@ -37,21 +37,21 @@
 
   (facility (name "Movida (RM)") (price 35) (city "Rimini") (stars 2) (rooms-available 10) (rooms-booked 10) (services pool air-conditioning))
   (facility (name "Alla mattina (RM)") (price 70) (city "Rimini") (stars 3) (rooms-available 4) (rooms-booked 13) (services pool tv wifi air-conditioning))
-  (facility (name "Nella notte (RM)") (price 50) (city "Rimini") (stars 2) (rooms-available 6) (rooms-booked 11) (services wifi tv air-conditioning))
+  (facility (name "Nella notte (RM)") (price 50) (city "Rimini") (stars 2) (rooms-available 6) (rooms-booked 11) (services wifi tv air-conditioning laundry))
 
   (facility (name "Il gelsomino (RA)") (price 140) (city "Ravenna") (stars 4) (rooms-available 12) (rooms-booked 15) (services wifi tv room-service air-conditioning spa))
   (facility (name "Baraonda (RA)") (price 20) (city "Ravenna") (stars 1) (rooms-available 11) (rooms-booked 16) (services air-conditioning))
 
   (facility (name "Bora (TS)") (price 85) (city "Trieste") (stars 3) (rooms-available 4) (rooms-booked 10) (services wifi tv room-service pool air-conditioning))
-  (facility (name "Hotel D'Annunzio (TS)") (price 60) (city "Trieste") (stars 2) (rooms-available 7) (rooms-booked 3) (services wifi tv air-conditioning))
+  (facility (name "Hotel D'Annunzio (TS)") (price 60) (city "Trieste") (stars 2) (rooms-available 7) (rooms-booked 3) (services wifi tv air-conditioning laundry))
 
   (facility (name "Falco (AO)") (price 120) (city "Saint Vincent") (stars 4) (rooms-available 3) (rooms-booked 4) (services parking wifi tv spa room-service pool air-conditioning))
   (facility (name "L'azzardo (AO)") (price 100) (city "Saint Vincent") (stars 3) (rooms-available 5) (rooms-booked 7) (services parking wifi tv spa air-conditioning))
   (facility (name "Arietta (AO)") (price 90) (city "Saint Vincent") (stars 3) (rooms-available 4) (rooms-booked 5) (services parking wifi tv))
-  (facility (name "Il giocatore (AO)") (price 130) (city "Saint Vincent") (stars 4) (rooms-available 6) (rooms-booked 10) (services parking wifi tv room-service pool air-conditioning))
+  (facility (name "Il giocatore (AO)") (price 130) (city "Saint Vincent") (stars 4) (rooms-available 6) (rooms-booked 10) (services parking wifi tv room-service laundry pool air-conditioning))
   (facility (name "Una giocata al volo (AO)") (price 35) (city "Saint Vincent") (stars 1) (rooms-available 10) (rooms-booked 12) (services parking tv))
 
-  (facility (name "La slavina (AO)") (price 60) (city "Aosta") (stars 2) (rooms-available 14) (rooms-booked 6) (services parking wifi tv))
+  (facility (name "La slavina (AO)") (price 60) (city "Aosta") (stars 2) (rooms-available 14) (rooms-booked 6) (services parking wifi tv laundry))
 
   (facility (name "Con permesso (FE)") (price 60) (city "Ferrara") (stars 2) (rooms-available 2) (rooms-booked 1) (services parking wifi tv))
   (facility (name "Hotel Ripagrande (FE)") (price 90) (city "Ferrara") (stars 3) (rooms-available 1) (rooms-booked 12) (services parking wifi tv air-conditioning pet))
