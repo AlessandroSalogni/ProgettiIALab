@@ -160,8 +160,8 @@ coppie_stazioni("Westbourne Park", "Royal Oak", 0).
 coppie_stazioni("Royal Oak", "Paddington", 0).
 coppie_stazioni("Baker Street", "Great Portland Street", 0).
 coppie_stazioni("Great Portland Street", "Euston Square", 0).
-coppie_stazioni("Euston Square", "King's Cross St. Pancras St Pancras", 0).
-coppie_stazioni("King's Cross St. Pancras St Pancras", "Farringdon", 0).
+coppie_stazioni("Euston Square", "King's Cross St. Pancras", 0).
+coppie_stazioni("King's Cross St. Pancras", "Farringdon", 0).
 coppie_stazioni("Farringdon", "Barbican", 0).
 coppie_stazioni("Barbican", "Moorgate", 0).
 coppie_stazioni("Moorgate", "Liverpool Street", 0).

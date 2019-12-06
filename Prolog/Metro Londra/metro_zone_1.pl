@@ -38,3 +38,4 @@ fermata(Stazione,Linea) :- percorso(Linea,0,P), member(Stazione,P).
 iniziale([at("Bayswater"),ground]).
 
 finale([at("Piccadilly Circus"),ground]).
+% finale([at("Euston Square"), ground]).
