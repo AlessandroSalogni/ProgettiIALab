@@ -45,7 +45,7 @@
   (profile
     (name-surname "Mario Rossi")
     (birth-year 1950)
-    (live-region lombardia)
+    (live-region toscana)
     (last-region-visited emilia-romagna)
     (favourite-services tv pet)
     (favourite-turisms sea))

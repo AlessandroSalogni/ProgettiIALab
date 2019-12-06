@@ -112,7 +112,7 @@
     (under-30 )
     (under-60 "Bolzano")
     (under-100 "Verona"))
-  (city (name "Bologna") (region emilia-romagna) (turism cultural 3 enogastronomic 5 naturalistic 1)
+  (city (name "Bologna") (region emilia-romagna) (turism cultural 3 religious 1 enogastronomic 5 naturalistic 1)
     (under-30 )
     (under-60 "Ferrara")
     (under-100 "Ravenna"))

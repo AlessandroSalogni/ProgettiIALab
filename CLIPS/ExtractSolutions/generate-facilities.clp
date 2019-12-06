@@ -23,8 +23,11 @@
   (facility (name "Avogadro Hostel (TO)") (price 15) (city "Torino") (stars 1) (rooms-available 3) (rooms-booked 2) (services parking))
 
   (facility (name "Ostello della gioventu (VR)") (price 30) (city "Verona") (stars 1) (rooms-available 0) (rooms-booked 10) (services pet))
+  (facility (name "Hotel L'Arena (VR)") (price 95) (city "Verona") (stars 2) (rooms-available 14) (rooms-booked 6) (services tv parking pet))
 
-  (facility (name "Bella vista (GE)") (price 80) (city "Genova") (stars 3) (rooms-available 20) (rooms-booked 4) (services parking wifi tv pool pet))
+  (facility (name "Il Lago (BS)") (price 100) (city "Desenzano del Garda") (stars 3) (rooms-available 10) (rooms-booked 5) (services  wifi pet))
+
+  (facility (name "Bella vista (GE)") (price 80) (city "Genova") (stars 3) (rooms-available 20) (rooms-booked 4) (services parking wifi tv pool pet laundry))
   (facility (name "Il porticciolo (GE)") (price 55) (city "Genova") (stars 2) (rooms-available 10) (rooms-booked 4) (services tv wifi laundry))
 
   (facility (name "Al fresco (IM)") (price 45) (city "Imperia") (stars 2) (rooms-available 5) (rooms-booked 15) (services tv wifi parking))
@@ -34,12 +37,12 @@
 
   (facility (name "Sale e pepe (LS)") (price 45) (city "La Spezia") (stars 1) (rooms-available 10) (rooms-booked 3) (services tv parking wifi)) 
 
-  (facility (name "La rocca (BO)") (price 80) (city "Bologna") (stars 3) (rooms-available 21) (rooms-booked 0) (services wifi tv room-service air-conditioning))
+  (facility (name "La rocca (BO)") (price 80) (city "Bologna") (stars 2) (rooms-available 21) (rooms-booked 0) (services wifi tv room-service air-conditioning))
   (facility (name "Il Maggiore (BO)") (price 55) (city "Bologna") (stars 2) (rooms-available 8) (rooms-booked 1) (services wifi tv air-conditioning))
-  (facility (name "La piazza (BO)") (price 90) (city "Bologna") (stars 3) (rooms-available 2) (rooms-booked 5) (services wifi tv room-service air-conditioning pool pet))
+  (facility (name "La piazza (BO)") (price 90) (city "Bologna") (stars 3) (rooms-available 2) (rooms-booked 5) (services wifi tv room-service air-conditioning pet))
 
   (facility (name "Movida (RM)") (price 35) (city "Rimini") (stars 2) (rooms-available 10) (rooms-booked 10) (services pool air-conditioning))
-  (facility (name "Alla mattina (RM)") (price 70) (city "Rimini") (stars 3) (rooms-available 4) (rooms-booked 13) (services pool tv wifi air-conditioning))
+  (facility (name "Alla mattina (RM)") (price 65) (city "Rimini") (stars 3) (rooms-available 4) (rooms-booked 13) (services pool tv wifi air-conditioning))
   (facility (name "Nella notte (RM)") (price 50) (city "Rimini") (stars 2) (rooms-available 6) (rooms-booked 11) (services wifi tv air-conditioning laundry))
 
   (facility (name "Il gelsomino (RA)") (price 140) (city "Ravenna") (stars 4) (rooms-available 12) (rooms-booked 15) (services wifi tv room-service air-conditioning spa))
@@ -52,14 +55,15 @@
   (facility (name "Il giocatore (GO)") (price 130) (city "Gorizia") (stars 4) (rooms-available 5) (rooms-booked 20) (services parking wifi tv room-service laundry pool air-conditioning))
 
   (facility (name "Falco (AO)") (price 120) (city "Saint Vincent") (stars 4) (rooms-available 3) (rooms-booked 4) (services parking wifi tv spa room-service pool air-conditioning))
-  (facility (name "L'azzardo (AO)") (price 100) (city "Saint Vincent") (stars 3) (rooms-available 5) (rooms-booked 7) (services parking wifi tv spa air-conditioning))
+  (facility (name "L'azzardo (AO)") (price 100) (city "Saint Vincent") (stars 3) (rooms-available 5) (rooms-booked 7) (services pool parking wifi tv spa air-conditioning))
   (facility (name "Arietta (AO)") (price 90) (city "Saint Vincent") (stars 3) (rooms-available 4) (rooms-booked 5) (services parking wifi tv))
   (facility (name "Una giocata al volo (AO)") (price 35) (city "Saint Vincent") (stars 1) (rooms-available 10) (rooms-booked 12) (services parking tv))
 
   (facility (name "La slavina (AO)") (price 60) (city "Aosta") (stars 2) (rooms-available 14) (rooms-booked 6) (services parking wifi tv laundry))
+  (facility (name "La Baita (AO)") (price 95) (city "Aosta") (stars 3) (rooms-available 5) (rooms-booked 7) (services room-service parking wifi tv laundry pool))
 
   (facility (name "Con permesso (FE)") (price 60) (city "Ferrara") (stars 2) (rooms-available 2) (rooms-booked 1) (services parking wifi tv))
-  (facility (name "Hotel Ripagrande (FE)") (price 90) (city "Ferrara") (stars 3) (rooms-available 1) (rooms-booked 12) (services parking wifi tv air-conditioning pet))
+  (facility (name "Hotel Ripagrande (FE)") (price 95) (city "Ferrara") (stars 2) (rooms-available 6) (rooms-booked 12) (services parking wifi tv air-conditioning pet))
 
   (facility (name "Trentuno (TR)") (price 10) (city "Trento") (stars 1) (rooms-available 1) (rooms-booked 4) (services tv pet))
   (facility (name "Vento (TR)") (price 65) (city "Trento") (stars 3) (rooms-available 3) (rooms-booked 9) (services tv wifi parking pool))
@@ -67,10 +71,12 @@
   (facility (name "Jodel (TR)") (price 40) (city "Trento") (stars 2) (rooms-available 7) (rooms-booked 1) (services tv spa wifi))
   (facility (name "Lo strudel (TR)") (price 40) (city "Trento") (stars 2) (rooms-available 1) (rooms-booked 5) (services tv wifi))
   
+  (facility (name "Le Dolomiti (BO)") (price 110) (city "Bolzano") (stars 3) (rooms-available 10) (rooms-booked 2) (services tv spa wifi air-conditioning pet))
+
   (facility (name "San Francesco (PG)") (price 40) (city "Assisi") (stars 2) (rooms-available 6) (rooms-booked 2) (services tv wifi)) 
   (facility (name "Santa Chiara (PG)") (price 80) (city "Assisi") (stars 3) (rooms-available 20) (rooms-booked 12) (services tv pet wifi air-conditioning)) 
   (facility (name "La Porziuncola (PG)") (price 120) (city "Assisi") (stars 4) (rooms-available 9) (rooms-booked 4) (services tv pet air-conditioning pool spa wifi)) 
-  (facility (name "Luxury place (PG)") (price 100) (city "Assisi") (stars 4) (rooms-available 10) (rooms-booked 3) (services tv pet air-conditioning pool spa wifi room-service)) 
+  (facility (name "Luxury place (PG)") (price 110) (city "Assisi") (stars 4) (rooms-available 10) (rooms-booked 3) (services tv pet air-conditioning spa wifi room-service)) 
   (facility (name "Ostello religioso (PG)") (price 40) (city "Assisi") (stars 2) (rooms-available 2) (rooms-booked 7) (services tv)) 
 
   (considered-hotels)
