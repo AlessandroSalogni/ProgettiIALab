@@ -13,9 +13,9 @@
 (deffacts GENERATE-FACILITIES::facility-definition
   (facility (name "Vista Mare (MS)") (price 100) (city "Massa") (stars 4) (rooms-available 12) (rooms-booked 4) (services parking wifi pool tv spa room-service))
   (facility (name "Resort Miramare (MS)") (price 75) (city "Massa") (stars 3) (rooms-available 2) (rooms-booked 16) (services parking pet tv wifi))
-  (facility (name "Ostello di Massa (MS)") (price 60) (city "Massa") (stars 2) (rooms-available 4) (rooms-booked 30) (services wifi tv))
+  (facility (name "Ostello di Massa (MS)") (price 45) (city "Massa") (stars 2) (rooms-available 10) (rooms-booked 22) (services wifi tv))
 
-  (facility (name "La Torre (PI)") (price 55) (city "Pisa") (stars 2) (rooms-available 10) (rooms-booked 5) (services wifi pet))
+  (facility (name "La Torre (PI)") (price 35) (city "Pisa") (stars 2) (rooms-available 10) (rooms-booked 5) (services wifi pet))
 
   (facility (name "Hotel Cavour (TO)") (price 70) (city "Torino") (stars 3) (rooms-available 10) (rooms-booked 1) (services air-conditioning wifi pool tv room-service))
   (facility (name "Hotel Mazzini (TO)") (price 50) (city "Torino") (stars 2) (rooms-available 5) (rooms-booked 3) (services parking pool tv))
@@ -33,12 +33,10 @@
   (facility (name "Al fresco (IM)") (price 45) (city "Imperia") (stars 2) (rooms-available 5) (rooms-booked 15) (services tv wifi parking))
   (facility (name "Al caldo (IM)") (price 30) (city "Imperia") (stars 1) (rooms-available 10) (rooms-booked 5) (services tv wifi pet))
 
-  (facility (name "Al sole (SV)") (price 50) (city "Savona") (stars 1) (rooms-available 9) (rooms-booked 8) (services parking pet tv))
-
-  (facility (name "Sale e pepe (LS)") (price 45) (city "La Spezia") (stars 1) (rooms-available 10) (rooms-booked 3) (services tv parking wifi)) 
+  (facility (name "Al sole (SV)") (price 45) (city "Savona") (stars 2) (rooms-available 10) (rooms-booked 1) (services parking pet tv))
 
   (facility (name "La rocca (BO)") (price 80) (city "Bologna") (stars 2) (rooms-available 21) (rooms-booked 0) (services wifi tv room-service air-conditioning))
-  (facility (name "Il Maggiore (BO)") (price 55) (city "Bologna") (stars 2) (rooms-available 8) (rooms-booked 1) (services wifi tv air-conditioning))
+  (facility (name "Il Maggiore (BO)") (price 50) (city "Bologna") (stars 2) (rooms-available 8) (rooms-booked 1) (services wifi tv air-conditioning))
   (facility (name "La piazza (BO)") (price 90) (city "Bologna") (stars 3) (rooms-available 2) (rooms-booked 5) (services wifi tv room-service air-conditioning pet))
 
   (facility (name "Movida (RM)") (price 35) (city "Rimini") (stars 2) (rooms-available 10) (rooms-booked 10) (services pool air-conditioning))
@@ -46,13 +44,13 @@
   (facility (name "Nella notte (RM)") (price 50) (city "Rimini") (stars 2) (rooms-available 6) (rooms-booked 11) (services wifi tv air-conditioning laundry))
 
   (facility (name "Il gelsomino (RA)") (price 140) (city "Ravenna") (stars 4) (rooms-available 12) (rooms-booked 15) (services wifi tv room-service air-conditioning spa))
-  (facility (name "Baraonda (RA)") (price 45) (city "Ravenna") (stars 1) (rooms-available 11) (rooms-booked 16) (services air-conditioning))
+  (facility (name "Baraonda (RA)") (price 20) (city "Ravenna") (stars 1) (rooms-available 11) (rooms-booked 16) (services air-conditioning))
 
   (facility (name "Bora (TS)") (price 85) (city "Trieste") (stars 3) (rooms-available 4) (rooms-booked 10) (services wifi tv room-service pool air-conditioning))
   (facility (name "Hotel D'Annunzio (TS)") (price 60) (city "Trieste") (stars 2) (rooms-available 7) (rooms-booked 3) (services wifi tv air-conditioning laundry))
-  (facility (name "Bora resort (TS)") (price 130) (city "Trieste") (stars 4) (rooms-available 22) (rooms-booked 0) (services parking wifi air-conditioning tv spa room-service pet))
+  (facility (name "Bora resort (TS)") (price 135) (city "Trieste") (stars 4) (rooms-available 22) (rooms-booked 0) (services parking wifi air-conditioning tv spa room-service pet))
 
-  (facility (name "Il giocatore (GO)") (price 130) (city "Gorizia") (stars 4) (rooms-available 5) (rooms-booked 20) (services parking wifi tv room-service laundry pool air-conditioning))
+  (facility (name "Il giocatore (GO)") (price 135) (city "Gorizia") (stars 4) (rooms-available 5) (rooms-booked 20) (services parking wifi tv room-service laundry pool air-conditioning))
 
   (facility (name "Falco (AO)") (price 120) (city "Saint Vincent") (stars 4) (rooms-available 3) (rooms-booked 4) (services parking wifi tv spa room-service pool air-conditioning))
   (facility (name "L'azzardo (AO)") (price 100) (city "Saint Vincent") (stars 3) (rooms-available 5) (rooms-booked 7) (services pool parking wifi tv spa air-conditioning))
