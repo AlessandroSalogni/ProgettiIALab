@@ -15,7 +15,7 @@
   (facility (name "Resort Miramare (MS)") (price 75) (city "Massa") (stars 3) (rooms-available 2) (rooms-booked 16) (services parking pet tv wifi))
   (facility (name "Ostello di Massa (MS)") (price 60) (city "Massa") (stars 2) (rooms-available 4) (rooms-booked 30) (services wifi tv))
 
-  (facility (name "La Torre (PI)") (price 35) (city "Pisa") (stars 2) (rooms-available 10) (rooms-booked 5) (services wifi))
+  (facility (name "La Torre (PI)") (price 55) (city "Pisa") (stars 2) (rooms-available 10) (rooms-booked 5) (services wifi pet))
 
   (facility (name "Hotel Cavour (TO)") (price 70) (city "Torino") (stars 3) (rooms-available 10) (rooms-booked 1) (services air-conditioning wifi pool tv room-service))
   (facility (name "Hotel Mazzini (TO)") (price 50) (city "Torino") (stars 2) (rooms-available 5) (rooms-booked 3) (services parking pool tv))
@@ -35,7 +35,7 @@
   (facility (name "Sale e pepe (LS)") (price 45) (city "La Spezia") (stars 1) (rooms-available 10) (rooms-booked 3) (services tv parking wifi)) 
 
   (facility (name "La rocca (BO)") (price 80) (city "Bologna") (stars 3) (rooms-available 21) (rooms-booked 0) (services wifi tv room-service air-conditioning))
-  (facility (name "Il Maggiore (BO)") (price 50) (city "Bologna") (stars 2) (rooms-available 8) (rooms-booked 1) (services wifi tv air-conditioning))
+  (facility (name "Il Maggiore (BO)") (price 55) (city "Bologna") (stars 2) (rooms-available 8) (rooms-booked 1) (services wifi tv air-conditioning))
   (facility (name "La piazza (BO)") (price 90) (city "Bologna") (stars 3) (rooms-available 2) (rooms-booked 5) (services wifi tv room-service air-conditioning pool pet))
 
   (facility (name "Movida (RM)") (price 35) (city "Rimini") (stars 2) (rooms-available 10) (rooms-booked 10) (services pool air-conditioning))
