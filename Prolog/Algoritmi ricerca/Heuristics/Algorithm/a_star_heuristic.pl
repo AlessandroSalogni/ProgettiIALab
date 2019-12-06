@@ -1,4 +1,4 @@
-as_heuristic([nodo(SA, _, CostoAzPerS, _)|_], CostoAzPerS, _) :-  finale([at(SA),_]),  !.
+as_heuristic([nodo(SA, _, CostoAzPerS, _)|_], CostoAzPerS, _) :-  finale([at(SA),_]), !.
 as_heuristic([nodo(S, AzPerS, CostoAzPerS, EurDaS)|Tail], Soluzione, Vis) :-
   findall(Az, applicabile_heuristic(Az, S), ListaAzApplicabili),
   expand_children_as_heuristic(nodo(S, AzPerS, CostoAzPerS, EurDaS), ListaAzApplicabili, Vis, ListaFigli),

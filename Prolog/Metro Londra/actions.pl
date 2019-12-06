@@ -9,7 +9,7 @@
 %  vai(Linea, Dir, StazionePartenza, StazioneArrivo)
 
 applicabile(sali(Linea,Dir),[at(Stazione),ground]) :- fermata(Stazione,Linea), member(Dir,[0,1]).
-applicabile(scendi(Stazione),[at(Stazione),in(_,_)]).
+applicabile(scendi(Stazione),[at(Stazione),in(_,_)]). % :- \+chiusa(Stazione).
 applicabile(vai(Linea,Dir,SP,SA),[at(SP),in(Linea,Dir)]) :- tratta(Linea,Dir,SP,SA).
 
 trasforma(sali(Linea,Dir),[at(Stazione),ground],[at(Stazione),in(Linea,Dir)]).

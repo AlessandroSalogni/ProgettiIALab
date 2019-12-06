@@ -49,10 +49,18 @@ tratta(Linea,Dir,SP,SA) :- percorso(Linea,Dir,LF), member_pair(SP,SA,LF).
 member_pair(X,Y,[X,Y|_]).
 member_pair(X,Y,[_,Z|Rest]) :- member_pair(X,Y,[Z|Rest]).
 
+
+% stazione(Stazione, Coord1, Coord2)
+
 fermata(Stazione,Linea) :- percorso(Linea,0,P), member(Stazione,P).
 
 
 iniziale([at("Ealing Broadway"),ground]).
 
+%finale([at("Notting Hill Gate"),ground]).
 finale([at("North Greenwich"),ground]).
 
+chiusa("Westminster").
+chiusa("Bond Street").
+chiusa("Green").
+chiusa("North Greenwich").
