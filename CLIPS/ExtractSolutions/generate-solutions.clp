@@ -32,8 +32,9 @@
   (bind ?min-cf (min ?cf1 ?cf-min2))
   (bind ?mean-cf-distance (/ (+ ?cf-distance ?cf-sum-distance2) (+ 1 ?n2)))
   (bind ?cf (- (+ ?min-cf ?mean-cf-distance) (* ?min-cf ?mean-cf-distance)))
-  (assert (possible-solution (facilities ?facilities2 ?facility1) (cities ?cities2 ?city1) (certainty ?cf) (min-cf-incremental-solution ?min-cf)))
- )
+  (assert (possible-solution (facilities ?facilities2 ?facility1) (cities ?cities2 ?city1) (certainty ?cf) (min-cf-incremental-solution ?min-cf)
+    (sum-cf-distance-incremental-solution (+ ?cf-distance ?cf-sum-distance2)) (number-places (+ 1 ?n2)))) 
+)
 
 (defrule GENERATE-SOLUTIONS::sort-cities-in-solution
   ?sol <- (possible-solution (cities $?head ?city-next ?city&:(< (str-compare ?city ?city-next) 0) $?tail))
