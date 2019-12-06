@@ -170,7 +170,7 @@
   (city (name ?city) (turism $? ?turism ?score $?))       
   =>
   (bind ?cf-score (- (/ (* ?score 1.98) 5) 0.99))
-  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.1)) (iteration ?i)))
+  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.2)) (iteration ?i)))
 )
 
 (defrule GENERATE-CITIES::generate-city-from-turism-not-present-in-city
@@ -179,7 +179,7 @@
   (city (name ?city) (turism $?turisms&:(not (member ?turism ?turisms))))
   =>
   (bind ?cf-score -0.99)
-  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.1)) (iteration ?i)))
+  (assert (attribute (name city) (value ?city) (certainty (* ?cf-turism ?cf-score 0.2)) (iteration ?i)))
 )
 
 (defrule GENERATE-CITIES::generate-city-from-region
