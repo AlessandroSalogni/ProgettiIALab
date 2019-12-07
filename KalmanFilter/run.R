@@ -7,15 +7,16 @@ F = matrix(c(1,0.2,0,1), byrow = TRUE, ncol = 2)
 H = matrix(c(1,0,0,1), byrow = TRUE, ncol = 2)
 iteration = 20
 
-cov0 = matrix(c(100, 0, 0, 100), ncol = 2, byrow = TRUE)
-covX = matrix(c(100, 0, 0, 100), ncol = 2, byrow = TRUE)
-covZ = matrix(c(1, 0, 0, 1), ncol = 2, byrow = TRUE)
-covT = matrix(c(0.1, 0, 0, 0.1), ncol = 2, byrow = TRUE)
+cov0 = matrix(c(1, 0, 0, 1), ncol = 2, byrow = TRUE)
+covX = matrix(c(1, 0, 0, 1), ncol = 2, byrow = TRUE)
+covZ = matrix(c(10, 0, 0, 10), ncol = 2, byrow = TRUE)
+covT = matrix(c(0, 0, 0, 0), ncol = 2, byrow = TRUE)
 
 filter = kalmanFilter(F,H,cov0,covX,covZ,covT,iteration)
 x = filter$real
 z = filter$observed
 t = filter$kalman
+kalmanGains = filter$kalmanGains
 
 par(mfrow = c(1, 1))
 plot(z, col="green", type="b", main="Kalman Filter", xlab ="X", ylab="Y", lty=2, pch=8, xlim=c(0, max(z[,1], na.rm = TRUE)), ylim=c(0, max(z[,2], na.rm = TRUE)))
