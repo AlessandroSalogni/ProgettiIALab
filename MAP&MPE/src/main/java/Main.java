@@ -15,45 +15,100 @@ import aima.core.probability.proposition.AssignmentProposition;
 import aima.core.probability.util.RandVar;
 import bifparser.BifBNReader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        BayesianNetwork bn = null;
-        long startTime, endTime, timeElapsed;
+        //Earthquake
+        //BayesianNetwork bn = BayesNetExampleFactory.constructBurglaryAlarmNetwork();
+        //RandomVariable[] mapVar = {ExampleRV.EARTHQUAKE_RV, ExampleRV.ALARM_RV, ExampleRV.BURGLARY_RV};
+        //AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.JOHN_CALLS_RV, false)};
 
-        BifBNReader bnReader = null;
+        BayesianNetwork bn = null;
+
+        BifBNReader bnReader;
         try {
-            bnReader = new BifBNReader("1_insurance.bif") {
+            bnReader = new BifBNReader("child.bif") {
                 @Override
                 protected Node nodeCreation(RandomVariable var, double[] probs, Node... parents) {
                     return new FullCPTNode(var, probs, parents);
                 }
             };
             bn = bnReader.getBayesianNetwork();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
 
-        //Earthquake
-        //BayesianNetwork bn = BayesNetExampleFactory.constructBurglaryAlarmNetwork();
-        //RandomVariable[] mapVar = {ExampleRV.EARTHQUAKE_RV, ExampleRV.ALARM_RV, ExampleRV.BURGLARY_RV};
-        //AssignmentProposition[] e = {new AssignmentProposition(ExampleRV.JOHN_CALLS_RV, false)};
 
-        //None, Mild, Moderate, Severe
-//        RandVar ac = new RandVar("ACCIDENT",  new ArbitraryTokenDomain("None", "Mild", "Moderate", "Severe"));
-//        RandVar gs = new RandVar("GOODSTUDENT",  new ArbitraryTokenDomain("True", "False"));
-//        RandVar age = new RandVar("AGE", new ArbitraryTokenDomain("Adolescent", "Adult", "Senior"));
-//        AssignmentProposition ap = new AssignmentProposition(gs, "True");
-        List<RandomVariable> vars = bn.getVariablesInTopologicalOrder();
-        RandomVariable evidence = vars.get(26);
-        AssignmentProposition[] e = {new AssignmentProposition(evidence, "Million")};
 
+//            List<RandomVariable> subVars = new ArrayList<>(vars.subList(0,1));
+//            AssignmentProposition[] e = {
+//                new AssignmentProposition(vars.get(4), "True")
+//            };
+//
+//            RandomVariable[] mapVar = subVars.toArray(new RandomVariable[subVars.size()]);
+//            RandomVariable[] mpeVar = vars.toArray(new RandomVariable[subVars.size()]);
+
+            List<RandomVariable> vars = bn.getVariablesInTopologicalOrder();
+            List<RandomVariable> subVars = new ArrayList<>(vars);
+
+//            AssignmentProposition[] e = {
+//                new AssignmentProposition(vars.get(12), "True"),
+//                new AssignmentProposition(vars.get(0), "Domino"),
+//                new AssignmentProposition(vars.get(16), "Poor")
+//            };
+
+//            AssignmentProposition[] e = {
+//                    new AssignmentProposition(vars.get(12), "True"),
+//                    new AssignmentProposition(vars.get(0), "Domino"),
+//                    new AssignmentProposition(vars.get(16), "Poor")
+//                    new AssignmentProposition(vars.get(26), "Million")
+//            };
+            AssignmentProposition[] e = {
+//                    new AssignmentProposition(vars.get(12), "True"),
+//                    new AssignmentProposition(vars.get(0), "Domino")
+            };
+            RandomVariable[] mapVar = subVars.toArray(new RandomVariable[subVars.size()]);
+            RandomVariable[] mpeVar = vars.toArray(new RandomVariable[subVars.size()]);
+
+            runMAP(mapVar, e, bn);
+            runMPE(mpeVar, e, bn);
+
+
+//            for(RandomVariable var : vars){
+//                if(var.getDomain().size() >= 3)
+//                    subVarsPrev.add(var);
+//            }
+
+        // subVars.addAll(subVarsNext);
+
+        //RandomVariable[] mapVar = subVars.toArray(new RandomVariable[subVars.size()]);
+
+//        AssignmentProposition[] e = {
+//                new AssignmentProposition(vars.get(19), "Poor"),
+//                new AssignmentProposition(vars.get(20), "Mild"),
+//                new AssignmentProposition(vars.get(21), "Severe"),
+//                new AssignmentProposition(vars.get(22), "Million"),
+//                new AssignmentProposition(vars.get(23), "Million"),
+//                new AssignmentProposition(vars.get(24), "Million"),
+//                new AssignmentProposition(vars.get(25), "Million"),
+//                new AssignmentProposition(vars.get(26), "Million"),
+//        };
+
+//        AssignmentProposition[] e = {
+//                new AssignmentProposition(vars.get(0), "Domino"),
+//                new AssignmentProposition(vars.get(1), "Adult"),
+//                new AssignmentProposition(vars.get(2), "Middle"),
+//                new AssignmentProposition(vars.get(3), "True"),
+//                new AssignmentProposition(vars.get(4), "Normal"),
+//                new AssignmentProposition(vars.get(5), "True"),
+//                new AssignmentProposition(vars.get(6), "Rural"),
+//                new AssignmentProposition(vars.get(7), "False")
+//        };
+
+        //AssignmentProposition[] e = {};
         //Insurance
-        RandomVariable[] mapVar = vars.toArray(new RandomVariable[vars.size()]);
-        //TODO TOGLIERE L'EVIDENZA DALLE VARIABILI MAP QUI SOPRA
+
 
         //Diabetes
         //RandomVariable[] mapVar = {};
@@ -66,30 +121,6 @@ public class Main {
         //Munif
         //RandomVariable[] mapVar = {};
         //AssignmentProposition[] e = {};
-        startTime = System.nanoTime();
-
-        CategoricalDistribution resMpe = new MpeEliminationAsk().ask(null, e, bn);
-        endTime = System.nanoTime();
-        System.out.println("MPE Probability: " +  resMpe.getValues()[0]);
-        for(Map.Entry<RandomVariable,Object> varValue : resMpe.getBestVarsValues()[0].entrySet())
-            System.out.println(varValue.getKey() + " -> " + varValue.getValue());
-
-        timeElapsed = endTime - startTime;
-        System.out.println("MPE - Execution time in milliseconds: " + timeElapsed / 1000000);
-
-        startTime = System.nanoTime();
-
-        CategoricalDistribution resMap = new MapEliminationAsk().ask(mapVar, e, bn);
-
-        endTime = System.nanoTime();
-
-        System.out.println("MAP Probability: " +  resMap.getValues()[0]);
-        for(Map.Entry<RandomVariable,Object> varValue : resMap.getBestVarsValues()[0].entrySet())
-            System.out.println(varValue.getKey() + " -> " + varValue.getValue());
-
-        timeElapsed = endTime - startTime;
-        System.out.println("MAP - Execution time in milliseconds: " + timeElapsed / 1000000 + "\n\n");
-
 
 //
 //        Scanner myObj = new Scanner(System.in);
@@ -122,8 +153,6 @@ public class Main {
 //        timeElapsed = (endTime - startTime)/1000000;
 //        System.out.println("MPE polytree - Execution time in milliseconds: " + timeElapsed);
 //
-//
-//
 //        int mapVarsDim = 18;
 //        RandVar[] mapVars = new RandVar[mapVarsDim];
 //        System.arraycopy(X, 1, mapVars, 0, mapVarsDim);
@@ -140,5 +169,42 @@ public class Main {
 //
 //        timeElapsed = endTime - startTime;
 //        System.out.println("MAP polytree - Execution time in milliseconds: " + timeElapsed / 1000000);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }
+
+
+    private static void runMPE(RandomVariable[] mpeVar, AssignmentProposition [] e, BayesianNetwork bn){
+        long startTime, endTime, timeElapsed;
+        startTime = System.nanoTime();
+
+        CategoricalDistribution resMpe = new MpeEliminationAsk().ask(null, e, bn);
+
+        endTime = System.nanoTime();
+
+        System.out.println("MPE Probability: " +  resMpe.getValues()[0]);
+        for(Map.Entry<RandomVariable,Object> varValue : resMpe.getBestVarsValues()[0].entrySet())
+            System.out.println(varValue.getKey() + " -> " + varValue.getValue());
+
+        timeElapsed = endTime - startTime;
+        System.out.println("MPE - Execution time in ms: " + timeElapsed / 1000000f);
+
+    }
+
+    private static void runMAP(RandomVariable[] mapVar, AssignmentProposition [] e, BayesianNetwork bn){
+        long startTime, endTime, timeElapsed;
+        startTime = System.nanoTime();
+
+        CategoricalDistribution resMap = new MapEliminationAsk().ask(mapVar, e, bn);
+
+        endTime = System.nanoTime();
+
+        System.out.println("MAP Probability: " +  resMap.getValues()[0]);
+        for(Map.Entry<RandomVariable,Object> varValue : resMap.getBestVarsValues()[0].entrySet())
+            System.out.println(varValue.getKey() + " -> " + varValue.getValue());
+
+        timeElapsed = endTime - startTime;
+        System.out.println("MAP - Execution time in ms: " + timeElapsed / 1000000f);
     }
 }
